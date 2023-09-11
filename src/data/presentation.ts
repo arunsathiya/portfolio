@@ -23,7 +23,7 @@ const presentation: Presentation = {
       link: "https://twitter.com/arunsathiya",
     },
     {
-      label: "Github",
+      label: "GitHub",
       link: "https://github.com/arunsathiya",
     },
   ],
