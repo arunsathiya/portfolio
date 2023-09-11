@@ -16,7 +16,7 @@ const presentation: Presentation = {
   title: "Hi, I’m Arun 👋",
   // profile: "/profile.webp",
   description:
-    "I am a new grad Go developer with prior experience in JavaScript development with occasional TypeScript work. I am looking for opportunities in Golang and Rust.",
+    "I am a new grad Go developer with prior experience in JavaScript development and occasional TypeScript work. I am looking for opportunities in Golang and Rust.",
   socials: [
     {
       label: "Twitter",
