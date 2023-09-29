@@ -1,0 +1,16 @@
+---
+import SocialLinks from "./SocialLinks.astro";
+import Link from "./shared/Link.astro";
+import presentation from "@/data/presentation";
+---
+
+<>
+    <p>
+        Email me at <Link
+            href={`mailto:${presentation.mail}`}
+            label={presentation.mail}
+        /> or follow me via my social links.
+    </p>
+
+    <SocialLinks />
+</>
