@@ -10,6 +10,7 @@ import convertAsteriskToStrongTag from "@/utils/convertAsteriskToStrongTag";
 
 import presentation from "@/data/presentation";
 import projects from "@/data/projects";
+import GetInTouch from "@/components/GetInTouch.astro";
 
 const posts = (await getCollection("posts")).sort(function (first, second) {
   return second.data.publishedAt.getTime() - first.data.publishedAt.getTime();
@@ -88,14 +89,7 @@ const posts = (await getCollection("posts")).sort(function (first, second) {
       <header class="flex w-full flex-row justify-between gap-2">
         <h3 class="text-lg text-neutral-100">Get in touch</h3>
       </header>
-      <p>
-        Email me at <Link
-          href={`mailto:${presentation.mail}`}
-          label={presentation.mail}
-        /> or follow me via my social links.
-      </p>
-
-      <SocialLinks />
+      <GetInTouch />
     </article>
   </main>
 </Layout>
