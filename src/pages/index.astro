@@ -10,7 +10,6 @@ import convertAsteriskToStrongTag from "@/utils/convertAsteriskToStrongTag";
 
 import presentation from "@/data/presentation";
 import projects from "@/data/projects";
-import GetInTouch from "@/components/GetInTouch.astro";
 
 const posts = (await getCollection("posts")).sort(function (first, second) {
   return second.data.publishedAt.getTime() - first.data.publishedAt.getTime();
@@ -83,10 +82,6 @@ const posts = (await getCollection("posts")).sort(function (first, second) {
             projects.map((project) => <ProjectCard {...project} />)
         }
       </section>
-    </article>
-
-    <article class="flex flex-col gap-8">
-      <GetInTouch />
     </article>
   </main>
 </Layout>
