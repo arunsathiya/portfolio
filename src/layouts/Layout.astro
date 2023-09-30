@@ -20,13 +20,15 @@ const headTags = Astro.props;
   <body
     class="mx-auto flex min-h-screen max-w-[872px] flex-col gap-9 bg-neutral-950 px-10 py-8 text-sm text-neutral-400 md:gap-20 md:py-16"
   >
-    <Header />
-    <slot />
-    <style is:global>
-      html {
-        font-family: "Open Sans";
-      }
-    </style>
+    <main class="flex flex-col gap-12 grow">
+      <Header />
+      <slot />
+      <style is:global>
+        html {
+          font-family: "Open Sans";
+        }
+      </style>
+    </main>
     <footer class="flex flex-col gap-2">
       <GetInTouch />
     </footer>
