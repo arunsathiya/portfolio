@@ -1,17 +1,16 @@
-# 👨‍🚀 Astro - Portfolio Template
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+# Astro Starter Kit: Portfolio
 
-![Template](https://github.com/MaeWolff/astro-portfolio-template/blob/main/public/opengraph-image.jpg)
+```sh
+npm create astro@latest -- --template portfolio
+```
 
-This theme/template is designed and crafted by [me](https://www.maxencewolff.com).
-NB: Additional color themes can also be configured on the `src/data/theme.ts` file.
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/portfolio)
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/portfolio)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/portfolio/devcontainer.json)
 
-## 🥷 Usage
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-- You can modify all the information in the files in the `data` folder (presentation, social links, projects list, colors).
-- You can write articles in `markdown` format in the `content/posts` folder.
+![portfolio](https://user-images.githubusercontent.com/357379/210779178-a98f0fb7-6b1a-4068-894c-8e1403e26654.jpg)
 
 ## 🧞 Commands
 
@@ -19,35 +18,13 @@ All commands are run from the root of the project, from a terminal:
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm run dev`             | Starts local dev server at `localhost:3000`      |
-| `pnpm run build`           | Build your production site to `./dist/`          |
-| `pnpm run preview`         | Preview your build locally, before deploying     |
-| `pnpm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm run astro -- --help` | Get help using the Astro CLI                     |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-## Contributors ✨
+## 👀 Want to learn more?
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/SterbenVD"><img src="https://avatars.githubusercontent.com/u/90999906?v=4?s=100" width="100px;" alt="Vishal Vijay Devadiga"/><br /><sub><b>Vishal Vijay Devadiga</b></sub></a><br /><a href="https://github.com/MaeWolff/astro-portfolio-template/commits?author=SterbenVD" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/khushChopra"><img src="https://avatars.githubusercontent.com/u/43996455?v=4?s=100" width="100px;" alt="Khush Chopra"/><br /><sub><b>Khush Chopra</b></sub></a><br /><a href="https://github.com/MaeWolff/astro-portfolio-template/commits?author=khushChopra" title="Code">💻</a></td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
