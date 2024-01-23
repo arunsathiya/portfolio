@@ -42,13 +42,6 @@ const projects = (await getCollection("work"))
             <Pill><Icon icon="pencil-line" size="1.33em" /> Blogger</Pill>
           </div>
         </Hero>
-
-        <img
-          alt="Jeanine White smiling in a red plaid shirt and tortoise shell glasses"
-          width="480"
-          height="620"
-          src="/assets/portrait.jpg"
-        />
       </header>
 
       <Skills />
@@ -78,34 +71,6 @@ const projects = (await getCollection("work"))
             View All
             <Icon icon="arrow-right" size="1.2em" />
           </CallToAction>
-        </div>
-      </section>
-
-      <section class="section with-background bg-variant">
-        <header class="section-header stack gap-2 lg:gap-4">
-          <h3>Mentions</h3>
-          <p>
-            I have been fortunate enough to receive praise for my work in
-            several publications. Take a look below to learn more.
-          </p>
-        </header>
-
-        <div class="gallery">
-          <Grid variant="small">
-            {
-              [
-                "Medium",
-                "BuzzFeed",
-                "The Next Web",
-                "awwwards.",
-                "TechCrunch",
-              ].map((brand) => (
-                <li class="mention-card">
-                  <p>{brand}</p>
-                </li>
-              ))
-            }
-          </Grid>
         </div>
       </section>
     </main>
