@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Install Fastly dependencies
         run: npm install
-        working-directory: ./compute-js
+        working-directory: compute-js
 
       - name: fastly compute deploy
         uses: fastly/compute-actions@v5
