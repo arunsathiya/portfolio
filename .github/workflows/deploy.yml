@@ -15,6 +15,10 @@ jobs:
       - name: Build project
         run: npm run build
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Install Fastly dependencies
         run: npm install
         working-directory: ./compute-js
@@ -22,7 +26,7 @@ jobs:
       - name: fastly compute deploy
         uses: fastly/compute-actions@v5
         with:
-          project_directory: “compute-js”
+          project_directory: compute-js
           comment: “Deployed via GitHub Actions”
         env:
           FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_TOKEN }}
