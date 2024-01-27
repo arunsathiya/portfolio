@@ -2,15 +2,43 @@
 title: 'Patching hundreds of GitHub repositories in seconds'
 description: 'Using GitHub API to commit patches and generate pull requests.'
 pubDate: 'Jan 27 2024'
-heroImage: '/images/blog-placeholder.jpg'
+heroImage: '/images/github_patch_to_pull_request.webp'
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
+The traditional approach for submitting a patch upstream is to fork (if you don't have write access to that upstream repository), clone the fork, make changes, commit and submit a pull request upstream.
 
-Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc. Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra massa massa ultricies mi.
+This can take a lot of time depending on how big the repository is. 
 
-Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
+I recently came across [this GitHub changelog](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/) about `set-output` command being deprecated, so I looked at the number of repositories that are still using this command, and [over 220,000 workflow files are still using it](https://github.com/search?q=set-output+language:YAML+path:/%5E.github%5C/workflows%5C//&type=code). Cloning hundreds of thousands of these repositories, opening the workflow files in an IDE, making changes and creating pull requests obviously takes a lot of time.
 
-Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id cursus metus aliquam eleifend mi.
+I wanted to simplify the whole approach with these guidelines:
 
-Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
+- Clone only the files that need to be patched.
+- Make changes programatically, instead of manually on an IDE.
+- Generate patch files for the changes made.
+- Create commit on the fork.
+- Prepare pull request from the fork to the upstream repository.
+
+I was pleasantly surprised to learn that the last three points are possible with [patch2pr](https://github.com/bluekeyes/patch2pr?tab=readme-ov-file), and GitHub API endpoints to [create commits](https://docs.github.com/en/graphql/reference/mutations#createcommitonbranch) and [pull requests](https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request).
+
+I tied all of this together into a Go program [set-output-janitor](https://github.com/arunsathiya/set-output-janitor): 
+
+- It looks for a list of repositories (owner/repo format) in a `repos.txt` file, 
+- Creates folders for individual workflow files,
+- Makes changes, generates patch files,
+- Commits and submits a pull request.
+
+All automatically, in seconds, thanks to Go's concurrency capabilities. 
+
+![Screenshot of a terminal command output that shows code changes being committed and submitted upstream as pull requests](/images/patch-github-with-api.png)
+
+This was a really fun exercise, but also got a bit of hate because I was spamming organizations with the same content across different repositories. A few people unfollowed me on GitHub because whenever my PR was merged, it appeared on their newsfeed, one person reached out with a comment that I was flooding their inbox, and a few even looked me up on LinkedIn to figure out what was happening.
+
+Next steps:
+
+- I have stopped running this program because submitting many pull requests puts my GitHub account at the risk of suspension.
+- I want to [use a bot token](https://github.com/arunsathiya/set-output-janitor/issues/17) to run this workflow.
+
+On the bot token front, I am currently blocked by GitHub's [fine-grained tokens not having access to public-but-unowned data](https://github.com/orgs/community/discussions/36441#discussioncomment-7635050) (which means, I can create commits on my forks, but not submit pull requests upstream just yet). In talking to support, it looks like fine-grained tokens won't have the ability to submit pull requests, but I am going to hold out hope and see what happens in the future. Of course, without needing the [GitHub app to be installed on the organization](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation), like in the case of [dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/configuring-dependabot-security-updates).
+
+I think this kind of consistent change can be a GitHub product feature in itself, with disclaimers that the maintainers will need to verify and test before deploying.
