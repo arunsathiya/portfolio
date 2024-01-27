@@ -1,56 +1,50 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import HorizontalCard from "../components/HorizontalCard.astro";
-import { getCollection } from "astro:content";
-import createSlug from "../lib/createSlug";
-
-const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-
-const last_posts = posts.slice(0, 3);
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
-<BaseLayout sideBarActiveItemID="home">
-  <div class="pb-12 mr-5 mt-5">
-    <div class="text-xl py-1">Hey there 👋</div>
-    <div class="text-5xl font-bold">I'm Arun</div>
-    <div class="text-3xl py-3 font-bold">Software Engineer</div>
-    <div class="py-2">
-      <text class="text-lg">
-        I am a new grad student, specializing in Golang, TypeScript and Python
-        work. I like building at the intersection of CLI, API, DevOps, and have
-        a recent interest in AI applications. I am currently looking for new
-        opportunities.
-      </text>
-    </div>
-    <div class="mt-8">
-      <a class="btn" href="https://twitter.com/arunsathiya" target="_blank">
-        @arunsathiya</a
-      >
-      <a
-        href="https://linkedin.com/in/arunsathiya"
-        target="_blank"
-        class="btn btn-outline"
-      >
-        LinkedIn
-      </a>
-    </div>
-  </div>
-
-  {
-    last_posts.map((post) => (
-      <>
-        <HorizontalCard
-          title={post.data.title}
-          img={post.data.heroImage}
-          desc={post.data.description}
-          url={"/blog/" + createSlug(post.data.title, post.slug)}
-          target="_self"
-          badge={post.data.badge}
-        />
-        <div class="divider my-0" />
-      </>
-    ))
-  }
-</BaseLayout>
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header title={SITE_TITLE} />
+		<main>
+			<h1>🧑‍🚀 Hello, Astronaut!</h1>
+			<p>
+				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
+				template serves as a lightweight, minimally-styled starting point for anyone looking to build
+				a personal website, blog, or portfolio with Astro.
+			</p>
+			<p>
+				This template comes with a few integrations already configured in your
+				<code>astro.config.mjs</code> file. You can customize your setup with
+				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
+				React, or Vue to your project.
+			</p>
+			<p>Here are a few ideas on how to get started with the template:</p>
+			<ul>
+				<li>Edit this page in <code>src/pages/index.astro</code></li>
+				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
+				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
+				<li>Check out the included blog posts in <code>src/pages/blog/</code></li>
+				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
+			</ul>
+			<p>
+				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
+					>read the docs
+				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
+			</p>
+			<p>
+				Looking for a blog template with a bit more personality? Check out <a
+					href="https://github.com/Charca/astro-blog-template"
+					>astro-blog-template
+				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
+			</p>
+		</main>
+		<Footer />
+	</body>
+</html>
