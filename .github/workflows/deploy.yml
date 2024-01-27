@@ -20,8 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Fastly dependencies
-        run: npm install
-        working-directory: compute-js
+        run: |
+          cd compute-js
+          npm install
 
       - name: fastly compute deploy
         uses: fastly/compute-actions@v5
