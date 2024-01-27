@@ -2,5 +2,8 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     "strictNullChecks": true
-  }
+  },
+  "exclude": [
+    "compute-js"
+  ]
 }
