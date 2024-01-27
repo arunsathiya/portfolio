@@ -1,6 +1,15 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "exclude": [
-    "compute-js"
-  ]
+  "extends": "astro/tsconfigs/base",
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@layouts/*": [
+        "src/layouts/*"
+      ]
+    }
+  }
 }
