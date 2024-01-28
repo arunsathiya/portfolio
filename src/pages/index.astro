@@ -1,51 +1,15 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import PageMeta from "../components/PageMeta.astro";
+import PageLayout from "../layouts/PageLayout.astro";
+import Intro from "../components/Intro.astro";
+import AboutTheTheme from "../components/AboutTheTheme.astro";
+import { SITE_TITLE } from "../config";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-  </head>
-  <body>
-    <Header title={SITE_TITLE} />
-    <main>
-      <h1>👋🏼</h1>
-      <p>
-        I am Arun, a software engineer and open source contributor. I enjoy
-        writing Go, and am familiar with Python and TypeScript.
-      </p>
-      <p>
-        I recently graduated with a major in Data Analytics, and I am on the
-        lookout for new software and data engineering opportunities. <a
-          href="mailto:arun@arun.blog">Reach out if you are hiring!</a
-        >
-      </p>
-      <p>Here's what I am working on at the moment:</p>
-      <ul>
-        <li>
-          <a href="https://github.com/arunsathiya/set-output-janitor"
-            >set-output-janitor</a
-          >: Workflow to automate repetitive changes across many repositories in
-          seconds with the GitHub API
-        </li>
-        <li>
-          <a href="https://github.com/arunsathiya/gh-ssh-import"
-            >gh-ssh-import</a
-          >: A GitHub CLI extension to import SSH keys from local and disk into
-          your GitHub account
-        </li>
-        <li>
-          <a href="https://github.com/arunsathiya/download-google-doc"
-            >download-google-doc</a
-          >: CLI program to browse and download Google Docs files in a specific
-          format
-        </li>
-      </ul>
-    </main>
-    <Footer />
-  </body>
-</html>
+<PageLayout>
+  <PageMeta title={`${SITE_TITLE} | Web Ninja`} slot="meta" />
+  <Fragment slot="main">
+    <Intro />
+    <AboutTheTheme />
+  </Fragment>
+</PageLayout>

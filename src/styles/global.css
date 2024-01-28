@@ -1,154 +1,216 @@
-/*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
-	--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
-}
-@font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-regular.woff') format('woff');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
-@font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-bold.woff') format('woff');
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
-body {
-	font-family: 'Atkinson', sans-serif;
-	margin: 0;
-	padding: 0;
-	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
-	font-size: 20px;
-	line-height: 1.7;
-}
-main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
-	line-height: 1.2;
-}
-h1 {
-	font-size: 3.052em;
-}
-h2 {
-	font-size: 2.441em;
-}
-h3 {
-	font-size: 1.953em;
-}
-h4 {
-	font-size: 1.563em;
-}
-h5 {
-	font-size: 1.25em;
-}
-strong,
-b {
-	font-weight: 700;
-}
-a {
-	color: var(--accent);
-}
-a:hover {
-	color: var(--accent);
-}
-p {
-	margin-bottom: 1em;
-}
-.prose p {
-	margin-bottom: 2em;
-}
-textarea {
-	width: 100%;
-	font-size: 16px;
-}
-input {
-	font-size: 16px;
-}
-table {
-	width: 100%;
-}
-img {
-	max-width: 100%;
-	height: auto;
-	border-radius: 8px;
-}
-code {
-	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
-}
-pre {
-	padding: 1.5em;
-	border-radius: 8px;
-}
-pre > code {
-	all: unset;
-}
-blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0px;
-	font-size: 1.333em;
-}
-hr {
-	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
-}
-@media (max-width: 720px) {
-	body {
-		font-size: 18px;
-	}
-	main {
-		padding: 1em;
-	}
+/* 
+    Tailwind colors listed here: https://tailwindcss.com/docs/customizing-colors
+    
+    Why colors are written in rgb format (255 255 255) instead of hex (#ffffff)
+    https://tailwindcss.com/docs/customizing-colors#using-css-variables 
+*/
+@layer base {
+
+    /* light theme */
+    .theme-bubblegum {
+        /* Custom #8AE6FB */
+        --color-primary-blue: 138 230 251;
+        /* Tailwind lime-300 #bef264 */
+        --color-primary-green: 190 242 100;
+        /* Custom #FFDE69 */
+        --color-primary-yellow: 255 222 105;
+
+        /* Custom #3e3355 */
+        --color-text-body: 62 51 85;
+        /* Custom #3e3355 */
+        --color-text-heading: 62 51 85;
+        /* Custom #3e3355 */
+        --color-text-bold: 62 51 85;
+        /* Tailwind slate-500 #64748b */
+        --color-text-muted: 100 116 139;
+        /* Tailwind cyan-500 #06b6d4 */
+        --color-text-link: 6 182 212;
+        /* black */
+        --color-text-code: 0 0 0;
+        /* black */
+        --color-text-selection: 0 0 0;
+
+        /* white */
+        --color-bg-body: 255 255 255;
+        /* tailwind amber-100 #fef3c7 */
+        --color-bg-code: 254 243 199;
+        /* tailwind lime-200 #d9f99d */
+        --color-bg-selection: 217 249 157;
+
+        /* tailwind orange-100 #ffedd5 */
+        --color-border-code: 255 237 213;
+    }
+
+    /* dark theme */
+    .theme-bubblegum.dark {
+        /* Tailwind blue-500 #3b82f6 */
+        --color-primary-blue: 59 130 246;
+        /* Tailwind lime-300 #bef264 */
+        --color-primary-green: 190 242 100;
+        /* Custom #FFDE69 */
+        --color-primary-yellow: 255 222 105;
+
+        /* tailwind slate-300 */
+        --color-text-body: 203 213 225;
+        /* white */
+        --color-text-heading: 255 255 255;
+        /* white */
+        --color-text-bold: 255 255 255;
+        /* tailwind slate-400 #94a3b8 */
+        --color-text-muted: 148 163 184;
+        /* Tailwind blue-400 #60a5fa */
+        --color-text-link: 96 165 250;
+        /* black */
+        --color-text-code: 255 255 255;
+        /* black */
+        --color-text-selection: 0 0 0;
+
+        /* Tailwind slate-900 #0f172a */
+        --color-bg-body: 15 23 42;
+        /* Tailwind sky-500 #0ea5e9 */
+        --color-bg-code: 14 165 233;
+        /* Tailwind lime-200 #d9f99d */
+        --color-bg-selection: 217 249 157;
+
+        /* Tailwind yellow-100 #fef9c3 */
+        --color-border-code: 254 243 199;
+    }
+
+    :root {
+        font-family: theme('fontFamily.body');
+        background-color: theme('colors.bg.body');
+        color: theme('colors.text.body');
+        /* base font-size 1px larger for better visibility */
+        font-size: 1.125em;
+        line-height: 1.85;
+        scroll-behavior: smooth;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: theme('fontFamily.heading');
+    }
 }
 
-.sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
-	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
-	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto seperate lines and some screen readers do not understand line feeds as a space */
-	white-space: nowrap;
+@layer components {
+
+    /* ------ GLOBAL STYLES - START ------ */
+    strong {
+        font-weight: 600;
+        color: theme('colors.text.bold');
+    }
+
+    mark {
+        background-color: theme('colors.bg.selection');
+        color: theme('colors.text.selection');
+    }
+
+    /* 
+        if you want an anchor tag to not have this style, 
+        just add a class `unset` to it. 
+    */
+    a:not(.unset) {
+        text-decoration: none;
+        background-repeat: no-repeat;
+        background-size: 100% 1.5px;
+        background-position: 0 100%;
+        background-image:
+            linear-gradient(to right, theme('colors.text.link'), theme('colors.text.link'));
+    }
+
+    a:not(.unset):hover {
+        color: theme('colors.text.link');
+    }
+
+    code:not(pre code):not(.unset) {
+        background-color: theme('colors.bg.code');
+        color: theme('colors.text.code');
+        padding: 0.125rem 0.25rem;
+        border-radius: 0.25rem;
+        font-size: 0.875em;
+        font-weight: 600;
+        border: 1px solid theme('colors.border.code');
+        margin-bottom: 1.25em;
+    }
+
+    html.dark code:not(pre code) {
+        background-color: rgb(var(--color-bg-code) / 0.15);
+        border-color: rgb(var(--color-border-code) / 0.15);
+    }
+
+    ul:not(.unset):not(:where([class~="prose"] *)) {
+        padding-left: 0;
+        list-style: none;
+    }
+
+    ul:not(:where([class~="prose"] *))>li {
+        position: relative;
+        padding-left: 1.375rem;
+    }
+
+    ul:not(.unset):not(:where([class~="prose"] *))>li::before {
+        position: absolute;
+        left: 0;
+        content: "»";
+        color: rgb(var(--color-text-muted));
+    }
+
+    ol:not(.unset):not(:where([class~="prose"] *)) {
+        padding-left: 1.125rem;
+    }
+
+    ol:not(.unset):not(:where([class~="prose"] *))>li::marker {
+        color: rgb(var(--color-text-muted))
+    }
+
+    ul:not(.unset):not(:where([class~="prose"] *))>li,
+    ol:not(.unset):not(:where([class~="prose"] *))>li {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
+
+    ::selection {
+        background: theme('colors.bg.selection');
+        color: theme('colors.text.selection');
+    }
+
+    /* ------ GLOBAL STYLES - END ------ */
+
+    /* ------ REUSABLE UTILS - START ------ */
+    .animated-link {
+        position: relative;
+        box-decoration-break: clone;
+        text-decoration: none;
+    }
+
+    .animated-link:hover:after {
+        transform: translateZ(0) scale(1);
+    }
+
+    .animated-link:after {
+        left: 0;
+        right: 0;
+        bottom: -3px;
+        content: "";
+        height: 2px;
+        position: absolute;
+        transform: translateZ(0) scaleX(0);
+        transform-origin: left center;
+        transition: all .150s ease-in-out;
+        background-image: linear-gradient(to right, theme('colors.text.link'), theme('colors.text.link'));
+    }
+
+    .animated-link.show:after {
+        transform: translateZ(0) scale(1);
+    }
+
+    /* ------ REUSABLE UTILS - END ------ */
 }
