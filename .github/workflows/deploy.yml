@@ -39,7 +39,7 @@ jobs:
       - name: Set Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "latest"
+          node-version: 18
 
       - name: Download build artifacts
         uses: actions/download-artifact@v2
