@@ -14,10 +14,10 @@
       const storageTheme = sessionStorage.getItem("theme");
       if (!storageTheme && isSystemColorSchemeDark) {
         document.documentElement.classList.add("dark");
-        document.head.children.namedItem("theme-color").content = "#0f172a";
+        document.head.children.namedItem("theme-color").content = "#0e141b";
       } else if (storageTheme === "dark") {
         document.documentElement.classList.add("dark");
-        document.head.children.namedItem("theme-color").content = "#0f172a";
+        document.head.children.namedItem("theme-color").content = "#0e141b";
       } else {
         // we already server render light theme
         document.head.children.namedItem("theme-color").content = "#ffffff";

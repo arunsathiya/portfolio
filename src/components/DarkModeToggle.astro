@@ -1,22 +1,23 @@
 ---
 ---
+
 <mode-toggle class="flex">
   <button
-    class="justify-self-end bg-black dark:bg-white ml-4 inline-flex h-6 w-11 items-center rounded-full"
-    id="mode-toggle"
-    role="switch"
-    type="button"
-    tabindex="0"
-    aria-checked="false"
-    data-headlessui-state=""
-    ><span class="sr-only">Toggle dark mode</span><span
-      id="mode-circle"
-      class="light inline-block h-4 w-4 rounded-full bg-gradient-to-tr invisible"
-      ><span
-        class="absolute top-0 right-0 w-[10px] h-[10px] rounded-full bg-gray-700 scale-[0]"
-      ></span>
-    </span>
-  </button>
+  class="justify-self-end bg-neutral-200 dark:bg-neutral-700 ml-4 inline-flex h-6 w-11 items-center rounded-full"
+  id="mode-toggle"
+  role="switch"
+  type="button"
+  tabindex="0"
+  aria-checked="false"
+  data-headlessui-state=""
+  ><span class="sr-only">Toggle dark mode</span><span
+    id="mode-circle"
+    class="light inline-block h-4 w-4 rounded-full bg-gradient-to-tr invisible"
+    ><span
+      class="absolute top-0 right-0 w-[10px] h-[10px] rounded-full bg-gray-700 scale-[0]"
+    ></span>
+  </span>
+</button>
 </mode-toggle>
 
 <script>
@@ -30,7 +31,7 @@
       document.documentElement.classList.add("dark");
       if (themeColorMetaTag) {
         // @ts-ignore
-        themeColorMetaTag.content = "#262626";
+        themeColorMetaTag.content = "#0e141b";
       }
     } else {
       document.documentElement.classList.remove("dark");
@@ -101,10 +102,18 @@
 <style>
   .light {
     transform: translateX(0.25rem);
-    background-color: rgb(var(--color-primary-yellow));
+    background-image: linear-gradient(
+      to top right,
+      #f97316,
+      #f97316
+    );
   }
   .dark {
     transform: translateX(1.5rem);
-    background-color: rgb(var(--color-primary-blue));
+    background-image: linear-gradient(
+      to top right,
+      #facc15,
+      #facc15
+    );
   }
 </style>

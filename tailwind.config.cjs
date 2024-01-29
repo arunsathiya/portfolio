@@ -5,16 +5,14 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        body: ["Space Grotesk", "sans-serif"],
-        heading: ["Space Grotesk", "sans-serif"],
+        body: ["Open Sans", "sans-serif"],
+        heading: ["Open Sans", "sans-serif"],
       },
       colors: {
         transparent: "transparent",
         current: "currentColor",
         primary: {
-          blue: "rgb(var(--color-primary-blue) / <alpha-value>)",
-          green: "rgb(var(--color-primary-green) / <alpha-value>)",
-          yellow: "rgb(var(--color-primary-yellow) / <alpha-value>)",
+          main: "rgb(var(--color-primary-main) / <alpha-value>)",
         },
         text: {
           body: "rgb(var(--color-text-body) / <alpha-value>)",
@@ -72,7 +70,7 @@ module.exports = {
               "font-family": "Arial",
               content: "'“'",
               "font-size": "4em",
-              color: "rgb(var(--color-text-bold))",
+              color: "rgb(var(--color-text-link))",
               position: "absolute",
               left: "-10px",
               top: "-10px",
@@ -88,7 +86,7 @@ module.exports = {
             },
           },
         },
-        bubblegum: {
+        sleek: {
           css: {
             "--tw-prose-body": "rgb(var(--color-text-body))",
             "--tw-prose-headings": "rgb(var(--color-text-heading))",
@@ -99,7 +97,7 @@ module.exports = {
             "--tw-prose-bullets": "rgb(var(--color-text-body))",
             "--tw-prose-hr": "rgb(var(--color-text-muted))",
             "--tw-prose-quotes": "rgb(var(--color-text-body))",
-            "--tw-prose-quote-borders": "rgb(var(--color-text-muted))",
+            "--tw-prose-quote-borders": "rgb(var(--color-primary-main))",
             "--tw-prose-captions": "rgb(var(--color-primary-heading))",
             "--tw-prose-quote-captions": "rgb(var(--color-primary-heading))",
             "--tw-prose-code": "rgb(var(--color-text-code))",

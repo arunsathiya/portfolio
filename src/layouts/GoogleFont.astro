@@ -16,7 +16,7 @@
   https://sia.codes/posts/making-google-fonts-faster
 
   woff/woff2 assets downloaded using google-webfonts-helper:
-  https://gwfh.mranftl.com/fonts/space-grotesk?subsets=latin
+  https://gwfh.mranftl.com/fonts/open-sans?subsets=latin
 */
 ---
 
@@ -39,38 +39,76 @@
 <Fragment>
   <link
     rel="preload"
-    href="/fonts/space-grotesk-v13-latin-regular.woff2"
+    href="/fonts/open-sans-v34-latin-regular.woff2"
     as="font"
     type="font/woff2"
     crossorigin="crossorigin"
   />
   <link
     rel="preload"
-    href="/fonts/space-grotesk-v13-latin-700.woff2"
+    href="/fonts/open-sans-v34-latin-700.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin="crossorigin"
+  />
+  <link
+    rel="preload"
+    href="/fonts/open-sans-v34-latin-800.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin="crossorigin"
+  />
+  <link
+    rel="preload"
+    href="/fonts/open-sans-v34-latin-italic.woff2"
     as="font"
     type="font/woff2"
     crossorigin="crossorigin"
   />
   <style is:inline>
-    /* space-grotesk-regular - latin */
+    /* open-sans-regular - latin */
     @font-face {
-      font-family: "Space Grotesk";
+      font-family: "Open Sans";
       font-style: normal;
       font-weight: 400;
+      font-display: fallback;
       src: local(""),
-        url("/fonts/space-grotesk-v13-latin-regular.woff2") format("woff2"),
+        url("/fonts/open-sans-v34-latin-regular.woff2") format("woff2"),
         /* Chrome 26+, Opera 23+, Firefox 39+ */
-          url("/fonts/space-grotesk-v13-latin-regular.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+          url("/fonts/open-sans-v34-latin-regular.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
     }
-    /* space-grotesk-700 - latin */
+    /* open-sans-700 - latin */
     @font-face {
-      font-family: "Space Grotesk";
+      font-family: "Open Sans";
       font-style: normal;
       font-weight: 700;
+      font-display: fallback;
       src: local(""),
-        url("/fonts/space-grotesk-v13-latin-700.woff2") format("woff2"),
+        url("/fonts/open-sans-v34-latin-700.woff2") format("woff2"),
         /* Chrome 26+, Opera 23+, Firefox 39+ */
-          url("/fonts/space-grotesk-v13-latin-700.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+          url("/fonts/open-sans-v34-latin-700.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    }
+    /* open-sans-800 - latin */
+    @font-face {
+      font-family: "Open Sans";
+      font-style: normal;
+      font-weight: 800;
+      font-display: fallback;
+      src: local(""),
+        url("/fonts/open-sans-v34-latin-800.woff2") format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url("/fonts/open-sans-v34-latin-800.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    }
+    /* open-sans-italic - latin */
+    @font-face {
+      font-family: "Open Sans";
+      font-style: italic;
+      font-weight: 400;
+      font-display: fallback;
+      src: local(""),
+        url("/fonts/open-sans-v34-latin-italic.woff2") format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+          url("/fonts/open-sans-v34-latin-italic.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
     }
   </style>
 </Fragment>
