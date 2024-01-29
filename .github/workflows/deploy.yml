@@ -1,0 +1,62 @@
+name: Deploy site
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "latest"
+
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+
+      - name: Build production files
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "latest"
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+          path: dist
+
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+          dir: "compute-js"
+
+      - name: fastly compute deploy
+        uses: fastly/compute-actions@v5
+        with:
+          project_directory: compute-js
+          comment: “Deployed via GitHub Actions”
+        env:
+          FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_TOKEN }}

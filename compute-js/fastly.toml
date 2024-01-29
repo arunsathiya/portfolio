@@ -1,0 +1,13 @@
+# This file describes a Fastly Compute package. To learn more visit:
+# https://developer.fastly.com/reference/fastly-toml/
+
+authors = [ "you@example.com" ]
+description = "Fastly Compute static site"
+language = "javascript"
+manifest_version = 2
+name = "blogster-sleek"
+service_id = "OjHmCScwpt4Z3zt64HVA53"
+
+[scripts]
+  build = "npm run build"
+  
