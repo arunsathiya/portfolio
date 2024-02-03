@@ -7,7 +7,7 @@ date: 2022-01-28
 
 I was pleasantly surprised to see this email on my inbox earlier this evening:
 
-![A screenshot of an email that I received from DuckDuckGo about being able to respond to emails on the DuckDuckGo Email Protection service](/public/images/rooting-for-duckduckgo.png)
+![A screenshot of an email that I received from DuckDuckGo about being able to respond to emails on the DuckDuckGo Email Protection service](/images/rooting-for-duckduckgo.png)
 
 I have written about DuckDuckGo's Email Protection feature in the past. It's a service that removes trackers in your emails before they hit your inbox. Some may not like the idea of DuckDuckGo being able to read/do that, but it's okay in the large sense because your email host could very well be reading your emails. Most promise not to, but we never know. Email in general is not a secure protocol for communication. One must be using Signal for such communication.
 
