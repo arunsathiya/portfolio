@@ -1,7 +1,10 @@
 name: Deploy site
 on:
-  push:
+  workflow_run:
+    workflows: ["Notion and commit changes"]
     branches: [main]
+    types:
+      - completed
 
 jobs:
   build:

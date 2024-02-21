@@ -3,9 +3,10 @@ const { NotionToMarkdown } = require("notion-to-md");
 const fs = require("fs");
 // or
 // import {NotionToMarkdown} from "notion-to-md";
+require("dotenv").config();
 
 const notion = new Client({
-  auth: "secret_redacted",
+  auth: process.env.NOTION_SECRET,
 });
 
 // passing notion client to the option
