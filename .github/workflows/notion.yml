@@ -2,6 +2,11 @@ name: Notion and commit changes
 
 on:
   workflow_dispatch:
+    inputs:
+      commit_message:
+        type: string
+        description: Commit message to use for this content build step
+        required: false
 
 jobs:
   notion_and_deploy:
