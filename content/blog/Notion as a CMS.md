@@ -2,6 +2,7 @@
 external: false
 notion: f0103a93-3511-4075-b677-3694485138e9
 title: Notion as a CMS
+slug: notion-as-a-cms
 description: I am testing Notion as a CMS for my portfolio site. At this time, only blog posts are controlled from Notion but I can expand to projects and other aspects.
 date: 2024-02-21
 ---
