@@ -2,8 +2,8 @@
 external: false
 notion: f0103a93-3511-4075-b677-3694485138e9
 title: Notion as a CMS
-description: Auto-generated from Notion page
-date: 2024-02-17
+description: I am testing Notion as a CMS for my portfolio site. At this time, only blog posts are controlled from Notion but I can expand to projects and other aspects.
+date: 2024-02-21
 ---
 
 I just set up Notion as my CMS for the blog. I think there’s an excellent opportunity to use Notion as a full-fledged website management platform, integrated with a custom frontend like Astro. 
