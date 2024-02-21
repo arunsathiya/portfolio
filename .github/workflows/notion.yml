@@ -29,6 +29,7 @@ jobs:
           NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
         run: |
           node index.js
+          git add .
 
       - name: Commit Changes
         uses: planetscale/ghcommit-action@v0.1.33
