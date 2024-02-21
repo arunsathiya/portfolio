@@ -25,6 +25,8 @@ jobs:
           cmd: install
 
       - name: Run Notion script
+        env:
+          NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
         run: |
           node index.js
 
