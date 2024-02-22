@@ -1,5 +1,6 @@
 ---
 external: false
+notion: b5694860-8304-468b-a473-d387dc742eef
 title: SSH setup of the future
 slug: ssh-setup-of-the-future
 description: My SSH setup with 1Password and Tailscale
@@ -12,7 +13,7 @@ About four years ago, I had no clue what SSH keys meant. I learned to understand
 
 About a month ago at work, my interest for SSH keys grew further when one of my colleagues introduced me to the concept of using [1Password as my SSH agent](https://blog.1password.com/1password-ssh-agent/). This is a fairly new feature, which allows one to generate and store SSH keypair on the 1Password vault, and once that’s done, one can export just the public key and upload it to the servers, or other platforms that use SSH to authorize access like GitHub and GitLab.
 
-1Password will act as the authorization tool, which on Mac would mean that one can authorize by tapping on the TouchID when prompted. This completely eliminates the need for copying the private key to several laptops, but also opens up an attack vector that the private key lives on 1Password.com cloud.
+1Password will act as the authorization tool, which on Mac would mean that one can authorize by tapping on the TouchID when prompted. This completely eliminates the need for copying the private key to several laptops, but also opens up an attack vector that the private key lives on [1Password.com](http://1password.com/) cloud.
 
 I am not concerned about the attack vector because 1Password is a leader in business, has an unique concept of "[secret key](https://support.1password.com/secret-key-security/)" and [supports 2FA as well](https://support.1password.com/two-factor-authentication/).
 
