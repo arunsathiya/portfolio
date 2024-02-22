@@ -47,7 +47,7 @@ const formattedDate = new Date(date).toLocaleDateString("en-us", {
     <Header />
     <main id="main">
       <section class="blog-post prose max-w-none prose-sleek">
-        <h1 class="m-0 mb-[0.25em]">{title}</h1>
+        <h1 class="text-2xl lg:text-3xl m-0 mb-[0.25em]">{title}</h1>
         <time class="block mb-[2em] text-text-muted">{formattedDate}</time>
         <slot name="content" />
       </section>
