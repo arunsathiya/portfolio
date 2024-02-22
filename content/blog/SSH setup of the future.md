@@ -1,6 +1,7 @@
 ---
 external: false
 title: SSH setup of the future
+slug: ssh-setup-of-the-future
 description: My SSH setup with 1Password and Tailscale
 date: 2022-07-08
 ---

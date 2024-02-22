@@ -1,7 +1,8 @@
 ---
 external: false
-title: 'Patching hundreds of GitHub repositories in seconds'
-description: 'Using GitHub API to commit patches and generate pull requests.'
+title: Patching hundreds of GitHub repositories in seconds
+slug: patch-github-with-api
+description: Using GitHub API to commit patches and generate pull requests.
 date: 2024-01-27
 ---
 

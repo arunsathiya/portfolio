@@ -1,6 +1,7 @@
 ---
 external: false
 title: I am rooting for DuckDuckGo
+slug: rooting-for-duckduckgo
 description: DuckDuckGo is growing fast with a suite of products including DuckDuckGo Email Protection, App Tracking Protection and a fantastic search engine. Exciting days!
 date: 2022-01-28
 ---
