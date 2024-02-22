@@ -4,7 +4,7 @@ notion: 4431d21a-8a22-4ab4-8227-7e8d6ca7d864
 title: Patching hundreds of GitHub repositories in seconds
 slug: patch-github-with-api
 description: Using GitHub API to commit patches and generate pull requests.
-date: 2024-02-22
+date: 2024-01-27
 ---
 
 The traditional approach for submitting a patch upstream is to fork (if you don't have write access to that upstream repository), clone the fork, make changes, commit and submit a pull request upstream.
