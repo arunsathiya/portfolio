@@ -48,7 +48,7 @@ const sortedPosts = posts
                   </a>
                 ) : (
                   <a
-                    href={`/blog/${post.slug}`}
+                    href={`/blog/${post.frontmatter.slug}`}
                     class="unset hover:text-text-link"
                   >
                     {post.frontmatter.title}

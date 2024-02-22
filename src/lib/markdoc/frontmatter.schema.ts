@@ -7,6 +7,10 @@ const baseSchema = z.object({
     required_error: "Required frontmatter missing: title",
     invalid_type_error: "title must be a string",
   }),
+  slug: z.string({
+    required_error: "Required frontmatter missing: slug",
+    invalid_type_error: "slug must be a string",
+  }),
   date: z.date({
     required_error: "Required frontmatter missing: date",
     invalid_type_error:

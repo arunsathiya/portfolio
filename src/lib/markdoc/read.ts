@@ -72,6 +72,10 @@ export async function read<T extends z.ZodTypeAny>({
   };
 }
 
+export function normalizeString(str: string) {
+  return str.toLowerCase().replace(/\s+/g, '-');
+}
+
 export async function readOne<T extends z.ZodTypeAny>({
   directory,
   slug,
@@ -81,9 +85,25 @@ export async function readOne<T extends z.ZodTypeAny>({
   slug: string;
   frontmatterSchema: T;
 }) {
-  const filepath = path.join(contentDirectory, directory, `${slug}.md`);
+  // Normalize the slug for comparison
+  const normalizedSlug = normalizeString(slug);
+
+  const dirPath = path.join(contentDirectory, directory);
+  const files = await globby(`${dirPath}/*.md`);
+
+  // Find a file that matches the normalized slug
+  const matchedFile = files.find(file => {
+    const fileName = path.basename(file, '.md');
+    return normalizeString(fileName) === normalizedSlug;
+  });
+
+  if (!matchedFile) {
+    throw new Error(`No matching file found for slug: ${slug}`);
+  }
+
+  // Proceed with reading the matched file
   return read({
-    filepath,
+    filepath: matchedFile,
     schema,
   });
 }
