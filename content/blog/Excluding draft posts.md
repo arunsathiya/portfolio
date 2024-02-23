@@ -7,7 +7,7 @@ description: If you are looking for a way to excluding draft posts from being in
 date: 2021-08-13
 ---
 
-```javascript
+```markdown
 Note: As of Feb 2024, I have moved to a Astro-based website deployed to the edge with Fastly Compute, with Notion as a backend and GitHub Actions as my build tool.
 ```
 
