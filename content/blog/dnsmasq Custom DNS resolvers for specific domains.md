@@ -1,8 +1,8 @@
 ---
 external: false
 notion: b86aaac5-f487-4d84-8ec1-d3cc4eaa7fda
-title: dnsmasq: Custom DNS resolvers for specific domains
-slug: dnsmasq:-custom-dns-resolvers-for-specific-domains
+title: dnsmasq - Custom DNS resolvers for specific domains
+slug: dnsmasq-custom-dns-resolvers-for-specific-domains
 description: It's possible to setup custom DNS resolvers for certain domains using a dnsmasq config file. Requests still pass through pihole, for ad-blocking capabilities.
 date: 2021-10-30
 ---
