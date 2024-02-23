@@ -1,7 +1,7 @@
 ---
 external: false
 notion: 1265e493-d4df-4e55-b5e5-a8d012de6f8f
-title: Free, private pi-hole hosting with
+title: Free, private pi-hole hosting with Fly.io and Tailscale
 slug: private-pi-hole-hosting-fly-tailscale
 description: Fly.io
 date: 2021-11-22
