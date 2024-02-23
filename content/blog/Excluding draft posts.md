@@ -8,7 +8,7 @@ date: 2021-08-13
 ---
 
 ```javascript
-Note: I have moved to a Astro-based website deployed to the edge with Fastly Compute, with Notion as a C
+Note: As of Feb 2024, I have moved to a Astro-based website deployed to the edge with Fastly Compute, with Notion as a backend and GitHub Actions as my build tool.
 ```
 
 For a while, I have been thinking about excluding draft posts from search engines' indexes. When I say draft posts, I am talking about the blog posts that aren't worthy of being indexed; those that aren't subjected to the level of quality that I expect the public to read. Think of draft blog posts similar to tweets. [I have been trying to use my blog as a source of my thoughts](https://www.notion.so/2021/01/19/blog-as-a-replacement-for-twitter/), while being cross-posted to other social networks.
