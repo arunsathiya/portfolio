@@ -7,7 +7,7 @@ description: It's possible to setup custom DNS resolvers for certain domains usi
 date: 2021-10-30
 ---
 
-Learned a neat thing today -- [it's possible to set custom DNS resolvers for certain domains](https://news.ycombinator.com/item?id=29026068). I can create a custom config file for dnsmasq and specify the DNS resolvers to use for those domains. I don't have a need for it today, but may be handy in cases like archive.is not loading on Cloudflare DNS.
+Learned a neat thing today — [it's possible to set custom DNS resolvers for certain domains](https://news.ycombinator.com/item?id=29026068). I can create a custom config file for dnsmasq and specify the DNS resolvers to use for those domains. I don't have a need for it today, but may be handy in cases like archive.is not loading on Cloudflare DNS.
 
 These requests still go through pihole, so ad-blocking capabilities are available. It's just the upstream that changes. My test below confirms so: I have set `dnsleaktest.com` to be queried using Google DNS but requests still pass through pihole.
 
