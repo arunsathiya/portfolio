@@ -74,6 +74,6 @@ In the above file, `mew.tailnet-b593.ts.net.pem` and `mew.tailnet-b593.ts.net
 
 If you are looking for a web server or reverse proxy manager, I cannot recommend Caddy enough. Their documentation and support on the community forums are impeccable.
 
-Oh also, I tried learning in the public for the first time by tooting my progress.
+I tried learning in the public for the first time by posting my progress to Mastodon.
 
 That helped me retain my lessons better and held me accountable, in the way that I wanted to see this completed. No wonder many successful people learn or build in the public. I plan on doing this more often.
