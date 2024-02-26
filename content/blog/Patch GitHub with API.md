@@ -15,7 +15,7 @@ I recently came across [this GitHub changelog](https://github.blog/changelog/202
 
 I wanted to simplify the whole approach with these guidelines:
 - Clone only the files that need to be patched.
-- Make changes programatically, instead of manually on an IDE.
+- Make changes programmatically, instead of manually on an IDE.
 - Generate patch files for the changes made.
 - Create commit on the fork.
 - Prepare pull request from the fork to the upstream repository.
