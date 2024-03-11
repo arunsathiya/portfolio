@@ -7,7 +7,7 @@ description: This is how I consume the Whisper speech model from the ChatGPT iOS
 date: 2024-03-11
 ---
 
-A lot of people know OpenAI only in the form of ChatGPT offering but they build a ton of products in the adjacent spaces as well. Whisper stands out as a prime example, an advanced speech recognition model. It’s available as a downloadable model for local use or through API for integration into online services
+A lot of people know OpenAI only in the form of ChatGPT offering but they build a ton of products in the adjacent spaces as well. [Whisper](https://openai.com/research/whisper) stands out as a prime example, an advanced speech recognition model. It’s available as a downloadable model for local use or through API for integration into online services
 
 Ever since I discovered this about three months ago, I had been hooked about the idea of creating content using voice input rather than having to type it. 
 
