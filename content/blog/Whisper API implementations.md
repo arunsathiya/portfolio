@@ -1,7 +1,7 @@
 ---
 external: false
 notion: f1a19543-cbf0-45cc-8a85-7b00e6ac4795
-title: Whisper API implementations`
+title: Whisper API implementations
 slug: whisper-api-implementations
 description: This is how I consume the Whisper speech model from the ChatGPT iOS app onto my MacBook.
 date: 2024-03-11
