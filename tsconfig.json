@@ -1,8 +1,12 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "display": "theme/sleek",
   "compilerOptions": {
-    "types": ["astro/client"],
-    "baseUrl": "."
-  }
+    "strictNullChecks": true,
+    "baseUrl": ".",
+		"paths": {
+			"@src/*": ["src/*"]
+		},
+    "outDir": "dist"
+	},
+  "exclude": ["public", "node_modules", "dist"]
 }
