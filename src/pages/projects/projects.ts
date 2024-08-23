@@ -12,54 +12,23 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    name: 'Devaradise.com',
-    description: 'A blog that sharing web development resources and tutorials',
-    demoLink: 'https://devaradise.com',
-    tags: ['Blog']
+    name: 'set-output-janitor',
+    description: 'Automated set-output replacements with GitHub GraphQL API',
+    demoLink: 'https://github.com/arunsathiya/set-output-janitor',
+    tags: ['GitHub', 'DevOps']
   },
   {
-    name: 'Sellercraft App',
-    description: 'An Ecommerce omnichannel platform in Southeast Asia',
-    demoLink: 'https://sellercraft.co',
+    name: 'gh-ssh-import',
+    description: 'Upload local SSH keys and 1Password-stored keys (coming soon) to your GitHub account',
+    demoLink: 'https://github.com/arunsathiya/gh-ssh-import',
     demoLinkRel: 'nofollow noopener noreferrer',
-    tags: ['ECommerce', 'Saas']
+    tags: ['1Password', 'DevOps', 'GitHub']
   },
   {
-    name: 'Gaji.id App',
-    description: 'Payroll and HR Management Information System',
-    demoLink: 'https://sellercraft.co',
+    name: 'download-google-doc',
+    description: 'Go program to download a Google document in specific file types with a beautiful TUI',
+    demoLink: 'https://github.com/arunsathiya/download-google-doc',
     demoLinkRel: 'nofollow noopener noreferrer',
-    tags: ['HRIS', 'Saas']
+    tags: ['Terminal', 'CLI', 'TUI', 'Google API']
   },
-  {
-    ...(await getRepositoryDetails('devaradise/paradise-ui')),
-    name: 'Paradise UI',
-    demoLink: 'https://paradise-ui.com',
-    postLink: 'https://devaradise.com/how-i-build-paradise-ui-react-component-library/',
-    tags: ['React', 'UI Library']
-  },
-  {
-    ...(await getRepositoryDetails('syakirurahman/react-lab')),
-    name: 'React Lab',
-    demoLink: 'https://devaradise.com/lab/react/',
-    tags: ['React']
-  },
-  {
-    ...(await getRepositoryDetails('syakirurahman/pokemon-catcher')),
-    name: 'Pokemon Catcher',
-    demoLink: 'https://pokemon-catcher-18636.web.app/',
-    tags: ['Hobby']
-  },
-  {
-    ...(await getRepositoryDetails('syakirurahman/movie-nominations')),
-    name: 'Movie Nominations',
-    demoLink: 'https://movie-nominations-c21c3.web.app/',
-    tags: ['Hobby']
-  },
-  {
-    ...(await getRepositoryDetails('syakirurahman/organization-tree')),
-    name: 'Organization tree',
-    demoLink: 'https://organization-tree-2a446.web.app/',
-    tags: ['Hobby']
-  }
 ]
