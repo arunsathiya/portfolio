@@ -104,3 +104,10 @@ jobs:
           comment: “Deployed via GitHub Actions”
         env:
           FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_TOKEN }}
+      - uses: altinukshini/deployment-action@releases/v1
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: '${{ github.token }}'
+          target_url: https://arun.blog
+          environment: production
