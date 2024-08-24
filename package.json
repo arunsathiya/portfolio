@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "notion-to-md": "tsx src/scripts/notion-to-md.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.2",
@@ -17,9 +18,14 @@
     "@astrojs/rss": "^4.0.7",
     "@astrojs/sitemap": "^3.1.6",
     "@astrojs/tailwind": "^5.1.0",
+    "@notionhq/client": "^2.2.15",
+    "@types/node": "^22.5.0",
     "astro": "^4.14.2",
+    "dotenv": "^16.4.5",
+    "notion-to-md": "^3.1.1",
     "sharp": "^0.33.5",
     "tailwindcss": "^3.4.10",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
     "unist-util-visit": "^5.0.0"
   },
@@ -27,6 +33,7 @@
     "@tailwindcss/typography": "^0.5.14",
     "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.1",
+    "tsx": "^4.17.0",
     "vite": "^5.4.1"
   }
 }
