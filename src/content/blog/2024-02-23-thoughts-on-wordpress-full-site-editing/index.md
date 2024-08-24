@@ -1,13 +1,14 @@
 ---
-title: 'Thoughts on WordPress Full Site Editing'
-seoTitle: 'Thoughts on WordPress Full Site Editing'
-slug: 'thoughts-on-wordpress-full-site-editing'
+title: "Thoughts on WordPress Full Site Editing"
+seoTitle: "Thoughts on WordPress Full Site Editing"
+slug: "thoughts-on-wordpress-full-site-editing"
 description: "I recently redesigned my website's homepage and blog post views using the new WordPress Full Site Editing experience. Read about my experience on this post."
 pubDate: 'Feb 23 2024'
 updatedDate: 'Aug 24 2024'
-tags: ['Content Management', 'Tools', 'Open Source']
+tags: ["Content Management","Tools","Open Source"]
 coverImage: './image.webp'
 ---
+
 
 For years, design on WordPress had been in the form of PHP templates bundled together as a WordPress theme. The templates apply to specific content as desginated by the [WordPress Template Hierarchy](https://developer.wordpress.org/themes/basics/template-hierarchy/). The largest issue with this approach would be that anyone wanting a custom design on their site must have PHP skills to write theme code.
 

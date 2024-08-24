@@ -1,13 +1,14 @@
 ---
-title: 'Thoughts on the 1Password-Fastmail partnership'
-seoTitle: 'Thoughts on the 1Password-Fastmail partnership'
-slug: 'thoughts-on-the-1password-fastmail-partnership'
-description: '1Password announced a partnership with Fastmail to generate unique email aliases within the 1Password apps. But, did you know that SimpleLogin is better?'
+title: "Thoughts on the 1Password-Fastmail partnership"
+seoTitle: "Thoughts on the 1Password-Fastmail partnership"
+slug: "thoughts-on-the-1password-fastmail-partnership"
+description: "1Password announced a partnership with Fastmail to generate unique email aliases within the 1Password apps. But, did you know that SimpleLogin is better?"
 pubDate: 'Feb 23 2024'
 updatedDate: 'Aug 24 2024'
-tags: ['Tools', 'Security', 'Privacy']
+tags: ["Tools","Security","Privacy"]
 coverImage: './image.webp'
 ---
+
 
 A week ago, the wonderful folks at 1Password announced a new feature: automatic generation of email aliases when creating a new vault entry. As an user of SimpleLogin, [I am already familiar with the concept of using unique aliases for each website](https://blogarunsathiya.wordpress.com/2020/06/25/of-emails-and-aliases/). It's the same functionality that [1Password and Fastmail announced](https://blog.1password.com/fastmail-masked-email/), except that generating the alias doesn't require a visit to the email provider's website.
 
@@ -21,7 +22,7 @@ In my 2 years of being a SimpleLogin customer, I have generated over 1200 aliase
 
 An image from my SimpleLogin dashboard that shows the number of aliases that I have generated, incoming emails, outbound responses and blocked emails.
 
-Except one outage, the service has been spectacular so far and support is great. The founder, Son, often responds to my emails, welcomes feedback and sometimes includes users in future product discussions. If you are looking for a privacy-respecting email alias generator, look no beyond SimpleLogin. *This is not a sponsored post. I am just a happy user.*
+Except one outage, the service has been spectacular so far and support is great. The founder, Son, often responds to my emails, welcomes feedback and sometimes includes users in future product discussions. If you are looking for a privacy-respecting email alias generator, look no beyond SimpleLogin. _This is not a sponsored post. I am just a happy user._
 
 SimpleLogin is also open-source and can be self-hosted.
 
