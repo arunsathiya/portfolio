@@ -1,13 +1,14 @@
 ---
-title: 'Proprietary email platforms and open standards for email'
-seoTitle: 'Proprietary email platforms and open standards for email'
-slug: 'proprietary-email-platforms-and-open-standards-for-email'
-description: 'Platforms like Gmail, Yahoo and Outlook have made it very easy to own and manage a mailbox, but I think we should be focusing on educating open standards.'
-pubDate: 'Feb 23 2024'
+title: "Proprietary email platforms and open standards for email"
+seoTitle: "Proprietary email platforms and open standards for email"
+slug: "proprietary-email-platforms-and-open-standards-for-email"
+description: "Platforms like Gmail, Yahoo and Outlook have made it very easy to own and manage a mailbox, but I think we should be focusing on educating open standards."
+pubDate: 'Dec 06 2021'
 updatedDate: 'Aug 24 2024'
-tags: ['Open Source', 'Privacy', 'Tools']
+tags: ["Open Source","Privacy","Tools"]
 coverImage: './image.webp'
 ---
+
 
 Proprietary email platforms like Gmail and Outlook are common in use these days that most users aren't even familiar with open standards for email: [IMAP](https://datatracker.ietf.org/doc/html/rfc9051), POP3 and SMTP. Popular platforms are based on these protocols, but don't expose them to the customer. Instead, the platforms act as one big wrapper service. For most customers, the concept of email stops here.
 

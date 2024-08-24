@@ -32,6 +32,8 @@ function formatDateForFolder(dateString: string): string {
 }
 
 async function processPage(page: PageObjectResponse) {
+	console.log('Page object:', JSON.stringify(page, null, 2));
+
 	const pageId = page.id;
 	const mdblocks = await n2m.pageToMarkdown(pageId);
 	const mdString = n2m.toMarkdownString(mdblocks);
@@ -42,7 +44,15 @@ async function processPage(page: PageObjectResponse) {
 			? page.properties.Slug.rich_text[0]?.plain_text.trim().toLowerCase().replace(/\s+/g, '-')
 			: '';
 	const description = page.properties.Description.type === 'rich_text' ? page.properties.Description.rich_text[0]?.plain_text.trim() : '';
-	const pubDate = formatDate(page.created_time);
+
+	// Use the Date property instead of created_time
+	let pubDate = '';
+	if (page.properties.Date && page.properties.Date.type === 'date') {
+		pubDate = formatDate(page.properties.Date.date?.start || '');
+	} else {
+		pubDate = formatDate(page.created_time);
+	}
+
 	const updatedDate = formatDate(page.last_edited_time);
 
 	let tags: string[] = [];
@@ -54,7 +64,14 @@ async function processPage(page: PageObjectResponse) {
 		});
 	}
 
-	const folderDate = formatDateForFolder(page.created_time);
+	// Use the Date property for folder name as well
+	let folderDate = '';
+	if (page.properties.Date && page.properties.Date.type === 'date') {
+		folderDate = formatDateForFolder(page.properties.Date.date?.start || '');
+	} else {
+		folderDate = formatDateForFolder(page.created_time);
+	}
+
 	const folderName = `${folderDate}-${slug}`;
 	const dir = `./src/content/blog/${folderName}`;
 	if (!fs.existsSync(dir)) {
