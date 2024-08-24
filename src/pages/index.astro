@@ -20,6 +20,18 @@ const posts = (await getCollection('blog'))
 
 <BaseLayout title={SITE_TITLE + ' - ' + SITE_TAGLINE} description={SITE_DESCRIPTION}>
 	<div class='container'>
+		<main>
+			<div class='mt-6 mb-12'>
+				<div class='flex justify-between gap-2 border-b mb-1 dark:border-b-zinc-700'>
+					<h2 class='text-lg font-bold mb-3'>Posts</h2>
+					<a href='/posts/' class='inline-block py-2 underline text-zinc-950 dark:text-zinc-100'>All posts &raquo;</a>
+				</div>
+				<div>
+					{posts.map((post: BlogPost) => <PostItem post={post} />)}
+				</div>
+				<div class='text-right'></div>
+			</div>
+		</main>
 		<div class='w-full md:flex md:items-center gap-16 mb-10'>
 			<div class='text-pretty leading-9'>
 				<h1 class='text-4xl font-bold mb-4'>Hi, thanks for visiting! ✨</h1>
@@ -41,16 +53,6 @@ const posts = (await getCollection('blog'))
 			<Image src={Arun} alt='Arun Sathiya' width={300} loading='eager' class='rounded-3xl md:rotate-3 mx-auto md:mx-0' />
 		</div>
 		<main>
-			<div class='mt-6 mb-12'>
-				<div class='flex justify-between gap-2 border-b mb-1 dark:border-b-zinc-700'>
-					<h2 class='text-lg font-bold mb-3'>Posts</h2>
-					<a href='/posts/' class='inline-block py-2 underline text-zinc-950 dark:text-zinc-100'>All posts &raquo;</a>
-				</div>
-				<div>
-					{posts.map((post: BlogPost) => <PostItem post={post} />)}
-				</div>
-				<div class='text-right'></div>
-			</div>
 			<div>
 				<div class='flex justify-between gap-2 mb-1'>
 					<h2 class='text-lg font-bold mb-3'>Projects</h2>
