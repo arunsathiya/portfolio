@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'latest'
+          node-version: 18
 
       - name: Run install
         uses: borales/actions-yarn@v5
@@ -27,10 +27,15 @@ jobs:
           cmd: install
 
       - name: Run Notion script
+        uses: borales/actions-yarn@v5
         env:
           NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        with:
+          cmd: notion-to-md
+
+      - name: Stage all changes
         run: |
-          node index.js
           git add .
 
       - name: Commit Changes
