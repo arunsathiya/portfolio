@@ -109,6 +109,6 @@ jobs:
         name: Create GitHub deployment
         id: deployment
         with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
+          token: '${{ secrets.PAT_FOR_DEPLOYMENTS }}'
           environment-url: https://arun.blog
           environment: production
