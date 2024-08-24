@@ -32,8 +32,6 @@ function formatDateForFolder(dateString: string): string {
 }
 
 async function processPage(page: PageObjectResponse) {
-	console.log('Page object:', JSON.stringify(page, null, 2));
-
 	const pageId = page.id;
 	const mdblocks = await n2m.pageToMarkdown(pageId);
 	const mdString = n2m.toMarkdownString(mdblocks);
@@ -123,7 +121,6 @@ async function main() {
 
 	const tagColorsPath = path.join('./src/data', 'tagColors.json');
 	fs.writeFileSync(tagColorsPath, JSON.stringify(allTagColors, null, 2));
-	console.log(`Saved tag colors to: ${tagColorsPath}`);
 }
 
 main().catch((error) => {
