@@ -14,6 +14,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    env:
+      TZ: 'America/Los_Angeles'
     steps:
       - uses: actions/checkout@v4
 
@@ -45,6 +47,8 @@ jobs:
 
   formatting:
     runs-on: ubuntu-24.04
+    env:
+      TZ: 'America/Los_Angeles'
     steps:
       - uses: actions/checkout@v4
 
@@ -67,6 +71,8 @@ jobs:
     if: ${{ github.event_name != 'pull_request' }}
     needs: build
     runs-on: ubuntu-24.04
+    env:
+      TZ: 'America/Los_Angeles'
     steps:
       - uses: actions/checkout@v4
 
