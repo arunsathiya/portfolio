@@ -4,8 +4,8 @@ seoTitle: 'I am rooting for DuckDuckGo'
 slug: 'rooting-for-duckduckgo'
 description: 'DuckDuckGo is growing fast with a suite of products including DuckDuckGo Email Protection, App Tracking Protection and a fantastic search engine. Exciting days!'
 pubDate: 'Feb 21 2024'
-updatedDate: 'Aug 23 2024'
-tags: []
+updatedDate: 'Aug 24 2024'
+tags: ['Privacy']
 coverImage: './image.webp'
 ---
 

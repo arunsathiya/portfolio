@@ -4,8 +4,8 @@ seoTitle: 'jq magic to create contacts for SimpleLogin aliases'
 slug: 'jq-magic-to-create-contacts-for-simplelogin-aliases'
 description: "If you are using SimpleLogin to create unique email aliases, here's a hacky workaround using jq to create contact reverse alias from your terminal application."
 pubDate: 'Feb 22 2024'
-updatedDate: 'Aug 23 2024'
-tags: []
+updatedDate: 'Aug 24 2024'
+tags: ['Automation']
 coverImage: './image.webp'
 ---
 

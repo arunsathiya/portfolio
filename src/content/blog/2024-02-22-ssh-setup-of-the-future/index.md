@@ -4,8 +4,8 @@ seoTitle: 'SSH setup of the future'
 slug: 'ssh-setup-of-the-future'
 description: 'My SSH setup with 1Password and Tailscale'
 pubDate: 'Feb 22 2024'
-updatedDate: 'Aug 23 2024'
-tags: []
+updatedDate: 'Aug 24 2024'
+tags: ['Security']
 coverImage: './image.webp'
 ---
 

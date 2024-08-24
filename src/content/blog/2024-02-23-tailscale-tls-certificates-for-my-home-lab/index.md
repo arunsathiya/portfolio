@@ -4,8 +4,8 @@ seoTitle: 'Growing my home lab - Tailscale TLS certificates for each Docker with
 slug: 'tailscale-tls-certificates-for-my-home-lab'
 description: 'I am starting to grow my home lab with Raspberry Pi, Docker, Caddy and Tailscale. Right now, I have Whoogle, libreddit, pihole and Caddy running on my nodes.'
 pubDate: 'Feb 23 2024'
-updatedDate: 'Aug 23 2024'
-tags: []
+updatedDate: 'Aug 24 2024'
+tags: ['Tools', 'DevOps']
 coverImage: './image.webp'
 ---
 

@@ -4,8 +4,8 @@ seoTitle: 'Excluding draft posts from search index'
 slug: 'excluding-draft-posts'
 description: 'If you are looking for a way to excluding draft posts from being indexed on the search engines, Yoast SEO offers filters to achieve that.'
 pubDate: 'Feb 23 2024'
-updatedDate: 'Aug 23 2024'
-tags: []
+updatedDate: 'Aug 24 2024'
+tags: ['Automation']
 coverImage: './image.webp'
 ---
 

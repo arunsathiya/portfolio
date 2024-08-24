@@ -4,8 +4,8 @@ seoTitle: 'Thoughts on WordPress Full Site Editing'
 slug: 'thoughts-on-wordpress-full-site-editing'
 description: "I recently redesigned my website's homepage and blog post views using the new WordPress Full Site Editing experience. Read about my experience on this post."
 pubDate: 'Feb 23 2024'
-updatedDate: 'Aug 23 2024'
-tags: []
+updatedDate: 'Aug 24 2024'
+tags: ['Content Management', 'Tools', 'Open Source']
 coverImage: './image.webp'
 ---
 

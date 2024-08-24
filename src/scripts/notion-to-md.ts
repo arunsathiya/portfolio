@@ -45,6 +45,11 @@ async function processPage(page: PageObjectResponse) {
 	const pubDate = formatDate(page.created_time);
 	const updatedDate = formatDate(page.last_edited_time);
 
+	let tags: string[] = [];
+	if (page.properties.Tags && page.properties.Tags.type === 'multi_select') {
+		tags = page.properties.Tags.multi_select.map((tag) => tag.name);
+	}
+
 	const folderDate = formatDateForFolder(page.created_time);
 	const folderName = `${folderDate}-${slug}`;
 	const dir = `./src/content/blog/${folderName}`;
@@ -60,7 +65,7 @@ slug: "${slug}"
 description: "${description}"
 pubDate: '${pubDate}'
 updatedDate: '${updatedDate}'
-tags: []
+tags: ${JSON.stringify(tags)}
 coverImage: './image.webp'
 ---
 

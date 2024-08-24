@@ -4,8 +4,8 @@ seoTitle: 'Storing 2FA codes on my 1Password'
 slug: 'storing-2fa-codes-on-my-1password'
 description: "Storing 2FA codes on a password manager doesn't equal placing all eggs in the same basket. That's because password managers come with unique security features."
 pubDate: 'Feb 22 2024'
-updatedDate: 'Aug 23 2024'
-tags: []
+updatedDate: 'Aug 24 2024'
+tags: ['Tools', 'Privacy', 'Security']
 coverImage: './image.webp'
 ---
 

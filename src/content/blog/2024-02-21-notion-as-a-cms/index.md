@@ -4,8 +4,8 @@ seoTitle: 'Notion as a CMS'
 slug: 'notion-as-a-cms'
 description: 'I am testing Notion as a CMS for my portfolio site. At this time, only blog posts are controlled from Notion but I can expand to projects and other aspects.'
 pubDate: 'Feb 21 2024'
-updatedDate: 'Aug 23 2024'
-tags: []
+updatedDate: 'Aug 24 2024'
+tags: ['Productivity', 'Content Management', 'APIs']
 coverImage: './image.webp'
 ---
 

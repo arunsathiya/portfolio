@@ -4,8 +4,8 @@ seoTitle: 'Whisper API implementations'
 slug: 'whisper-api-implementations'
 description: 'This is how I consume the Whisper speech model from the ChatGPT iOS app onto my MacBook.'
 pubDate: 'Mar 11 2024'
-updatedDate: 'Aug 23 2024'
-tags: []
+updatedDate: 'Aug 24 2024'
+tags: ['Whisper', 'AI', 'APIs', 'Productivity', 'Open Source']
 coverImage: './image.webp'
 ---
 

@@ -4,8 +4,8 @@ seoTitle: 'Thoughts on the 1Password-Fastmail partnership'
 slug: 'thoughts-on-the-1password-fastmail-partnership'
 description: '1Password announced a partnership with Fastmail to generate unique email aliases within the 1Password apps. But, did you know that SimpleLogin is better?'
 pubDate: 'Feb 23 2024'
-updatedDate: 'Aug 23 2024'
-tags: []
+updatedDate: 'Aug 24 2024'
+tags: ['Tools', 'Security', 'Privacy']
 coverImage: './image.webp'
 ---
 
