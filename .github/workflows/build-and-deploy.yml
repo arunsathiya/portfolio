@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
   workflow_run:
-    workflows: ['Notion and commit changes']
+    workflows: ['Commit Notion changes']
     branches: [main]
     types:
       - completed

@@ -1,4 +1,4 @@
-name: Notion and commit changes
+name: Commit Notion changes
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
         required: false
 
 jobs:
-  notion_and_deploy:
+  commit:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -33,6 +33,11 @@ jobs:
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
         with:
           cmd: notion-to-md
+
+      - name: Fix Formatting
+        uses: borales/actions-yarn@v5
+        with:
+          cmd: format:write
 
       - name: Stage all changes
         run: |

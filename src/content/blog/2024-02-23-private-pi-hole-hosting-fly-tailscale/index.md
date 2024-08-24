@@ -1,14 +1,13 @@
 ---
-title: "Free, private pi-hole hosting with Fly.io and Tailscale"
-seoTitle: "Free, private pi-hole hosting with Fly.io and Tailscale"
-slug: "private-pi-hole-hosting-fly-tailscale"
-description: "Fly.io"
+title: 'Free, private pi-hole hosting with Fly.io and Tailscale'
+seoTitle: 'Free, private pi-hole hosting with Fly.io and Tailscale'
+slug: 'private-pi-hole-hosting-fly-tailscale'
+description: 'Fly.io'
 pubDate: 'Feb 23 2024'
 updatedDate: 'Aug 24 2024'
-tags: ["Tools","Automation"]
+tags: ['Tools', 'Automation']
 coverImage: './image.webp'
 ---
-
 
 Hosting a network-wide pi-hole for ad-blocking is easy. It comes with a one-step installation guide that you can run on most environments. [I run two pi-holes at my house](https://blogarunsathiya.wordpress.com/2021/09/27/tailscale-tls-certificates-for-my-home-lab/), but the problem with my setup is, if my internet drops, both pi-holes stop working too. Ideally, I'd need to have a pi-hole outside my house, preferably where internet doesn't go down at the same time as my provider.
 

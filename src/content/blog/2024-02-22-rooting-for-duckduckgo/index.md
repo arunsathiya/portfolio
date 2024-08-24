@@ -1,14 +1,13 @@
 ---
-title: "I am rooting for DuckDuckGo"
-seoTitle: "I am rooting for DuckDuckGo"
-slug: "rooting-for-duckduckgo"
-description: "DuckDuckGo is growing fast with a suite of products including DuckDuckGo Email Protection, App Tracking Protection and a fantastic search engine. Exciting days!"
+title: 'I am rooting for DuckDuckGo'
+seoTitle: 'I am rooting for DuckDuckGo'
+slug: 'rooting-for-duckduckgo'
+description: 'DuckDuckGo is growing fast with a suite of products including DuckDuckGo Email Protection, App Tracking Protection and a fantastic search engine. Exciting days!'
 pubDate: 'Feb 22 2024'
 updatedDate: 'Aug 24 2024'
-tags: ["Privacy"]
+tags: ['Privacy']
 coverImage: './image.webp'
 ---
-
 
 I was pleasantly surprised to see this email on my inbox earlier this evening:
 
