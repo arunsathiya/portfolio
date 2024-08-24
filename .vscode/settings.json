@@ -1,3 +1,17 @@
 {
-    "vscode-yaml-sort.indent": 2
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "always",
+        "source.addMissingImports.ts": "always",
+        "source.sortImports": "always",
+        "source.removeUnused.ts": "always",
+        "source.removeUnusedImports": "always"
+    },
+    "[github-actions-workflow]": {
+        "editor.defaultFormatter": "github.vscode-github-actions"
+    },
+    "[typescript][javascript][astro]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
 }

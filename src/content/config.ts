@@ -14,10 +14,10 @@ const blog = defineCollection({
 			tags: z.array(z.string()).optional(),
 			coverImage: image()
 				.refine((img) => img.width >= 960, {
-					message: 'Cover image must be at least 960 pixels wide!'
+					message: 'Cover image must be at least 960 pixels wide!',
 				})
-				.optional()
-		})
+				.optional(),
+		}),
 });
 
 export const collections = { blog };

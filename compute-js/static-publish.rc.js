@@ -27,8 +27,8 @@ const config = {
 		spaFile: false,
 		notFoundPageFile: '/404.html',
 		autoExt: [],
-		autoIndex: ['index.html', 'index.htm']
-	}
+		autoIndex: ['index.html', 'index.htm'],
+	},
 };
 
 export default config;

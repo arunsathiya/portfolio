@@ -21,14 +21,14 @@ function groupTagsByFirstLetter(tags: Tag[]) {
 			acc[firstLetter].push(tag);
 			return acc;
 		},
-		{} as Record<string, Tag[]>
+		{} as Record<string, Tag[]>,
 	);
 
 	return Object.entries(grouped)
 		.sort(([a], [b]) => a.localeCompare(b))
 		.map(([letter, tags]) => ({
 			letter,
-			tags: tags.sort((a, b) => a.label.localeCompare(b.label))
+			tags: tags.sort((a, b) => a.label.localeCompare(b.label)),
 		}));
 }
 
@@ -43,7 +43,7 @@ for (const post of allPosts) {
 			const _tag: Tag = {
 				value: tagValue,
 				label: tag,
-				postCount: 1
+				postCount: 1,
 			};
 			mappedTags[tagValue] = _tag;
 		}

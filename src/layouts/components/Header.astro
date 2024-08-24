@@ -8,16 +8,16 @@ import GithubBlack from '@src/assets/img/github-mark.svg';
 const menu = [
 	{
 		link: '/about/',
-		label: 'About'
+		label: 'About',
 	},
 	{
 		link: '/posts/',
-		label: 'Posts'
+		label: 'Posts',
 	},
 	{
 		link: '/projects/',
-		label: 'Projects'
-	}
+		label: 'Projects',
+	},
 ];
 ---
 
@@ -152,14 +152,14 @@ const menu = [
 			if (isDark) {
 				sendMessage({
 					setConfig: {
-						theme: 'dark_dimmed'
-					}
+						theme: 'dark_dimmed',
+					},
 				});
 			} else {
 				sendMessage({
 					setConfig: {
-						theme: 'light'
-					}
+						theme: 'light',
+					},
 				});
 			}
 			localStorage.setItem('theme', isDark ? 'dark' : 'light');

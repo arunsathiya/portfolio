@@ -13,8 +13,8 @@ export const getStaticPaths = async () => {
 			allPosts
 				.map((post) => post.data.tags)
 				.flat()
-				.filter((tag) => !!tag)
-		)
+				.filter((tag) => !!tag),
+		),
 	].map((tag) => ({ params: { tag: slugify(tag || '') } }));
 };
 

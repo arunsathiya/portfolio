@@ -15,14 +15,14 @@ function groupPostsByYear(posts: BlogPost[]) {
 			acc[year].push(post);
 			return acc;
 		},
-		{} as Record<number, BlogPost[]>
+		{} as Record<number, BlogPost[]>,
 	);
 
 	return Object.entries(grouped)
 		.sort(([a], [b]) => Number(b) - Number(a))
 		.map(([year, posts]) => ({
 			year: Number(year),
-			posts: posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+			posts: posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()),
 		}));
 }
 

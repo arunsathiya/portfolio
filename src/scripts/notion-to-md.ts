@@ -8,15 +8,15 @@ import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoint
 dotenv.config();
 
 const notion = new Client({
-	auth: process.env.NOTION_SECRET
+	auth: process.env.NOTION_SECRET,
 });
 
 const n2m = new NotionToMarkdown({
 	notionClient: notion,
 	config: {
 		parseChildPages: false,
-		separateChildPage: false
-	}
+		separateChildPage: false,
+	},
 });
 
 function formatDate(dateString: string): string {
@@ -38,7 +38,7 @@ function formatDateForFolder(dateString: string): string {
 	}
 
 	const databaseQuery = await notion.databases.query({
-		database_id: databaseId
+		database_id: databaseId,
 	});
 
 	for (const page of databaseQuery.results) {
