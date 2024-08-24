@@ -12,20 +12,20 @@ import { loadEnv } from 'vite';
 const { GISCUS_REPO, GISCUS_REPO_ID, GISCUS_CATEGORY, GISCUS_CATEGORY_ID } = loadEnv(
 	process.env.NODE_ENV || 'production',
 	process.cwd(),
-	''
+	'',
 );
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
 	return posts.map((post: any) => ({
 		params: { slug: post.slug },
-		props: post
+		props: post,
 	}));
 }
 type Props = CollectionEntry<'blog'>;
 const post = Astro.props;
 const {
-	data: { title, seoTitle, description, coverImage, pubDate, updatedDate, tags }
+	data: { title, seoTitle, description, coverImage, pubDate, updatedDate, tags },
 } = post;
 const { Content, headings } = await post.render();
 ---

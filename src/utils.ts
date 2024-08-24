@@ -32,8 +32,8 @@ export const getRepositoryDetails = async (repositoryFullname: string) => {
 		method: 'GET',
 		headers: {
 			Authorization: `Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN}`,
-			'X-GitHub-Api-Version': '2022-11-28'
-		}
+			'X-GitHub-Api-Version': '2022-11-28',
+		},
 	});
 	const response = await repoDetails.json();
 	return response;
