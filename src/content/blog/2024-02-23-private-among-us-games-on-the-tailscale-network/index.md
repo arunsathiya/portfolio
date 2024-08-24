@@ -1,14 +1,13 @@
 ---
-title: "Private Among Us games on the Tailscale network"
-seoTitle: "Private Among Us games on the Tailscale network"
-slug: "private-among-us-games-on-the-tailscale-network"
-description: "Learn how to setup private Among Us games using Impostor and Tailscale. This enables you to host custom games without depending on the official servers."
+title: 'Private Among Us games on the Tailscale network'
+seoTitle: 'Private Among Us games on the Tailscale network'
+slug: 'private-among-us-games-on-the-tailscale-network'
+description: 'Learn how to setup private Among Us games using Impostor and Tailscale. This enables you to host custom games without depending on the official servers.'
 pubDate: 'Feb 22 2024'
 updatedDate: 'Feb 22 2024'
 tags: []
 coverImage: './image.webp'
 ---
-
 
 Among Us can be hosted on the public servers. Games can be private or public, but the problem with public server-hosted games is that, games disconnect sometimes. That's because these public servers are popular that it doesn't handle surge in active sessions. A solution is to host the games locally on a private network.
 
@@ -21,11 +20,12 @@ That's where Impostor and Tailscale come in.
 [The first step is to install Tailscale on all of your devices](https://tailscale.com/kb/1017/install/) and connect them to the same Google, GitHub, or supported auth provider account. This ensures all of the devices are in the same tailnet. Use the same Tailscale account for your Tailscale installation on the Raspberry Pi too.
 
 Install Impostor on the Raspberry Pi. The process involves installing Dotnet runtime (in my case, I installed the full SDK), installing the server build, modifying the configuration file to set the Raspberry Pi's Tailscale node address as the public server and running the server itself. To elaborate a bit,
+
 - Install Dotnet SDK/runtime on the Raspberry Pi using instructions here: [Deploy .NET apps to Raspberry Pi](https://docs.microsoft.com/en-us/dotnet/iot/deployment).
 - Download the server build from here: [Impostor Releases](https://github.com/Impostor/Impostor/releases). [You can use wget to download](https://www.gnu.org/software/wget/manual/wget.html), [tar to extract](https://linuxize.com/post/how-to-extract-unzip-tar-gz-file/) and [nano to edit](https://www.nano-editor.org/dist/v2.2/nano.html) the `config.json` file.
 - In the `config.json` file, modify `PublicIp` and `ListenIp` to your Raspberry Pi's Tailscale node address. In my case, it's `100.127.71.62`.
 - Finally, run `./Imposter.Server` to start this custom Among Us Server.
-Other devices can join this custom Among Us server by following the instructions on [this page](https://impostor.github.io/Impostor/).
+  Other devices can join this custom Among Us server by following the instructions on [this page](https://impostor.github.io/Impostor/).
 
 Finally, anyone can start the game, mark it as `Public` and then other devices can join this public room. Make sure that the "World" in your "Online" mode is set to "Impostor", not "Asia", "Europe" or "Americas".
 

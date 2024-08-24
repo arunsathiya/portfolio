@@ -25,14 +25,11 @@ const title = `All Posts Tagged with ${unslugify(tag || '')}`;
 const description = `All Posts Tagged with ${unslugify(tag || '')}`;
 ---
 
-<BaseLayout
-	title={title}
-	description={description}
->
-  <div class='container'>
-    <div class="mb-10">
-      <h1 class="text-3xl font-bold mb-2">{title}</h1>
-    </div>
-    <PostsByYear posts={taggedPosts}/>
-  </div>
+<BaseLayout title={title} description={description}>
+	<div class='container'>
+		<div class='mb-10'>
+			<h1 class='text-3xl font-bold mb-2'>{title}</h1>
+		</div>
+		<PostsByYear posts={taggedPosts} />
+	</div>
 </BaseLayout>

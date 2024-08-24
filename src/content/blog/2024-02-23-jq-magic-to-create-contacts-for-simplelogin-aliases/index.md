@@ -1,14 +1,13 @@
 ---
-title: "jq magic to create contacts for SimpleLogin aliases"
-seoTitle: "jq magic to create contacts for SimpleLogin aliases"
-slug: "jq-magic-to-create-contacts-for-simplelogin-aliases"
+title: 'jq magic to create contacts for SimpleLogin aliases'
+seoTitle: 'jq magic to create contacts for SimpleLogin aliases'
+slug: 'jq-magic-to-create-contacts-for-simplelogin-aliases'
 description: "If you are using SimpleLogin to create unique email aliases, here's a hacky workaround using jq to create contact reverse alias from your terminal application."
 pubDate: 'Feb 22 2024'
 updatedDate: 'Feb 25 2024'
 tags: []
 coverImage: './image.webp'
 ---
-
 
 One thing that I found lacking in the [SimpleLogin API](https://github.com/simple-login/app/blob/master/docs/api.md) is that, it doesn't expose an API endpoint to create a contact based on the alias' email address. Rather, the `POST /api/aliases/:alias_id/contacts` endpoint requires the alias ID. So, I ended up downloading all aliases as multiple batches (each query returns upto 20 results) and saved them as json files in a folder.
 
