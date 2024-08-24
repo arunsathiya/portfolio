@@ -25,9 +25,6 @@ jobs:
         with:
           cmd: install
 
-      - name: Add TypeScript as dev dependency
-        run: yarn add --dev typescript
-
       - name: Build production files
         uses: borales/actions-yarn@v5
         with:
