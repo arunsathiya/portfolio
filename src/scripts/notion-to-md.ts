@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import { NotionToMarkdown } from 'notion-to-md';
 import path from 'path';
+import sortKeys from 'sort-keys';
 
 dotenv.config();
 
@@ -120,7 +121,7 @@ async function main() {
 	await Promise.all(processPromises);
 
 	const tagColorsPath = path.join('./src/data', 'tagColors.json');
-	fs.writeFileSync(tagColorsPath, JSON.stringify(allTagColors, null, 2));
+	fs.writeFileSync(tagColorsPath, JSON.stringify(sortKeys(allTagColors), null, 2));
 }
 
 main().catch((error) => {
