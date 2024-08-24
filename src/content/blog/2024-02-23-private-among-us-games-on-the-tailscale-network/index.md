@@ -3,7 +3,7 @@ title: 'Private Among Us games on the Tailscale network'
 seoTitle: 'Private Among Us games on the Tailscale network'
 slug: 'private-among-us-games-on-the-tailscale-network'
 description: 'Learn how to setup private Among Us games using Impostor and Tailscale. This enables you to host custom games without depending on the official servers.'
-pubDate: 'Feb 23 2024'
+pubDate: 'Feb 22 2024'
 updatedDate: 'Aug 24 2024'
 tags: ['Tools', 'Automation']
 coverImage: './image.webp'

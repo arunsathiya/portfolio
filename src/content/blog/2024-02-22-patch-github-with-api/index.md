@@ -3,7 +3,7 @@ title: 'Patching hundreds of GitHub repositories in seconds'
 seoTitle: 'Patching hundreds of GitHub repositories in seconds'
 slug: 'patch-github-with-api'
 description: 'Using GitHub API to commit patches and generate pull requests.'
-pubDate: 'Feb 22 2024'
+pubDate: 'Feb 21 2024'
 updatedDate: 'Aug 24 2024'
 tags: ['DevOps', 'Automation', 'APIs']
 coverImage: './image.webp'

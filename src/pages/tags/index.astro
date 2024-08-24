@@ -1,8 +1,9 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { getCollection } from 'astro:content';
 import BaseLayout from '@src/layouts/BaseLayout.astro';
 import { slugify } from '@src/utils';
+import { getTagBackgroundColor } from '@src/utils/tagColors';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 type BlogPost = CollectionEntry<'blog'>;
 interface Tag {
@@ -68,10 +69,8 @@ const description = 'Post tags: concise keywords categorizing content for easy n
 						<div class='flex gap-2 flex-wrap'>
 							{(tags || [])?.map((tag: Tag) => (
 								<a
-									class='border border-zinc-300 dark:border-zinc-700 rounded-2xl
-                    text-sm text-zinc-700 dark:text-zinc-300 no-underline px-3 py-1
-                    transition-all duration-700
-                  hover:border-zinc-700 dark:hover:border-zinc-300'
+									class={`rounded-2xl text-sm text-zinc-700 dark:text-zinc-300 no-underline px-3 py-1
+                                    transition-all duration-700 hover:opacity-80 ${getTagBackgroundColor(tag.label)}`}
 									href={`/tags/${slugify(tag.value)}/`}
 								>
 									{tag.label} ({tag.postCount})

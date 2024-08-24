@@ -1,11 +1,13 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { getCollection } from 'astro:content';
+import PostsByYear from '@src/components/PostsByYear.astro';
 import BaseLayout from '@src/layouts/BaseLayout.astro';
 import { slugify, unslugify } from '@src/utils';
-import PostsByYear from '@src/components/PostsByYear.astro';
+import { getTagBackgroundColor } from '@src/utils/tagColors';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 type BlogPost = CollectionEntry<'blog'>;
+
 export const getStaticPaths = async () => {
 	const allPosts: BlogPost[] = await getCollection('blog');
 	return [
@@ -13,22 +15,30 @@ export const getStaticPaths = async () => {
 			allPosts
 				.map((post) => post.data.tags)
 				.flat()
-				.filter((tag) => !!tag),
+				.filter((tag): tag is string => !!tag),
 		),
-	].map((tag) => ({ params: { tag: slugify(tag || '') } }));
+	].map((tag) => ({ params: { tag: slugify(tag) } }));
 };
 
 const { tag } = Astro.params;
-const allPosts: BlogPost[] = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const taggedPosts = allPosts.filter((post) => post.data.tags?.map((tag) => slugify(tag)).includes(tag || ''));
+const allPosts: BlogPost[] = (await getCollection('blog')).sort(
+	(a: BlogPost, b: BlogPost) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const taggedPosts = allPosts.filter((post) => post.data.tags?.map((postTag: string) => slugify(postTag)).includes(tag || ''));
 const title = `All Posts Tagged with ${unslugify(tag || '')}`;
 const description = `All Posts Tagged with ${unslugify(tag || '')}`;
+const tagBackgroundColor = getTagBackgroundColor(unslugify(tag || ''));
 ---
 
 <BaseLayout title={title} description={description}>
 	<div class='container'>
 		<div class='mb-10'>
-			<h1 class='text-3xl font-bold mb-2'>{title}</h1>
+			<h1 class='text-3xl font-bold mb-2'>
+				All Posts Tagged with
+				<span class={`inline-block ${tagBackgroundColor} px-2 py-1 rounded-md`}>
+					{unslugify(tag || '')}
+				</span>
+			</h1>
 		</div>
 		<PostsByYear posts={taggedPosts} />
 	</div>

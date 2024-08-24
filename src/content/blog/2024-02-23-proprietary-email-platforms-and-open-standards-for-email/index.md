@@ -3,7 +3,7 @@ title: 'Proprietary email platforms and open standards for email'
 seoTitle: 'Proprietary email platforms and open standards for email'
 slug: 'proprietary-email-platforms-and-open-standards-for-email'
 description: 'Platforms like Gmail, Yahoo and Outlook have made it very easy to own and manage a mailbox, but I think we should be focusing on educating open standards.'
-pubDate: 'Feb 23 2024'
+pubDate: 'Feb 22 2024'
 updatedDate: 'Aug 24 2024'
 tags: ['Open Source', 'Privacy', 'Tools']
 coverImage: './image.webp'

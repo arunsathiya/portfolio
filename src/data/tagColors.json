@@ -1,0 +1,14 @@
+{
+	"Networking": "orange",
+	"Productivity": "red",
+	"Security": "gray",
+	"Open Source": "yellow",
+	"Privacy": "green",
+	"Tools": "red",
+	"Content Management": "gray",
+	"APIs": "blue",
+	"Automation": "yellow",
+	"Whisper": "default",
+	"AI": "brown",
+	"DevOps": "blue"
+}
