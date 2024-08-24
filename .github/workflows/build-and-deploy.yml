@@ -104,10 +104,11 @@ jobs:
           comment: “Deployed via GitHub Actions”
         env:
           FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_TOKEN }}
+
       - uses: chrnorm/deployment-action@v2
         name: Create GitHub deployment
         id: deployment
         with:
-          token: '${{ github.token }}'
+          token: '${{ secrets.GITHUB_TOKEN }}'
           environment-url: https://arun.blog
           environment: production
