@@ -37,7 +37,12 @@ async function processPage(page: PageObjectResponse) {
 	const mdblocks = await n2m.pageToMarkdown(pageId);
 	const mdString = n2m.toMarkdownString(mdblocks);
 
-	const title = page.properties.Title.type === 'title' ? page.properties.Title.title[0]?.plain_text.trim() : 'Untitled';
+	const title =
+		page.properties.Title.type === 'title' && page.properties.Title.title.length > 1
+			? page.properties.Title.title.map((t) => t.plain_text.trim()).join(' ')
+			: page.properties.Title.type === 'title'
+				? page.properties.Title.title[0]?.plain_text.trim()
+				: 'Untitled';
 	const slug =
 		page.properties.Slug.type === 'rich_text'
 			? page.properties.Slug.rich_text[0]?.plain_text.trim().toLowerCase().replace(/\s+/g, '-')
