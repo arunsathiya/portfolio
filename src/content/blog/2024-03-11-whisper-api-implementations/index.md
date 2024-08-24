@@ -1,6 +1,6 @@
 ---
-title: 'Whisper API implementations'
-seoTitle: 'Whisper API implementations'
+title: 'Whisper API for voice to text conversion'
+seoTitle: 'Whisper API for voice to text conversion'
 slug: 'whisper-api-implementations'
 description: 'This is how I consume the Whisper speech model from the ChatGPT iOS app onto my MacBook.'
 pubDate: 'Mar 11 2024'
