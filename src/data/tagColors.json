@@ -1,14 +1,14 @@
 {
-  "Networking": "orange",
-  "Productivity": "red",
-  "Automation": "yellow",
-  "Security": "gray",
-  "Content Management": "gray",
-  "APIs": "blue",
-  "Whisper": "default",
-  "AI": "brown",
-  "Open Source": "yellow",
-  "Tools": "red",
-  "Privacy": "green",
-  "DevOps": "blue"
+	"Networking": "orange",
+	"Productivity": "red",
+	"Automation": "yellow",
+	"Security": "gray",
+	"Content Management": "gray",
+	"APIs": "blue",
+	"Whisper": "default",
+	"AI": "brown",
+	"Open Source": "yellow",
+	"Tools": "red",
+	"Privacy": "green",
+	"DevOps": "blue"
 }

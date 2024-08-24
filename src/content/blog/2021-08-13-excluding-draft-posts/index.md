@@ -1,14 +1,13 @@
 ---
-title: "Excluding draft posts from search index"
-seoTitle: "Excluding draft posts from search index"
-slug: "excluding-draft-posts"
-description: "If you are looking for a way to excluding draft posts from being indexed on the search engines, Yoast SEO offers filters to achieve that."
+title: 'Excluding draft posts from search index'
+seoTitle: 'Excluding draft posts from search index'
+slug: 'excluding-draft-posts'
+description: 'If you are looking for a way to excluding draft posts from being indexed on the search engines, Yoast SEO offers filters to achieve that.'
 pubDate: 'Aug 12 2021'
 updatedDate: 'Aug 24 2024'
-tags: ["Automation"]
+tags: ['Automation']
 coverImage: './image.webp'
 ---
-
 
 > Note: As of Feb 2024, I have moved to a Astro-based website deployed to the edge with Fastly Compute, with Notion as a backend and GitHub Actions as my build tool.
 

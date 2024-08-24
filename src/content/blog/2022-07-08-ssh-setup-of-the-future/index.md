@@ -1,14 +1,13 @@
 ---
-title: "SSH setup of the future"
-seoTitle: "SSH setup of the future"
-slug: "ssh-setup-of-the-future"
-description: "My SSH setup with 1Password and Tailscale"
+title: 'SSH setup of the future'
+seoTitle: 'SSH setup of the future'
+slug: 'ssh-setup-of-the-future'
+description: 'My SSH setup with 1Password and Tailscale'
 pubDate: 'Jul 07 2022'
 updatedDate: 'Aug 24 2024'
-tags: ["Security"]
+tags: ['Security']
 coverImage: './image.webp'
 ---
-
 
 About four years ago, I had no clue what SSH keys meant. I learned to understand what SSH keys meant when I joined Automattic in 2018. Fast forward four years later, after a lot of trial and error, all of my homelab setup is gated with SSH keys. Password-based authentication is completely disabled.
 
