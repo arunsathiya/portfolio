@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   workflow_run:
-    workflows: ["Notion and commit changes"]
+    workflows: ['Notion and commit changes']
     branches: [main]
     types:
       - completed
@@ -18,7 +18,7 @@ jobs:
       - name: Set Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.10.0
+          node-version: 18
 
       - name: Run install
         uses: borales/actions-yarn@v5
@@ -60,7 +60,7 @@ jobs:
         uses: borales/actions-yarn@v5
         with:
           cmd: install
-          dir: "compute-js"
+          dir: 'compute-js'
 
       - name: fastly compute deploy
         uses: fastly/compute-actions@v8
