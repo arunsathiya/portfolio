@@ -25,8 +25,10 @@ jobs:
         with:
           cmd: install
 
-      - name: Add TypeScript as dev dependency
-        run: yarn add --dev typescript
+      - name: Install Fastly Compute types
+        uses: borales/actions-yarn@v5
+        with:
+          cmd: add --dev @fastly/js-compute
 
       - name: Build production files
         uses: borales/actions-yarn@v5
