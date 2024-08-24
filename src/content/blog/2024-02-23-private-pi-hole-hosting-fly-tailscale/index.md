@@ -4,7 +4,7 @@ seoTitle: 'Free, private pi-hole hosting with Fly.io and Tailscale'
 slug: 'private-pi-hole-hosting-fly-tailscale'
 description: 'Fly.io'
 pubDate: 'Feb 22 2024'
-updatedDate: 'Feb 23 2024'
+updatedDate: 'Aug 23 2024'
 tags: []
 coverImage: './image.webp'
 ---

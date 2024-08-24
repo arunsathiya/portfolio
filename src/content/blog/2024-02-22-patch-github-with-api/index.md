@@ -4,7 +4,7 @@ seoTitle: 'Patching hundreds of GitHub repositories in seconds'
 slug: 'patch-github-with-api'
 description: 'Using GitHub API to commit patches and generate pull requests.'
 pubDate: 'Feb 21 2024'
-updatedDate: 'Feb 25 2024'
+updatedDate: 'Aug 23 2024'
 tags: []
 coverImage: './image.webp'
 ---

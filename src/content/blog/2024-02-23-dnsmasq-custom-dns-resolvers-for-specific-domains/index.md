@@ -4,7 +4,7 @@ seoTitle: 'dnsmasq - Custom DNS resolvers for specific domains'
 slug: 'dnsmasq-custom-dns-resolvers-for-specific-domains'
 description: "It's possible to setup custom DNS resolvers for certain domains using a dnsmasq config file. Requests still pass through pihole, for ad-blocking capabilities."
 pubDate: 'Feb 22 2024'
-updatedDate: 'Feb 22 2024'
+updatedDate: 'Aug 23 2024'
 tags: []
 coverImage: './image.webp'
 ---

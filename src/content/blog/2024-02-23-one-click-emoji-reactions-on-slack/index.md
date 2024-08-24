@@ -4,7 +4,7 @@ seoTitle: 'One-click emoji reactions on Slack'
 slug: 'one-click-emoji-reactions-on-slack'
 description: 'Slack has a workspace-level feature to allow members to configure their top 3 emoji for quick reactions.'
 pubDate: 'Feb 22 2024'
-updatedDate: 'Feb 22 2024'
+updatedDate: 'Aug 23 2024'
 tags: []
 coverImage: './image.webp'
 ---

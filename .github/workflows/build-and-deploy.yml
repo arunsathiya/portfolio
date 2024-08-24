@@ -27,6 +27,11 @@ jobs:
         with:
           cmd: install
 
+      - name: Fix Formatting
+        uses: borales/actions-yarn@v5
+        with:
+          cmd: format:write
+
       - name: Build production files
         uses: borales/actions-yarn@v5
         with:
