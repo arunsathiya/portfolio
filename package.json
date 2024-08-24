@@ -8,6 +8,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "format:check": "prettier --check src compute-js",
+    "format:write": "prettier --write src compute-js",
     "notion-to-md": "tsx src/scripts/notion-to-md.ts"
   },
   "dependencies": {

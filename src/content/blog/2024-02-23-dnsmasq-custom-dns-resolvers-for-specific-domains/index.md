@@ -1,14 +1,13 @@
 ---
-title: "dnsmasq - Custom DNS resolvers for specific domains"
-seoTitle: "dnsmasq - Custom DNS resolvers for specific domains"
-slug: "dnsmasq-custom-dns-resolvers-for-specific-domains"
+title: 'dnsmasq - Custom DNS resolvers for specific domains'
+seoTitle: 'dnsmasq - Custom DNS resolvers for specific domains'
+slug: 'dnsmasq-custom-dns-resolvers-for-specific-domains'
 description: "It's possible to setup custom DNS resolvers for certain domains using a dnsmasq config file. Requests still pass through pihole, for ad-blocking capabilities."
 pubDate: 'Feb 22 2024'
 updatedDate: 'Feb 22 2024'
 tags: []
 coverImage: './image.webp'
 ---
-
 
 Learned a neat thing today — [it's possible to set custom DNS resolvers for certain domains](https://news.ycombinator.com/item?id=29026068). I can create a custom config file for dnsmasq and specify the DNS resolvers to use for those domains. I don't have a need for it today, but may be handy in cases like archive.is not loading on Cloudflare DNS.
 

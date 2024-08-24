@@ -1,14 +1,13 @@
 ---
-title: "Growing my home lab - Tailscale TLS certificates for each Docker with Caddy"
-seoTitle: "Growing my home lab - Tailscale TLS certificates for each Docker with Caddy"
-slug: "tailscale-tls-certificates-for-my-home-lab"
-description: "I am starting to grow my home lab with Raspberry Pi, Docker, Caddy and Tailscale. Right now, I have Whoogle, libreddit, pihole and Caddy running on my nodes."
+title: 'Growing my home lab - Tailscale TLS certificates for each Docker with Caddy'
+seoTitle: 'Growing my home lab - Tailscale TLS certificates for each Docker with Caddy'
+slug: 'tailscale-tls-certificates-for-my-home-lab'
+description: 'I am starting to grow my home lab with Raspberry Pi, Docker, Caddy and Tailscale. Right now, I have Whoogle, libreddit, pihole and Caddy running on my nodes.'
 pubDate: 'Feb 23 2024'
 updatedDate: 'Feb 25 2024'
 tags: []
 coverImage: './image.webp'
 ---
-
 
 I have grown up reading Raspberry Pi users build amazing projects on this wonderful reddit: [r/homelab](https://old.reddit.com/r/homelab/). Until an year ago, I didn't have a clue where to start, mostly because the idea of setting up Wireguard to access these self-hosted services was a bit intimidating. Tailscale changed everything.
 
@@ -25,9 +24,10 @@ That changed a while ago because Tailscale TLS certificates are now available fo
 That's when I discovered Caddy, which turns out to be a web server that can provision TLS certificates as well.
 
 But my use-case was to run Caddy as a reverse proxy, to serve each Docker container on the Tailscale node address, each on a subfolder. After a lot of trial and error, reading documentation, reading GitHub issues, I have the following running with TLS:
+
 - Libreddit on the root domain `mew.tailnet-b593.ts.net`.
 - Whoogle on `mew.tailnet-b593.ts.net/google`
-![8bcce-image-2.png](https://blogarunsathiya.files.wordpress.com/2022/07/8bcce-image-2.png?w=1024&h=636)
+  ![8bcce-image-2.png](https://blogarunsathiya.files.wordpress.com/2022/07/8bcce-image-2.png?w=1024&h=636)
 
 Tailscale TLS certificates on a Whoogle instance
 

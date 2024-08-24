@@ -3,4 +3,5 @@
 
 export const SITE_TITLE = 'Arun';
 export const SITE_TAGLINE = 'Software Engineer with focus on data-driven applications';
-export const SITE_DESCRIPTION = 'I\'m Arun, a full-stack engineer with fresh Data Analytics expertise, crafting efficient solutions in Golang, TypeScript, and Python.My focus spans data-driven applications, serverless architectures, and DevOps practices.';
+export const SITE_DESCRIPTION =
+	"I'm Arun, a full-stack engineer with fresh Data Analytics expertise, crafting efficient solutions in Golang, TypeScript, and Python.My focus spans data-driven applications, serverless architectures, and DevOps practices.";
