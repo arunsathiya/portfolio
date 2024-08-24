@@ -97,6 +97,14 @@ jobs:
           cmd: install
           dir: 'compute-js'
 
+      - uses: chrnorm/deployment-action@v2
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: '${{ secrets.PAT_FOR_DEPLOYMENTS }}'
+          environment-url: https://www.arun.blog
+          environment: Production
+
       - name: fastly compute deploy
         uses: fastly/compute-actions@v8
         with:
@@ -105,10 +113,20 @@ jobs:
         env:
           FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_TOKEN }}
 
-      - uses: chrnorm/deployment-action@v2
-        name: Create GitHub deployment
-        id: deployment
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
         with:
-          token: '${{ secrets.PAT_FOR_DEPLOYMENTS }}'
-          environment-url: https://www.arun.blog
-          environment: Production
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'success'
+
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'failure'
