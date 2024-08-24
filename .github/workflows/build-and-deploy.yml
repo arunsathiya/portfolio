@@ -110,5 +110,5 @@ jobs:
         id: deployment
         with:
           token: '${{ secrets.PAT_FOR_DEPLOYMENTS }}'
-          environment-url: https://arun.blog
-          environment: production
+          environment-url: https://www.arun.blog
+          environment: Production
