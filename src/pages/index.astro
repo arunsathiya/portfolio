@@ -44,7 +44,7 @@ const posts = (await getCollection('blog'))
 			<div class='mt-6 mb-12'>
 				<div class='flex justify-between gap-2 border-b mb-1 dark:border-b-zinc-700'>
 					<h2 class='text-lg font-bold mb-3'>Posts</h2>
-					<a href='/posts/' class='inline-block py-2 underline text-zinc-950'>All posts &raquo;</a>
+					<a href='/posts/' class='inline-block py-2 underline text-zinc-950 dark:text-zinc-100'>All posts &raquo;</a>
 				</div>
 				<div>
 					{posts.map((post: BlogPost) => <PostItem post={post} />)}
@@ -54,7 +54,7 @@ const posts = (await getCollection('blog'))
 			<div>
 				<div class='flex justify-between gap-2 mb-1'>
 					<h2 class='text-lg font-bold mb-3'>Projects</h2>
-					<a href='/projects/' class='inline-block py-2 underline text-zinc-950'>All projects &raquo;</a>
+					<a href='/projects/' class='inline-block py-2 underline text-zinc-950 dark:text-zinc-100'>All projects &raquo;</a>
 				</div>
 				<ProjectList projects={top6Projects} />
 			</div>
