@@ -8,10 +8,7 @@
         "source.removeUnused.ts": "always",
         "source.removeUnusedImports": "always"
     },
-    "[github-actions-workflow]": {
-        "editor.defaultFormatter": "github.vscode-github-actions"
-    },
-    "[typescript][javascript][astro]": {
+    "[typescript][javascript][astro][github-actions-workflow]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
 }
