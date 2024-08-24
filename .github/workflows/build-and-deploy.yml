@@ -1,7 +1,9 @@
-name: Deploy site
+name: Build and Deploy
 on:
   workflow_dispatch:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_run:
     workflows: ['Notion and commit changes']
@@ -37,6 +39,7 @@ jobs:
           path: dist
 
   deploy:
+    if: ${{ github.event_name != 'pull_request' }}
     needs: build
     runs-on: ubuntu-24.04
     steps:
