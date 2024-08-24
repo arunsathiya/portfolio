@@ -8,6 +8,10 @@ on:
         description: Commit message to use for this content build step
         required: false
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   commit:
     runs-on: ubuntu-24.04
