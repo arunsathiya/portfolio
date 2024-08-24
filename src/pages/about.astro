@@ -1,8 +1,8 @@
 ---
-import { Image } from 'astro:assets';
-import BaseLayout from '../layouts/BaseLayout.astro';
 import Arun from '@src/assets/img/arun.jpg';
+import { Image } from 'astro:assets';
 import Prose from '../components/Prose.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title='About Me' description='Lorem ipsum dolor sit amet'>
@@ -27,7 +27,7 @@ import Prose from '../components/Prose.astro';
 							</div>
 						</Prose>
 					</div>
-					<Image src={Arun} alt='Arun Sathiya' width={300} class='rounded-3xl md:rotate-3 mx-auto md:mx-0' />
+					<Image src={Arun} alt='Arun Sathiya' width={400} class='rounded-3xl md:rotate-3 mx-auto md:mx-0' />
 				</div>
 			</article>
 		</main>

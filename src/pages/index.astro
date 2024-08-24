@@ -1,14 +1,14 @@
 ---
-import { SITE_TITLE, SITE_TAGLINE, SITE_DESCRIPTION } from '../consts';
-import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
+import Arun from '@src/assets/img/arun.jpg';
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import Arun from '@src/assets/img/arun.jpg';
-import Prose from '../components/Prose.astro';
-import { projects } from './projects/projects';
-import ProjectList from '../components/ProjectList.astro';
+import { getCollection } from 'astro:content';
 import PostItem from '../components/PostItem.astro';
+import ProjectList from '../components/ProjectList.astro';
+import Prose from '../components/Prose.astro';
+import { SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { projects } from './projects/projects';
 
 type BlogPost = CollectionEntry<'blog'>;
 
@@ -50,7 +50,7 @@ const posts = (await getCollection('blog'))
 					</div>
 				</Prose>
 			</div>
-			<Image src={Arun} alt='Arun Sathiya' width={300} loading='eager' class='rounded-3xl md:rotate-3 mx-auto md:mx-0' />
+			<Image src={Arun} alt='Arun Sathiya' width={400} loading='eager' class='rounded-3xl md:rotate-3 mx-auto md:mx-0' />
 		</div>
 		<main>
 			<div>
