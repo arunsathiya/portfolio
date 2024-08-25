@@ -21,17 +21,17 @@ Personally, I wanted a theme that shows all of my blog posts on the homepage, bu
 
 Right now, my homepage looks as shown below, this is a two column layout:
 
-![9fec7-image-3.png](https://blogarunsathiya.files.wordpress.com/2022/07/9fec7-image-3.png?w=1024&h=580)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/thoughts-on-wordpress-full-site-editing-53ae846c-1d75-424e-804c-2ea4301ed73a.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060505Z&X-Amz-Expires=3600&X-Amz-Signature=cff71c05b80edb28bec4bc64b45ccbcfe38fd0e51ae6046de99c7354c68c78e4&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 The content on the right isn't my sidebar. Rather is the right column of my homepage's FSE editor. For comparison, my editor view is as shown below:
 
-![37c74-image-4.png](https://blogarunsathiya.files.wordpress.com/2022/07/37c74-image-4.png?w=1024&h=519)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/thoughts-on-wordpress-full-site-editing-4a79b9de-cff0-41be-ba1d-7dd6fccdf17f.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060505Z&X-Amz-Expires=3600&X-Amz-Signature=9629b97a9568adec885a213ef3906826471e77e25bd596e6cdc2aeec7a0af1a1&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 Likewise, here's a comparison of the single blog post view:
 
-![06ce5-image-5.png](https://blogarunsathiya.files.wordpress.com/2022/07/06ce5-image-5.png?w=1024&h=580)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/thoughts-on-wordpress-full-site-editing-f180d5e9-7857-4305-af28-294e025d7254.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060506Z&X-Amz-Expires=3600&X-Amz-Signature=5c40d1da31f3cc593d439bb1266d54a791eb8f6feb22037f546b36cb649b54aa&X-Amz-SignedHeaders=host&x-id=GetObject)
 
-![73643-image-6.png](https://blogarunsathiya.files.wordpress.com/2022/07/73643-image-6.png?w=1024&h=519)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/thoughts-on-wordpress-full-site-editing-d2d99e7a-628f-46d9-a7bc-21c61db2a145.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060506Z&X-Amz-Expires=3600&X-Amz-Signature=049706ac142bebafe988f2aedce5b6586e76ceb3b11fdf6197970f1d6eac2b8e&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 See how the editor looks very similar to a blog post or page editor?
 
