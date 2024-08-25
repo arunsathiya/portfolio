@@ -27,7 +27,7 @@ But my use-case was to run Caddy as a reverse proxy, to serve each Docker contai
 
 - Libreddit on the root domain `mew.tailnet-b593.ts.net`.
 - Whoogle on `mew.tailnet-b593.ts.net/google`
-  ![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/tailscale-tls-certificates-for-my-home-lab-5e11ac3a-ce18-4dbb-8ff9-05c0afe3f875.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060504Z&X-Amz-Expires=3600&X-Amz-Signature=c0ee323ac7f9c070350f5314487f7c4b113ce17faa6ef441cbc755cc4169aaf2&X-Amz-SignedHeaders=host&x-id=GetObject)
+  ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/da5014df-4435-4589-be90-bb347d6ecfb1/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20240825%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240825T062149Z&X-Amz-Expires=3600&X-Amz-Signature=e3bbaac4b367a59650ed3eb6773ce76fbab78105e69c9925e4b94a3cd0e446fa&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 I wanted to access my pihole admin on HTTPS too, but I couldn't get it working on a subfolder, like `mew.tailnet-b593.ts.net/pihole`. When I assigned the root domain to pihole, libreddit had to go to a subfolder like `mew.tailnet-b593.ts.net/reddit` and when I tried that, CSS on my libreddit instance broke.
 

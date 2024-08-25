@@ -31,6 +31,6 @@ If you are wondering what the `tr -d "\\""` part is, it's to remove the unwant
 
 The contact's reverse address is finally in my clipboard, which I can paste on Apple Mail:
 
-![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/jq-magic-to-create-contacts-for-simplelogin-aliases-3976fae0-0b0f-42c5-8361-c78f3f890db0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060504Z&X-Amz-Expires=3600&X-Amz-Signature=137923c548cc84d756db6c6bd7e9ee547cb3c1ccc651ae207992388e42d3122c&X-Amz-SignedHeaders=host&x-id=GetObject)
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/be463ddd-b458-41b3-a63a-d151ddf8c2f2/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20240825%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240825T062148Z&X-Amz-Expires=3600&X-Amz-Signature=c980e0acd32ed4bdfde1b76faba79ff3d91214c97a53071381741c7f560361d9&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 SimpleLogin recently announced an update to their Firefox extension too, to create reverse aliases (contact reverse address) on the go, but I like this API-based process better. The extension takes a while to populate all aliases.
