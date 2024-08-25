@@ -77,4 +77,4 @@ async function listObjectsInBucket(prefix?: string): Promise<void> {
 
 // You can call the function with or without a prefix
 // listObjectsInBucket();
-listObjectsInBucket('blog-images/');
+listObjectsInBucket('blog/assets/');
