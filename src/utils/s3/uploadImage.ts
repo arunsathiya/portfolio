@@ -18,7 +18,7 @@ const S3 = new S3Client({
 	},
 });
 
-export async function uploadImageToR2(imageUrl: string, pageSlug: string): Promise<string> {
+export async function uploadImageToR2(imageUrl: string, pageSlug: string, blockId: string): Promise<string> {
 	try {
 		// Download the image
 		const response = await fetch(imageUrl, {
@@ -31,8 +31,8 @@ export async function uploadImageToR2(imageUrl: string, pageSlug: string): Promi
 		}
 		const buffer = await response.arrayBuffer();
 
-		// Generate a unique filename
-		const filename = `${pageSlug}-${Date.now()}${path.extname(imageUrl.split('?')[0])}`;
+		// Generate a unique filename using blockId
+		const filename = `${pageSlug}-${blockId}${path.extname(imageUrl.split('?')[0])}`;
 		const key = `blog/assets/${filename}`;
 
 		// Upload to R2

@@ -36,6 +36,9 @@ function formatDateForFolder(dateString: string): string {
 async function processPage(page: PageObjectResponse) {
 	const pageId = page.id;
 	const mdblocks = await n2m.pageToMarkdown(pageId);
+	if (page.properties.Title.type === 'title' && page.properties.Title.title[0]?.plain_text.trim().includes('private')) {
+		console.log(mdblocks);
+	}
 
 	const title =
 		page.properties.Title.type === 'title' && page.properties.Title.title.length > 1
@@ -57,7 +60,8 @@ async function processPage(page: PageObjectResponse) {
 				const imageUrl = block.parent.match(/\((.*?)\)/)?.[1]; // Extract URL from markdown
 				if (imageUrl) {
 					try {
-						const signedUrl = await uploadImageToR2(imageUrl, slug);
+						const blockId = block.blockId || `fallback-${i}`; // Use a fallback if blockId is not available
+						const signedUrl = await uploadImageToR2(imageUrl, slug, blockId);
 						mdblocks[i].parent = block.parent.replace(imageUrl, signedUrl);
 					} catch (error) {
 						console.error(`Failed to upload image: ${imageUrl}`, error);
