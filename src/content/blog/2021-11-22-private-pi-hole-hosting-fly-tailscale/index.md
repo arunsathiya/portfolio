@@ -15,9 +15,7 @@ That's where a cloud-hosted pi-hole proves helpful.
 
 I learned about Fly.io recently. It's an app hosting platform that makes it incredibly easy to deploy apps to multiple regions and scales as needed. [Their free tier offers a generous 2,340 hours per month of uptime](https://fly.io/docs/about/pricing/), which translates to about 3 shared-cpu-1x VMs with 256MB RAM full time. My pi-hole consumes about 200MB RAM consistently, so this means I could host upto 3 apps each with pi-hole on it. But I have only one as I have two others at my house.
 
-![d6c0b-image-2.png](https://blogarunsathiya.files.wordpress.com/2022/07/d6c0b-image-2.png?w=1024&h=459)
-
-Fly.io free tier
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/1afa9f92-9838-4802-9e11-abae1186aa8a/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20240825%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240825T013340Z&X-Amz-Expires=3600&X-Amz-Signature=67f4aaa0aafb2d5d77dee1628b5ec24a2bdbdcf0fd314be266f9922e428291c4&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 ## Setting up the pi-hole
 
