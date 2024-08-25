@@ -1,4 +1,4 @@
-import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { GetObjectCommand, HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -18,8 +18,28 @@ const S3 = new S3Client({
 	},
 });
 
-export async function uploadImageToR2(imageUrl: string, pageSlug: string, blockId: string): Promise<string> {
+export async function uploadImage(imageUrl: string, pageSlug: string, blockId: string): Promise<string> {
 	try {
+		// Generate a unique filename using blockId
+		const filename = `${pageSlug}-${blockId}${path.extname(imageUrl.split('?')[0])}`;
+		const key = `blog/assets/${filename}`;
+
+		// Check if the file already exists in the bucket
+		try {
+			const headCommand = new HeadObjectCommand({
+				Bucket: process.env.R2_BUCKET_NAME!,
+				Key: key,
+			});
+			await S3.send(headCommand);
+
+			// If we reach here, the file exists. Generate and return a signed URL.
+			console.log('Image already exists in the bucket. Generating signed URL.');
+			return await getSignedUrlForObject(key);
+		} catch (error) {
+			// If the file doesn't exist, we'll get an error. Proceed with upload.
+			console.log('Image does not exist in the bucket. Proceeding with upload.');
+		}
+
 		// Download the image
 		const response = await fetch(imageUrl, {
 			headers: {
@@ -30,10 +50,6 @@ export async function uploadImageToR2(imageUrl: string, pageSlug: string, blockI
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		const buffer = await response.arrayBuffer();
-
-		// Generate a unique filename using blockId
-		const filename = `${pageSlug}-${blockId}${path.extname(imageUrl.split('?')[0])}`;
-		const key = `blog/assets/${filename}`;
 
 		// Upload to R2
 		const uploadCommand = new PutObjectCommand({
@@ -50,12 +66,7 @@ export async function uploadImageToR2(imageUrl: string, pageSlug: string, blockI
 		}
 
 		// Generate a signed URL
-		const getObjectCommand = new GetObjectCommand({
-			Bucket: process.env.R2_BUCKET_NAME!,
-			Key: key,
-		});
-
-		const signedUrl = await getSignedUrl(S3, getObjectCommand, { expiresIn: 3600 }); // URL expires in 1 hour
+		const signedUrl = await getSignedUrlForObject(key);
 
 		console.log('Upload successful. Signed URL:', signedUrl);
 		return signedUrl;
@@ -67,4 +78,13 @@ export async function uploadImageToR2(imageUrl: string, pageSlug: string, blockI
 		}
 		throw error;
 	}
+}
+
+async function getSignedUrlForObject(key: string): Promise<string> {
+	const getObjectCommand = new GetObjectCommand({
+		Bucket: process.env.R2_BUCKET_NAME!,
+		Key: key,
+	});
+
+	return getSignedUrl(S3, getObjectCommand, { expiresIn: 3600 }); // URL expires in 1 hour
 }

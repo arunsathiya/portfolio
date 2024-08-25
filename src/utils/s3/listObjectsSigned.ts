@@ -1,4 +1,5 @@
-import { ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
+import { GetObjectCommand, ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -23,7 +24,16 @@ const S3 = new S3Client({
 	},
 });
 
-async function listObjectsInBucket(prefix?: string): Promise<void> {
+async function getSignedDownloadUrl(key: string, expiresIn: number = 3600): Promise<string> {
+	const command = new GetObjectCommand({
+		Bucket: BUCKET_NAME,
+		Key: key,
+	});
+
+	return getSignedUrl(S3, command, { expiresIn });
+}
+
+async function listObjectsSigned(prefix?: string): Promise<void> {
 	try {
 		console.log(`Attempting to list objects in bucket: ${BUCKET_NAME}`);
 		if (prefix) {
@@ -40,9 +50,11 @@ async function listObjectsInBucket(prefix?: string): Promise<void> {
 		if (response.Contents && response.Contents.length > 0) {
 			console.log('Objects in the bucket:');
 			for (const object of response.Contents) {
+				const signedUrl = await getSignedDownloadUrl(object.Key!);
 				console.log(`- ${object.Key}`);
 				console.log(`  Size: ${object.Size} bytes`);
 				console.log(`  Last Modified: ${object.LastModified}`);
+				console.log(`  Signed URL (expires in 1 hour): ${signedUrl}`);
 				console.log('---');
 			}
 		} else {
@@ -64,5 +76,5 @@ async function listObjectsInBucket(prefix?: string): Promise<void> {
 }
 
 // You can call the function with or without a prefix
-// listObjectsInBucket();
-listObjectsInBucket('blog/assets/');
+// listObjectsWithSignedUrls();
+listObjectsSigned('blog/assets/');
