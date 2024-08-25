@@ -17,13 +17,32 @@ const { GISCUS_REPO, GISCUS_REPO_ID, GISCUS_CATEGORY, GISCUS_CATEGORY_ID } = loa
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
-	return posts.map((post: any) => ({
+	return posts.map((post: CollectionEntry<'blog'>) => ({
 		params: { slug: post.slug },
-		props: post,
+		props: { post },
 	}));
 }
-type Props = CollectionEntry<'blog'>;
-const post = Astro.props;
+
+type Props = {
+	post: CollectionEntry<'blog'>;
+};
+
+const { slug } = Astro.params;
+let { post } = Astro.props as Props;
+
+if (Astro.props.post) {
+	// Static mode: post is passed as a prop
+	post = Astro.props.post;
+} else {
+	// Server mode: fetch the post
+	const posts = await getCollection('blog');
+	const foundPost = posts.find((p: CollectionEntry<'blog'>) => p.slug === slug);
+	if (!foundPost) {
+		return Astro.redirect('/404');
+	}
+	post = foundPost;
+}
+
 const {
 	data: { title, seoTitle, description, coverImage, pubDate, updatedDate, tags },
 } = post;
