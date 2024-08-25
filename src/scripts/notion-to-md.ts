@@ -57,8 +57,10 @@ async function processPage(page: PageObjectResponse) {
 			if (imageUrl) {
 				try {
 					const blockId = block.blockId || `fallback-${i}`;
-					const signedUrl = await uploadImage(imageUrl, slug, blockId);
-					mdblocks[i].parent = block.parent.replace(imageUrl, signedUrl);
+					const imageKey = `${slug}-${blockId}${path.extname(imageUrl.split('?')[0])}`;
+					await uploadImage(imageUrl, slug, blockId);
+					const altText = 'Description of the image';
+					mdblocks[i].parent = `<R2Image imageKey="blog/assets/${imageKey}" alt="${altText}" />`;
 				} catch (error) {
 					console.error(`Failed to upload image: ${imageUrl}`, error);
 				}
@@ -101,7 +103,7 @@ async function processPage(page: PageObjectResponse) {
 		fs.mkdirSync(dir, { recursive: true });
 	}
 
-	const filePath = path.join(dir, 'index.md');
+	const filePath = path.join(dir, 'index.mdx');
 	const content = `---
 title: "${title}"
 seoTitle: "${title}"
@@ -112,6 +114,8 @@ updatedDate: '${updatedDate}'
 tags: ${JSON.stringify(tags)}
 coverImage: './image.webp'
 ---
+
+import R2Image from 'src/components/R2Image.astro';
 
 ${mdString.parent.replace(/\n\n/g, '\n')}`;
 

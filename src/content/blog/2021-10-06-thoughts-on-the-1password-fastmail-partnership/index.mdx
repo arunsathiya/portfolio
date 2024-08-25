@@ -9,6 +9,8 @@ tags: ['Tools', 'Security', 'Privacy']
 coverImage: './image.webp'
 ---
 
+import R2Image from 'src/components/R2Image.astro';
+
 A week ago, the wonderful folks at 1Password announced a new feature: automatic generation of email aliases when creating a new vault entry. As an user of SimpleLogin, [I am already familiar with the concept of using unique aliases for each website](https://blogarunsathiya.wordpress.com/2020/06/25/of-emails-and-aliases/). It's the same functionality that [1Password and Fastmail announced](https://blog.1password.com/fastmail-masked-email/), except that generating the alias doesn't require a visit to the email provider's website.
 
 ## Fastmail vs SimpleLogin
@@ -17,7 +19,10 @@ I see how this is helpful for the common user, but I am also slightly sad that s
 
 In my 2 years of being a SimpleLogin customer, I have generated over 1200 aliases and I guess, about 50% reply addresses. All of that is available at a fantastic cost of 30 USD per year.
 
-![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/thoughts-on-the-1password-fastmail-partnership-e3f54144-5013-458d-a4c8-a89475ba1d78.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T062628Z&X-Amz-Expires=3600&X-Amz-Signature=dd0edbefdefb7009a22d66618bf3c577c123146da944d597f2f0b0a43b8de623&X-Amz-SignedHeaders=host&x-id=GetObject)
+<R2Image
+	imageKey='blog/assets/thoughts-on-the-1password-fastmail-partnership-e3f54144-5013-458d-a4c8-a89475ba1d78.png'
+	alt='Description of the image'
+/>
 
 Except one outage, the service has been spectacular so far and support is great. The founder, Son, often responds to my emails, welcomes feedback and sometimes includes users in future product discussions. If you are looking for a privacy-respecting email alias generator, look no beyond SimpleLogin. *This is not a sponsored post. I am just a happy user.*
 
