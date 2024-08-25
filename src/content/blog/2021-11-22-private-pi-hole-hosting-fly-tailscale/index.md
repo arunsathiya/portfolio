@@ -15,7 +15,7 @@ That's where a cloud-hosted pi-hole proves helpful.
 
 I learned about Fly.io recently. It's an app hosting platform that makes it incredibly easy to deploy apps to multiple regions and scales as needed. [Their free tier offers a generous 2,340 hours per month of uptime](https://fly.io/docs/about/pricing/), which translates to about 3 shared-cpu-1x VMs with 256MB RAM full time. My pi-hole consumes about 200MB RAM consistently, so this means I could host upto 3 apps each with pi-hole on it. But I have only one as I have two others at my house.
 
-![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/private-pi-hole-hosting-fly-tailscale-2000cca4-0414-4908-b3f9-ff74c543ee9c.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T055134Z&X-Amz-Expires=3600&X-Amz-Signature=519e18bdbdb578ea65eab50c724677b4c95c5fd5479563e9b066b5d0c15b0727&X-Amz-SignedHeaders=host&x-id=GetObject)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/private-pi-hole-hosting-fly-tailscale-2000cca4-0414-4908-b3f9-ff74c543ee9c.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T055304Z&X-Amz-Expires=3600&X-Amz-Signature=8daaeabfbfae508c997e5b5a2d4b06fc3045bf08059f9c80fa948a56a2f73ca2&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 ## Setting up the pi-hole
 

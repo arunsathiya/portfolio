@@ -50,23 +50,22 @@ async function processPage(page: PageObjectResponse) {
 	const description = page.properties.Description.type === 'rich_text' ? page.properties.Description.rich_text[0]?.plain_text.trim() : '';
 
 	// Process image blocks
-	if (page.properties.Title.type === 'title' && page.properties.Title.title[0]?.plain_text.trim().includes('private')) {
-		for (let i = 0; i < mdblocks.length; i++) {
-			const block = mdblocks[i];
-			if (block.type === 'image') {
-				const imageUrl = block.parent.match(/\((.*?)\)/)?.[1];
-				if (imageUrl) {
-					try {
-						const blockId = block.blockId || `fallback-${i}`;
-						const signedUrl = await uploadImage(imageUrl, slug, blockId);
-						mdblocks[i].parent = block.parent.replace(imageUrl, signedUrl);
-					} catch (error) {
-						console.error(`Failed to upload image: ${imageUrl}`, error);
-					}
+	for (let i = 0; i < mdblocks.length; i++) {
+		const block = mdblocks[i];
+		if (block.type === 'image') {
+			const imageUrl = block.parent.match(/\((.*?)\)/)?.[1];
+			if (imageUrl) {
+				try {
+					const blockId = block.blockId || `fallback-${i}`;
+					const signedUrl = await uploadImage(imageUrl, slug, blockId);
+					mdblocks[i].parent = block.parent.replace(imageUrl, signedUrl);
+				} catch (error) {
+					console.error(`Failed to upload image: ${imageUrl}`, error);
 				}
 			}
 		}
 	}
+
 	const mdString = n2m.toMarkdownString(mdblocks);
 
 	// Use the Date property instead of created_time
