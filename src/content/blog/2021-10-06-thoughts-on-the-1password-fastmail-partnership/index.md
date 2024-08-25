@@ -17,7 +17,7 @@ I see how this is helpful for the common user, but I am also slightly sad that s
 
 In my 2 years of being a SimpleLogin customer, I have generated over 1200 aliases and I guess, about 50% reply addresses. All of that is available at a fantastic cost of 30 USD per year.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/ee68892c-7dc4-449b-865a-cfdeadb28289/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20240825%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240825T062150Z&X-Amz-Expires=3600&X-Amz-Signature=a9fa2dd7fc3ed5568cc8ffa3fe72afcc715807ee4f1c5518d6a79e47f3347017&X-Amz-SignedHeaders=host&x-id=GetObject)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/thoughts-on-the-1password-fastmail-partnership-e3f54144-5013-458d-a4c8-a89475ba1d78.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T062628Z&X-Amz-Expires=3600&X-Amz-Signature=dd0edbefdefb7009a22d66618bf3c577c123146da944d597f2f0b0a43b8de623&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 Except one outage, the service has been spectacular so far and support is great. The founder, Son, often responds to my emails, welcomes feedback and sometimes includes users in future product discussions. If you are looking for a privacy-respecting email alias generator, look no beyond SimpleLogin. *This is not a sponsored post. I am just a happy user.*
 

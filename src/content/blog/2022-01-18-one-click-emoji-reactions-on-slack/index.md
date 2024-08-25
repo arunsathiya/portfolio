@@ -13,4 +13,4 @@ Last week at work, I learned that Slack has support for [one-click emoji reacti
 
 If your workspace has it enabled, you can configure your options under **Messages & media** tab on Slack settings.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/bf3eb410-9cfb-4d37-8adf-cf575c15d052/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20240825%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240825T062150Z&X-Amz-Expires=3600&X-Amz-Signature=054dc5227f65422fe5b60a20264f8b217ed53ff8a72ffdd04775a571b3b5399d&X-Amz-SignedHeaders=host&x-id=GetObject)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/one-click-emoji-reactions-on-slack-cb6f24e1-57eb-4a39-9a82-e02a72996163.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T062629Z&X-Amz-Expires=3600&X-Amz-Signature=1e58ccce3ab48f2b4810158f8c6465b16d8440fdce3e9e4235573d59784f0951&X-Amz-SignedHeaders=host&x-id=GetObject)

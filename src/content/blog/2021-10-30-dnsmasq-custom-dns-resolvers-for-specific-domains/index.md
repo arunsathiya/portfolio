@@ -19,6 +19,6 @@ server=/dnsleaktest.com/8.8.8.8
 server=/dnsleaktest.com/8.8.4.4
 ```
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/8e87097b-abe2-4015-8e4b-27a383843c30/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20240825%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240825T062148Z&X-Amz-Expires=3600&X-Amz-Signature=ab30b46e089d03e647c6c6f72945ce8bea16572cc5f23d68c23860747387cf0c&X-Amz-SignedHeaders=host&x-id=GetObject)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/dnsmasq-custom-dns-resolvers-for-specific-domains-42362915-5cb1-4239-b9c9-2284826ef946.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T062628Z&X-Amz-Expires=3600&X-Amz-Signature=d26e83e47d6ba0bafbf28dee5dce9e918b2c33f254934f359ac125272e395d96&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 I use two Raspberry Pi devices at home, both running pihole with Unbound as a recursive DNS resolver. These devices are connected to my [Tailscale network, so all of my devices (and my friends) can enjoy Unbound and pihole's ad-blocking capabilities](https://blogarunsathiya.wordpress.com/2021/03/30/pi-hole-on-tailscale/).
