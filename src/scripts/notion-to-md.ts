@@ -1,5 +1,5 @@
 import { Client } from '@notionhq/client';
-import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import type { ImageBlockObjectResponse, PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { uploadImage } from '@src/utils/s3/uploadImage';
 import dotenv from 'dotenv';
 import fs from 'fs';
@@ -59,8 +59,9 @@ async function processPage(page: PageObjectResponse) {
 					const blockId = block.blockId || `fallback-${i}`;
 					const imageKey = `${slug}-${blockId}${path.extname(imageUrl.split('?')[0])}`;
 					await uploadImage(imageUrl, slug, blockId);
-					const altText = 'Description of the image';
-					mdblocks[i].parent = `<R2Image imageKey="blog/assets/${imageKey}" alt="${altText}" />`;
+					const blockObj = (await notion.blocks.retrieve({ block_id: blockId })) as ImageBlockObjectResponse;
+					const caption = blockObj.image?.caption[0]?.plain_text || '';
+					mdblocks[i].parent = `<R2Image imageKey="blog/assets/${imageKey}" alt="${caption}" />`;
 				} catch (error) {
 					console.error(`Failed to upload image: ${imageUrl}`, error);
 				}
