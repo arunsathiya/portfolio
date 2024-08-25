@@ -1,10 +1,11 @@
 import mdx from '@astrojs/mdx';
+import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import { defineConfig } from 'astro/config';
 import { autoNewTabExternalLinks } from './src/autoNewTabExternalLinks';
 
-import partytown from '@astrojs/partytown';
+import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,4 +23,11 @@ export default defineConfig({
 			],
 		],
 	},
+	adapter: cloudflare({
+		routes: {
+			extend: {
+				include: ['/api/*'],
+			},
+		},
+	}),
 });
