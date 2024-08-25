@@ -29,13 +29,13 @@ Install Impostor on the Raspberry Pi. The process involves installing Dotnet run
 
 Finally, anyone can start the game, mark it as `Public` and then other devices can join this public room. Make sure that the "World" in your "Online" mode is set to "Impostor", not "Asia", "Europe" or "Americas".
 
-![97a08-custom-amoong-us-gameplay-3.png](https://blogarunsathiya.files.wordpress.com/2022/07/97a08-custom-amoong-us-gameplay-3.png?w=1024)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/private-among-us-games-on-the-tailscale-network-039db48d-d183-45f4-b9e7-a52ca42cdbd0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060504Z&X-Amz-Expires=3600&X-Amz-Signature=67a94c4af797dbfbec4f81c2bd5b9d111055d344990738146359b01cb0cf14a7&X-Amz-SignedHeaders=host&x-id=GetObject)
 
-![01f0a-custom-among-us-gameplay-1.png](https://blogarunsathiya.files.wordpress.com/2022/07/01f0a-custom-among-us-gameplay-1.png?w=1024)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/private-among-us-games-on-the-tailscale-network-954b6a83-28b1-4707-9dda-d263dd8a5dd8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060505Z&X-Amz-Expires=3600&X-Amz-Signature=c958f7d821d28e7abc2a24e252c40628c5b299143408fd5b0e6c05bf58ecb0c0&X-Amz-SignedHeaders=host&x-id=GetObject)
 
-![76eaa-custom-among-us-gameplay-2.png](https://blogarunsathiya.files.wordpress.com/2022/07/76eaa-custom-among-us-gameplay-2.png?w=1024)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/private-among-us-games-on-the-tailscale-network-43079733-26cb-4f4a-b37f-b2ce47640f60.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060505Z&X-Amz-Expires=3600&X-Amz-Signature=b54d0965ad3214ef0cdc6665ed5718548efbc25860905b0f361693433b64a956&X-Amz-SignedHeaders=host&x-id=GetObject)
 
-![280cb-custom-among-us-game-lobby.png](https://blogarunsathiya.files.wordpress.com/2022/07/280cb-custom-among-us-game-lobby.png?w=1024)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/private-among-us-games-on-the-tailscale-network-ad192dfe-ca42-414e-958c-c99ceaf84bdf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060506Z&X-Amz-Expires=3600&X-Amz-Signature=c1c2046dddf0ec77684746df6af823a3b4a00cf7b17b841decf7389dfd8c3544&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 ## Other notes
 

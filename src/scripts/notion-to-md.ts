@@ -1,5 +1,6 @@
 import { Client } from '@notionhq/client';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import { uploadImage } from '@src/utils/s3/uploadImage';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import { NotionToMarkdown } from 'notion-to-md';
@@ -35,7 +36,6 @@ function formatDateForFolder(dateString: string): string {
 async function processPage(page: PageObjectResponse) {
 	const pageId = page.id;
 	const mdblocks = await n2m.pageToMarkdown(pageId);
-	const mdString = n2m.toMarkdownString(mdblocks);
 
 	const title =
 		page.properties.Title.type === 'title' && page.properties.Title.title.length > 1
@@ -48,6 +48,25 @@ async function processPage(page: PageObjectResponse) {
 			? page.properties.Slug.rich_text[0]?.plain_text.trim().toLowerCase().replace(/\s+/g, '-')
 			: '';
 	const description = page.properties.Description.type === 'rich_text' ? page.properties.Description.rich_text[0]?.plain_text.trim() : '';
+
+	// Process image blocks
+	for (let i = 0; i < mdblocks.length; i++) {
+		const block = mdblocks[i];
+		if (block.type === 'image') {
+			const imageUrl = block.parent.match(/\((.*?)\)/)?.[1];
+			if (imageUrl) {
+				try {
+					const blockId = block.blockId || `fallback-${i}`;
+					const signedUrl = await uploadImage(imageUrl, slug, blockId);
+					mdblocks[i].parent = block.parent.replace(imageUrl, signedUrl);
+				} catch (error) {
+					console.error(`Failed to upload image: ${imageUrl}`, error);
+				}
+			}
+		}
+	}
+
+	const mdString = n2m.toMarkdownString(mdblocks);
 
 	// Use the Date property instead of created_time
 	let pubDate = '';

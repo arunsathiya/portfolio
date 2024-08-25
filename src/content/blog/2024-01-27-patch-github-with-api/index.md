@@ -32,8 +32,6 @@ I tied all of this together into a Go program [set-output-janitor](https://githu
 - Commits and submits a pull request.
   All automatically, in seconds, thanks to Go's concurrency capabilities.
 
-![patch-github-with-api.webp](/images/patch-github-with-api.webp)
-
 This was a really fun exercise, but also got a bit of hate because I was spamming organizations with the same content across different repositories. A few people unfollowed me on GitHub because whenever my PR was merged, it appeared on their newsfeed, one person reached out with a comment that I was flooding their inbox, and a few even looked me up on LinkedIn to figure out what was happening.
 
 Next steps:

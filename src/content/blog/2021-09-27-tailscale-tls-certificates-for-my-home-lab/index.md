@@ -27,9 +27,7 @@ But my use-case was to run Caddy as a reverse proxy, to serve each Docker contai
 
 - Libreddit on the root domain `mew.tailnet-b593.ts.net`.
 - Whoogle on `mew.tailnet-b593.ts.net/google`
-  ![8bcce-image-2.png](https://blogarunsathiya.files.wordpress.com/2022/07/8bcce-image-2.png?w=1024&h=636)
-
-Tailscale TLS certificates on a Whoogle instance
+  ![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/tailscale-tls-certificates-for-my-home-lab-5e11ac3a-ce18-4dbb-8ff9-05c0afe3f875.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060504Z&X-Amz-Expires=3600&X-Amz-Signature=c0ee323ac7f9c070350f5314487f7c4b113ce17faa6ef441cbc755cc4169aaf2&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 I wanted to access my pihole admin on HTTPS too, but I couldn't get it working on a subfolder, like `mew.tailnet-b593.ts.net/pihole`. When I assigned the root domain to pihole, libreddit had to go to a subfolder like `mew.tailnet-b593.ts.net/reddit` and when I tried that, CSS on my libreddit instance broke.
 

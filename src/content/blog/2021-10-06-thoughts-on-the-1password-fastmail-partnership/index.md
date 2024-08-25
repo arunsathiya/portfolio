@@ -17,9 +17,7 @@ I see how this is helpful for the common user, but I am also slightly sad that s
 
 In my 2 years of being a SimpleLogin customer, I have generated over 1200 aliases and I guess, about 50% reply addresses. All of that is available at a fantastic cost of 30 USD per year.
 
-![7c528-image.png](https://blogarunsathiya.files.wordpress.com/2022/07/7c528-image.png?w=1024&h=440)
-
-An image from my SimpleLogin dashboard that shows the number of aliases that I have generated, incoming emails, outbound responses and blocked emails.
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/thoughts-on-the-1password-fastmail-partnership-e3f54144-5013-458d-a4c8-a89475ba1d78.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060504Z&X-Amz-Expires=3600&X-Amz-Signature=5e187f71d7d20a4db47e1b80f779b15d41cff797795306f36b131d0d1554745d&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 Except one outage, the service has been spectacular so far and support is great. The founder, Son, often responds to my emails, welcomes feedback and sometimes includes users in future product discussions. If you are looking for a privacy-respecting email alias generator, look no beyond SimpleLogin. *This is not a sponsored post. I am just a happy user.*
 

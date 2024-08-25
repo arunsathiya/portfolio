@@ -13,4 +13,4 @@ Last week at work, I learned that Slack has support for [one-click emoji reacti
 
 If your workspace has it enabled, you can configure your options under **Messages & media** tab on Slack settings.
 
-![af553-image.png](https://blogarunsathiya.files.wordpress.com/2022/07/af553-image.png?w=1024&h=552)
+![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/one-click-emoji-reactions-on-slack-cb6f24e1-57eb-4a39-9a82-e02a72996163.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T060504Z&X-Amz-Expires=3600&X-Amz-Signature=6cd7504f8e256d786f6b793618803795ec64841303b8e7f438cd15d324a93e27&X-Amz-SignedHeaders=host&x-id=GetObject)
