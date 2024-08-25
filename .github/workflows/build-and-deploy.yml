@@ -15,6 +15,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  deployments: write
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -101,7 +104,7 @@ jobs:
         name: Create GitHub deployment
         id: deployment
         with:
-          token: '${{ secrets.PAT_FOR_DEPLOYMENTS }}'
+          token: '${{ github.token }}'
           environment-url: https://www.arun.blog
           environment: Production
 
@@ -117,7 +120,7 @@ jobs:
         if: success()
         uses: chrnorm/deployment-status@v2
         with:
-          token: '${{ secrets.PAT_FOR_DEPLOYMENTS }}'
+          token: '${{ github.token }}'
           environment-url: ${{ steps.deployment.outputs.environment_url }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
           state: 'success'
@@ -126,7 +129,7 @@ jobs:
         if: failure()
         uses: chrnorm/deployment-status@v2
         with:
-          token: '${{ secrets.PAT_FOR_DEPLOYMENTS }}'
+          token: '${{ github.token }}'
           environment-url: ${{ steps.deployment.outputs.environment_url }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
           state: 'failure'
