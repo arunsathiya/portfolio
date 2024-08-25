@@ -37,7 +37,6 @@ console.log('R2Image component rendering with props:', { imageKey, alt });
 					const data = await response.json();
 
 					if (data.url) {
-						console.log(`Setting image src to: ${data.url}`);
 						img.src = data.url;
 					} else {
 						console.error('No URL received in the response');
