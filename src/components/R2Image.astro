@@ -39,7 +39,7 @@ console.log('R2Image component rendering with props:', { imageKey, alt });
 					if (data.url) {
 						img.src = data.url;
 					} else {
-						console.error('No URL received in the response:', JSON.stringify(data));
+						console.error('No URL received in the response');
 					}
 				} catch (error) {
 					console.error('Failed to refresh signed URL:', error);
