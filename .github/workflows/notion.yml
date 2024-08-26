@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   commit:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     env:
       TZ: 'America/Los_Angeles'
     permissions:
@@ -37,8 +37,20 @@ jobs:
         env:
           NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_R2_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+          CLOUDFLARE_R2_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
         with:
           cmd: notion-to-md
+        continue-on-error: true
+
+      - name: Check for script errors
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "Notion script failed. Check the logs for errors."
+            exit 1
+          fi
 
       - name: Fix Formatting
         uses: borales/actions-yarn@v5
@@ -48,8 +60,10 @@ jobs:
       - name: Stage all changes
         run: |
           git add .
+          git diff --staged --quiet || echo "CHANGES_EXIST=true" >> $GITHUB_ENV
 
       - name: Commit Changes
+        if: env.CHANGES_EXIST == 'true'
         uses: planetscale/ghcommit-action@v0.1.33
         with:
           commit_message: ${{ github.event.inputs.commit_message || 'Update from Notion' }}
@@ -57,3 +71,11 @@ jobs:
           branch: ${{ github.head_ref || github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for commit errors
+        if: env.CHANGES_EXIST == 'true'
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "Failed to commit changes. Check the logs for errors."
+            exit 1
+          fi
