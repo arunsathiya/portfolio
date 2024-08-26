@@ -10,7 +10,7 @@ import cloudflare from '@astrojs/cloudflare';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://www.arun.blog',
-	output: 'server',
+	output: 'hybrid',
 	integrations: [mdx(), sitemap(), tailwind(), partytown()],
 	markdown: {
 		extendDefaultPlugins: true,
@@ -28,6 +28,9 @@ export default defineConfig({
 			extend: {
 				include: ['/api/*'],
 			},
+		},
+		platformProxy: {
+			enabled: true,
 		},
 	}),
 	vite: {

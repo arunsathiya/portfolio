@@ -8,8 +8,8 @@
 		},
     "outDir": "dist",
     "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "strict": true
+		"esModuleInterop": true,
+		"strict": true,
 	},
-  "exclude": ["public", "node_modules", "dist"]
+	"exclude": ["public", "node_modules", "dist"]
 }
