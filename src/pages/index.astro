@@ -6,7 +6,7 @@ import { getCollection } from 'astro:content';
 import PostItem from '../components/PostItem.astro';
 import ProjectList from '../components/ProjectList.astro';
 import Prose from '../components/Prose.astro';
-import { SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE } from '../consts';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { projects } from './projects/projects';
 
@@ -18,7 +18,7 @@ const posts = (await getCollection('blog'))
 	.slice(0, 5);
 ---
 
-<BaseLayout title={SITE_TITLE + ' - ' + SITE_TAGLINE} description={SITE_DESCRIPTION}>
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
 	<div class='container'>
 		<main>
 			<div class='mt-6 mb-12'>
