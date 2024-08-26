@@ -10,7 +10,7 @@ import vercel from '@astrojs/vercel/serverless';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://www.arun.blog',
-	output: 'server',
+	output: 'hybrid',
 	integrations: [mdx(), sitemap(), tailwind(), partytown()],
 	markdown: {
 		extendDefaultPlugins: true,
