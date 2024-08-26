@@ -52,6 +52,7 @@ export default defineConfig({
 				'node:test',
 				'node:util',
 				'node:perf_hooks',
+				'node:module',
 			],
 		},
 	},
