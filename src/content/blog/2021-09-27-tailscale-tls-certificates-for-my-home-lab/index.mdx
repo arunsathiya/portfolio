@@ -4,7 +4,7 @@ seoTitle: 'Growing my home lab - Tailscale TLS certificates for each Docker with
 slug: 'tailscale-tls-certificates-for-my-home-lab'
 description: 'I am starting to grow my home lab with Raspberry Pi, Docker, Caddy and Tailscale. Right now, I have Whoogle, libreddit, pihole and Caddy running on my nodes.'
 pubDate: 'Sep 26 2021'
-updatedDate: 'Aug 25 2024'
+updatedDate: 'Aug 26 2024'
 tags: ['Tools', 'DevOps']
 coverImage: './image.webp'
 ---
@@ -23,16 +23,18 @@ That changed a while ago because Tailscale TLS certificates are now available fo
 
 ## Caddy to the rescue
 
-That's when I discovered Caddy, which turns out to be a web server that can provision TLS certificates as well.
+That's when I discovered Caddy, a web server that can provision TLS certificates as well.
 
 But my use-case was to run Caddy as a reverse proxy, to serve each Docker container on the Tailscale node address, each on a subfolder. After a lot of trial and error, reading documentation, reading GitHub issues, I have the following running with TLS:
 
 - Libreddit on the root domain `mew.tailnet-b593.ts.net`.
 - Whoogle on `mew.tailnet-b593.ts.net/google`
-  <R2Image
-  	imageKey='blog/assets/tailscale-tls-certificates-for-my-home-lab-5e11ac3a-ce18-4dbb-8ff9-05c0afe3f875.png'
-  	alt='Tailscale TLS certificates on a Whoogle instance'
-  />
+  A web application with SSL configured out of the box:
+
+<R2Image
+	imageKey='blog/assets/tailscale-tls-certificates-for-my-home-lab-5e11ac3a-ce18-4dbb-8ff9-05c0afe3f875.png'
+	alt='Tailscale TLS certificates on a Whoogle instance'
+/>
 
 I wanted to access my pihole admin on HTTPS too, but I couldn't get it working on a subfolder, like `mew.tailnet-b593.ts.net/pihole`. When I assigned the root domain to pihole, libreddit had to go to a subfolder like `mew.tailnet-b593.ts.net/reddit` and when I tried that, CSS on my libreddit instance broke.
 
