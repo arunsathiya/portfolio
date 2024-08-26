@@ -6,6 +6,8 @@ import { getTagBackgroundColor } from '@src/utils/tagColors';
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 
+export const prerender = true;
+
 type BlogPost = CollectionEntry<'blog'>;
 
 export const getStaticPaths = async () => {

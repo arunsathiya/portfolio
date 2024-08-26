@@ -2,6 +2,8 @@ import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import type { APIRoute } from 'astro';
 
+export const prerender = false;
+
 const s3Client = new S3Client({
 	region: 'auto',
 	endpoint: `https://${import.meta.env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,

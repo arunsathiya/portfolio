@@ -1,15 +1,16 @@
 import mdx from '@astrojs/mdx';
+import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import { defineConfig } from 'astro/config';
 import { autoNewTabExternalLinks } from './src/autoNewTabExternalLinks';
 
-import partytown from '@astrojs/partytown';
+import vercel from '@astrojs/vercel/serverless';
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://www.arun.blog',
-	output: 'server',
+	output: 'hybrid',
 	integrations: [mdx(), sitemap(), tailwind(), partytown()],
 	markdown: {
 		extendDefaultPlugins: true,
@@ -22,4 +23,5 @@ export default defineConfig({
 			],
 		],
 	},
+	adapter: vercel(),
 });
