@@ -23,9 +23,5 @@ export default defineConfig({
 			],
 		],
 	},
-	adapter: vercel({
-		routes: {
-			include: ['/api/*'],
-		},
-	}),
+	adapter: vercel(),
 });
