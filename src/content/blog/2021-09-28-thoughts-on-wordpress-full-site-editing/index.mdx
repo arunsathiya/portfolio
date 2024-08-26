@@ -9,6 +9,8 @@ tags: ['Content Management', 'Tools', 'Open Source']
 coverImage: './image.webp'
 ---
 
+import R2Image from 'src/components/R2Image.astro';
+
 For years, design on WordPress had been in the form of PHP templates bundled together as a WordPress theme. The templates apply to specific content as desginated by the [WordPress Template Hierarchy](https://developer.wordpress.org/themes/basics/template-hierarchy/). The largest issue with this approach would be that anyone wanting a custom design on their site must have PHP skills to write theme code.
 
 Full Site Editing (FSE) is changing that process. Those with programming knowledge can design custom designs for their pages, posts or even for search archives or 404 pages. This is largely possible, thanks to the extensible nature of Gutenberg blocks. They are now available for use on sidebars in the form of widgets, on the header and footer areas, in the form of Full Site Editing.
@@ -21,17 +23,17 @@ Personally, I wanted a theme that shows all of my blog posts on the homepage, bu
 
 Right now, my homepage looks as shown below, this is a two column layout:
 
-![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/thoughts-on-wordpress-full-site-editing-53ae846c-1d75-424e-804c-2ea4301ed73a.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T062629Z&X-Amz-Expires=3600&X-Amz-Signature=d8fb6e924ee620e4661ec858b21d3bfb9ba649e223bfe0f24b23df8646647d24&X-Amz-SignedHeaders=host&x-id=GetObject)
+<R2Image imageKey='blog/assets/thoughts-on-wordpress-full-site-editing-53ae846c-1d75-424e-804c-2ea4301ed73a.png' alt='' />
 
 The content on the right isn't my sidebar. Rather is the right column of my homepage's FSE editor. For comparison, my editor view is as shown below:
 
-![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/thoughts-on-wordpress-full-site-editing-4a79b9de-cff0-41be-ba1d-7dd6fccdf17f.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T062629Z&X-Amz-Expires=3600&X-Amz-Signature=2beac7d7f103ab1070af3719febc6a952ba6e9e4316a10095418e916d4debccc&X-Amz-SignedHeaders=host&x-id=GetObject)
+<R2Image imageKey='blog/assets/thoughts-on-wordpress-full-site-editing-4a79b9de-cff0-41be-ba1d-7dd6fccdf17f.png' alt='' />
 
 Likewise, here's a comparison of the single blog post view:
 
-![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/thoughts-on-wordpress-full-site-editing-f180d5e9-7857-4305-af28-294e025d7254.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T062629Z&X-Amz-Expires=3600&X-Amz-Signature=ed313851e14e778decd1e8ba4fb1da52c2c1fbbb089ab6e437c3ccf675de30f9&X-Amz-SignedHeaders=host&x-id=GetObject)
+<R2Image imageKey='blog/assets/thoughts-on-wordpress-full-site-editing-f180d5e9-7857-4305-af28-294e025d7254.png' alt='' />
 
-![image.png](https://portfolio.75d17a47b6c80ac40b0e7e44a4a8517d.r2.cloudflarestorage.com/blog/assets/thoughts-on-wordpress-full-site-editing-d2d99e7a-628f-46d9-a7bc-21c61db2a145.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=8367778c331a87824282df96c3af94ca%2F20240825%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20240825T062629Z&X-Amz-Expires=3600&X-Amz-Signature=faee3d6d3f7561ab401594c9d9192fcc94bb89784b0bbfabe2e3ea628ba72e5c&X-Amz-SignedHeaders=host&x-id=GetObject)
+<R2Image imageKey='blog/assets/thoughts-on-wordpress-full-site-editing-d2d99e7a-628f-46d9-a7bc-21c61db2a145.png' alt='' />
 
 See how the editor looks very similar to a blog post or page editor?
 

@@ -18,7 +18,7 @@ const S3 = new S3Client({
 	},
 });
 
-export async function uploadImage(imageUrl: string, pageSlug: string, blockId: string): Promise<string> {
+export async function uploadImage(imageUrl: string, pageSlug: string, blockId: string): Promise<{ uploaded: boolean; signedUrl: string }> {
 	try {
 		// Generate a unique filename using blockId
 		const filename = `${pageSlug}-${blockId}${path.extname(imageUrl.split('?')[0])}`;
@@ -34,7 +34,8 @@ export async function uploadImage(imageUrl: string, pageSlug: string, blockId: s
 
 			// If we reach here, the file exists. Generate and return a signed URL.
 			console.log('Image already exists in the bucket. Generating signed URL.');
-			return await getSignedUrlForObject(key);
+			const signedUrl = await getSignedUrlForObject(key);
+			return { uploaded: false, signedUrl };
 		} catch (error) {
 			// If the file doesn't exist, we'll get an error. Proceed with upload.
 			console.log('Image does not exist in the bucket. Proceeding with upload.');
@@ -69,7 +70,7 @@ export async function uploadImage(imageUrl: string, pageSlug: string, blockId: s
 		const signedUrl = await getSignedUrlForObject(key);
 
 		console.log('Upload successful. Signed URL:', signedUrl);
-		return signedUrl;
+		return { uploaded: true, signedUrl };
 	} catch (error) {
 		console.error('Error uploading image to R2:', error);
 		if (error instanceof Error) {
