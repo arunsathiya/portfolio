@@ -51,6 +51,7 @@ export default defineConfig({
 				'node:string_decoder',
 				'node:test',
 				'node:util',
+				'node:perf_hooks',
 			],
 		},
 	},
