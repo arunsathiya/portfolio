@@ -35,7 +35,23 @@ export default defineConfig({
 	}),
 	vite: {
 		ssr: {
-			external: ['node:fs', 'node:fs/promises', 'node:path'],
+			external: [
+				'node:fs',
+				'node:fs/promises',
+				'node:path',
+				'node:url',
+				'node:assert',
+				'node:async_hooks',
+				'node:buffer',
+				'node:crypto',
+				'node:diagnostics_channel',
+				'node:events',
+				'node:process',
+				'node:stream',
+				'node:string_decoder',
+				'node:test',
+				'node:util',
+			],
 		},
 	},
 });
