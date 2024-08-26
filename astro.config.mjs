@@ -5,6 +5,8 @@ import tailwind from '@astrojs/tailwind';
 import { defineConfig } from 'astro/config';
 import { autoNewTabExternalLinks } from './src/autoNewTabExternalLinks';
 
+import vercel from '@astrojs/vercel/serverless';
+
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://www.arun.blog',
@@ -21,5 +23,9 @@ export default defineConfig({
 			],
 		],
 	},
-	adapter: vercel(),
+	adapter: vercel({
+		routes: {
+			include: ['/api/*'],
+		},
+	}),
 });
