@@ -35,7 +35,7 @@ export default defineConfig({
 	}),
 	vite: {
 		ssr: {
-			external: ['node:fs', 'node:fs/promises'],
+			external: ['node:fs', 'node:fs/promises', 'node:path'],
 		},
 	},
 });
