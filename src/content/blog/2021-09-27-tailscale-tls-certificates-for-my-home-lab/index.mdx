@@ -29,11 +29,10 @@ But my use-case was to run Caddy as a reverse proxy, to serve each Docker contai
 
 - Libreddit on the root domain `mew.tailnet-b593.ts.net`.
 - Whoogle on `mew.tailnet-b593.ts.net/google`
-
-<R2Image
-	imageKey='blog/assets/tailscale-tls-certificates-for-my-home-lab-5e11ac3a-ce18-4dbb-8ff9-05c0afe3f875.png'
-	alt='Tailscale TLS certificates on a Whoogle instance'
-/>
+  <R2Image
+  	imageKey='blog/assets/tailscale-tls-certificates-for-my-home-lab-5e11ac3a-ce18-4dbb-8ff9-05c0afe3f875.png'
+  	alt='Tailscale TLS certificates on a Whoogle instance'
+  />
 
 I wanted to access my pihole admin on HTTPS too, but I couldn't get it working on a subfolder, like `mew.tailnet-b593.ts.net/pihole`. When I assigned the root domain to pihole, libreddit had to go to a subfolder like `mew.tailnet-b593.ts.net/reddit` and when I tried that, CSS on my libreddit instance broke.
 

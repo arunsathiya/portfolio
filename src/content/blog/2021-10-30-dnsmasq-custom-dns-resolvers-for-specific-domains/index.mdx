@@ -4,7 +4,7 @@ seoTitle: 'dnsmasq - Custom DNS resolvers for specific domains'
 slug: 'dnsmasq-custom-dns-resolvers-for-specific-domains'
 description: "It's possible to setup custom DNS resolvers for certain domains using a dnsmasq config file. Requests still pass through pihole, for ad-blocking capabilities."
 pubDate: 'Oct 29 2021'
-updatedDate: 'Aug 24 2024'
+updatedDate: 'Aug 26 2024'
 tags: ['Automation']
 coverImage: './image.webp'
 ---
@@ -21,6 +21,9 @@ server=/dnsleaktest.com/8.8.8.8
 server=/dnsleaktest.com/8.8.4.4
 ```
 
-<R2Image imageKey='blog/assets/dnsmasq-custom-dns-resolvers-for-specific-domains-42362915-5cb1-4239-b9c9-2284826ef946.png' alt='' />
+<R2Image
+	imageKey='blog/assets/dnsmasq-custom-dns-resolvers-for-specific-domains-42362915-5cb1-4239-b9c9-2284826ef946.png'
+	alt='A screenshot of pihole logs'
+/>
 
 I use two Raspberry Pi devices at home, both running pihole with Unbound as a recursive DNS resolver. These devices are connected to my [Tailscale network, so all of my devices (and my friends) can enjoy Unbound and pihole's ad-blocking capabilities](https://blogarunsathiya.wordpress.com/2021/03/30/pi-hole-on-tailscale/).
