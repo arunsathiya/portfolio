@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+export const prerender = false;
+
 // Define the type for our tagColors object
 type TagColors = {
 	[key: string]: string;
