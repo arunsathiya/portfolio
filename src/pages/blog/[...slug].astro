@@ -8,6 +8,7 @@ import AboutTheAuthor from '../../components/widgets/AboutTheAuthor.astro';
 import TableOfContent from '../../components/widgets/TableOfContent.astro';
 import { slugify } from '../../utils';
 import { loadEnv } from 'vite';
+import { getTagBackgroundColor } from '@src/utils/tagColors';
 
 export const prerender = true;
 
@@ -49,6 +50,15 @@ const {
 	data: { title, seoTitle, description, coverImage, pubDate, updatedDate, tags },
 } = post;
 const { Content, headings } = await post.render();
+
+const getTagClasses = (tag: string) => `
+  rounded-2xl
+  text-sm no-underline px-2 py-0.5
+  transition-all duration-700
+  hover:opacity-80
+  ${getTagBackgroundColor(tag)}
+  ${getTagBackgroundColor(tag).includes('dark:bg-') ? 'text-zinc-800 dark:text-zinc-200' : 'text-zinc-700 dark:text-zinc-300'}
+`;
 ---
 
 <BaseLayout title={seoTitle || title} description={description} image={coverImage?.src || undefined}>
@@ -65,13 +75,7 @@ const { Content, headings } = await post.render();
 								(
 									<div class='flex gap-2'>
 										{(tags || [])?.map((tag: string) => (
-											<a
-												class='border border-zinc-300 dark:border-zinc-700 rounded-2xl
-                          text-sm text-zinc-700 dark:text-zinc-300 no-underline px-2 py-0.5
-                          transition-all duration-700
-                        hover:border-zinc-700 dark:hover:border-zinc-300'
-												href={`/tags/${slugify(tag)}`}
-											>
+											<a class={getTagClasses(tag)} href={`/tags/${slugify(tag)}`}>
 												{tag}
 											</a>
 										))}
