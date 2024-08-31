@@ -98,8 +98,18 @@ async function processPage(page: PageObjectResponse) {
 		folderDate = formatDateForFolder(page.created_time);
 	}
 
-	const folderName = `${folderDate}-${slug}`;
-	const dir = `./src/content/blog/${folderName}`;
+	const blogDir = './src/content/blog';
+	const existingFolders = fs.readdirSync(blogDir);
+	const existingFolder = existingFolders.find((folder) => folder.endsWith(`-${slug}`));
+	if (existingFolder) {
+		if (existingFolder !== `${folderDate}-${slug}`) {
+			const oldDir = path.join(blogDir, existingFolder);
+			const newDir = path.join(blogDir, `${folderDate}-${slug}`);
+			fs.renameSync(oldDir, newDir);
+		}
+	}
+
+	const dir = `./src/content/blog/${folderDate}-${slug}`;
 	if (!fs.existsSync(dir)) {
 		fs.mkdirSync(dir, { recursive: true });
 	}
