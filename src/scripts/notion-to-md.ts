@@ -105,6 +105,7 @@ async function processPage(page: PageObjectResponse) {
 	}
 
 	const filePath = path.join(dir, 'index.mdx');
+	const imageExists = fs.existsSync(path.join(dir, 'image.webp'));
 	const content = `---
 title: "${title}"
 seoTitle: "${title}"
@@ -113,7 +114,7 @@ description: "${description}"
 pubDate: '${pubDate}'
 updatedDate: '${updatedDate}'
 tags: ${JSON.stringify(tags)}
-coverImage: './image.webp'
+${imageExists ? `coverImage: "./image.webp"` : ''}
 ---
 
 import R2Image from 'src/components/R2Image.astro';
