@@ -12,6 +12,7 @@
     "format:write": "prettier --write src .github",
     "notion-to-md": "tsx src/scripts/notion-to-md.ts",
     "changes-on-notion": "tsx src/scripts/changes-on-notion.ts",
+    "notion": "tsx src/scripts/notion-to-md.ts && tsx src/scripts/changes-on-notion.ts",
     "list-buckets": "tsx src/utils/s3/listBuckets.ts",
     "list-objects": "tsx src/utils/s3/listObjects.ts",
     "list-objects-signed": "tsx src/utils/s3/listObjectsSigned.ts"
