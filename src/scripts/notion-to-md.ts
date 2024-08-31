@@ -116,6 +116,7 @@ async function processPage(page: PageObjectResponse) {
 
 	const filePath = path.join(dir, 'index.mdx');
 	const imageExists = fs.existsSync(path.join(dir, 'image.webp'));
+	const postContainsImages = mdblocks.some((block) => block.parent.includes('R2Image'));
 	const content = `---
 title: "${title}"
 seoTitle: "${title}"
@@ -127,7 +128,7 @@ tags: ${JSON.stringify(tags)}
 ${imageExists ? `coverImage: "./image.webp"` : ''}
 ---
 
-import R2Image from 'src/components/R2Image.astro';
+${postContainsImages ? `import R2Image from 'src/components/R2Image.astro';` : ''}
 
 ${mdString.parent.replace(/\n\n/g, '\n')}`;
 
