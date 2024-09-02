@@ -66,7 +66,7 @@ jobs:
   fetch-images:
     needs: scan-mdx-files
     runs-on: ubuntu-latest
-    if: ${{ needs.scan-mdx-files.outputs.missing_images != '' }}
+    if: ${{ fromJson(needs.scan-mdx-files.outputs.missing_images)[0] }}
     strategy:
       matrix:
         image: ${{ fromJson(needs.scan-mdx-files.outputs.missing_images) }}
