@@ -73,19 +73,24 @@ jobs:
       max-parallel: 5
     steps:
       - uses: actions/checkout@v4
-
       - name: Fetch image from R2
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: r2 object get ${{ secrets.R2_BUCKET_NAME }}/blog/cover/${{ matrix.image }}/image.webp --file src/content/blog/${{ matrix.image }}/image.webp
-
       - name: Update frontmatter
         run: |
           mdx_file="src/content/blog/${{ matrix.image }}/index.mdx"
           sed -i '1s/^/---\ncoverImage: ".\/image.webp"\n---\n/' "$mdx_file"
           echo "Updated frontmatter for $mdx_file"
+      - name: Upload changes
+        uses: actions/upload-artifact@v3
+        with:
+          name: updated-files-${{ matrix.image }}
+          path: |
+            src/content/blog/${{ matrix.image }}/image.webp
+            src/content/blog/${{ matrix.image }}/index.mdx
 
   commit-changes:
     needs: fetch-images
@@ -94,28 +99,32 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: yarn
           cache-dependency-path: 'yarn.lock'
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+      - name: Move artifacts to correct locations
+        run: |
+          for dir in artifacts/updated-files-*; do
+            cp -R "$dir"/* src/content/blog/
+          done
       - name: Fix Formatting
         run: yarn format:write
-
-      - name: Stage all changes
+      - name: Check for changes
         id: stage
         run: |
           git add .
           git diff --staged --quiet || echo "CHANGES_EXIST=true" >> $GITHUB_OUTPUT
-
       - name: Commit Changes
-        if: ${{ steps.stage.outputs.CHANGES_EXIST == 'true' }}
+        if: steps.stage.outputs.CHANGES_EXIST == 'true'
         uses: planetscale/ghcommit-action@v0.1.33
         with:
           commit_message: ${{ github.event.inputs.commit_message || 'Set missing cover images in blog posts' }}
@@ -124,16 +133,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check for commit errors
-        if: ${{ steps.stage.outputs.CHANGES_EXIST == 'true' }}
-        run: |
-          if [ $? -ne 0 ]; then
-            echo "Failed to commit changes. Check the logs for errors."
-            exit 1
-          fi
-
-      - name: Report status
-        if: failure()
+  report-status:
+    needs: [scan-mdx-files, fetch-images, commit-changes]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report failure
         run: |
           echo "Some MDX files are missing coverImage frontmatter and images could not be fetched"
           exit 1
