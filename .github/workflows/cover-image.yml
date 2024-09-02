@@ -1,0 +1,138 @@
+name: Fix missing cover images in blog posts
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      commit_message:
+        type: string
+        description: Commit message to use for this content build step
+        required: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scan-mdx-files:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'yarn'
+          cache-dependency-path: 'yarn.lock'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Scan MDX files
+        id: scan
+        run: |
+          missing_images=()
+          for file in $(find src/content/blog -name "*.mdx"); do
+          if ! node -e "
+            const matter = require('gray-matter');
+            const fs = require('fs');
+            const fileContents = fs.readFileSync('$file', 'utf8');
+            const { data } = matter(fileContents);
+            if (!data.coverImage) {
+              console.log('$file is missing coverImage');
+              process.exit(1);
+            }
+          "; then
+            dir_name=$(dirname "$file")
+            base_name=$(basename "$dir_name")
+            missing_images+=("$base_name")
+          fi
+          done
+          if [ ${#missing_images[@]} -eq 0 ]; then
+            echo "missing_images=[]" >> $GITHUB_OUTPUT
+          else
+            json_array=$(printf '%s\n' "${missing_images[@]}" | jq -R . | jq -s -c .)
+            echo "missing_images=$json_array" >> $GITHUB_OUTPUT
+          fi
+    outputs:
+      missing_images: ${{ steps.scan.outputs.missing_images }}
+
+  fetch-images:
+    needs: scan-mdx-files
+    runs-on: ubuntu-latest
+    if: ${{ fromJson(needs.scan-mdx-files.outputs.missing_images)[0] }}
+    strategy:
+      matrix:
+        image: ${{ fromJson(needs.scan-mdx-files.outputs.missing_images) }}
+      max-parallel: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch image from R2
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: r2 object get ${{ secrets.R2_BUCKET_NAME }}/blog/cover/${{ matrix.image }}/image.webp --file src/content/blog/${{ matrix.image }}/image.webp
+
+      - name: Update frontmatter
+        run: |
+          mdx_file="src/content/blog/${{ matrix.image }}/index.mdx"
+          sed -i '1s/^/---\ncoverImage: ".\/image.webp"\n---\n/' "$mdx_file"
+          echo "Updated frontmatter for $mdx_file"
+
+  commit-changes:
+    needs: fetch-images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: yarn
+          cache-dependency-path: 'yarn.lock'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Fix Formatting
+        run: yarn format:write
+
+      - name: Stage all changes
+        run: |
+          git add .
+          git diff --staged --quiet || echo "CHANGES_EXIST=true" >> $GITHUB_ENV
+
+      - name: Commit Changes
+        if: env.CHANGES_EXIST == 'true'
+        uses: planetscale/ghcommit-action@v0.1.33
+        with:
+          commit_message: ${{ github.event.inputs.commit_message || 'Set missing cover images in blog posts' }}
+          repo: ${{ github.repository }}
+          branch: ${{ github.head_ref || github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for commit errors
+        if: env.CHANGES_EXIST == 'true'
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "Failed to commit changes. Check the logs for errors."
+            exit 1
+          fi
+
+      - name: Report status
+        if: failure()
+        run: |
+          echo "Some MDX files are missing coverImage frontmatter and images could not be fetched"
+          exit 1
