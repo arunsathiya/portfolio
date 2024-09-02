@@ -34,55 +34,69 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Scan MDX files and fetch missing images
-        id: scan-and-fetch
+      - name: Scan MDX files
+        id: scan
+        run: |
+          missing_images=()
+          for file in $(find src/content/blog -name "*.mdx"); do
+          if ! node -e "
+            const matter = require('gray-matter');
+            const fs = require('fs');
+            const fileContents = fs.readFileSync('$file', 'utf8');
+            const { data } = matter(fileContents);
+            if (!data.coverImage) {
+              console.log('$file is missing coverImage');
+              process.exit(1);
+            }
+          "; then
+            dir_name=$(dirname "$file")
+            base_name=$(basename "$dir_name")
+            missing_images+=("$base_name")
+          fi
+          done
+          echo "missing_images=${missing_images[@]}" >> $GITHUB_OUTPUT
+
+  fetch-images:
+    needs: scan-mdx-files
+    runs-on: ubuntu-latest
+    if: ${{ needs.scan-mdx-files.outputs.missing_images != '' }}
+    strategy:
+      matrix:
+        image: ${{ fromJson(needs.scan-mdx-files.outputs.missing_images) }}
+      max-parallel: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch image from R2
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: |
-            # Find all .mdx files
-            mdx_files=$(find src/content/blog -name "*.mdx")
+          command: wrangler r2 object get ${{ secrets.R2_BUCKET_NAME }}/portfolio/blog/cover/${{ matrix.image }}/image.webp --file src/content/blog/${{ matrix.image }}/image.webp
 
-            for file in $mdx_files
-            do
-              # Use gray-matter to check for coverImage
-              if ! node -e "
-                const matter = require('gray-matter');
-                const fs = require('fs');
-                const fileContents = fs.readFileSync('$file', 'utf8');
-                const { data } = matter(fileContents);
-                if (!data.coverImage) {
-                  console.log('$file is missing coverImage');
-                  process.exit(1);
-                }
-              "
-              then
-                echo "Warning: $file is missing coverImage frontmatter. Attempting to fetch from R2..."
-                
-                # Extract the date and slug from the file path
-                dir_name=$(dirname "$file")
-                base_name=$(basename "$dir_name")
-                
-                # Construct the R2 object key and local file path
-                r2_key="portfolio/blog/cover/$base_name/image.webp"
-                local_path="$dir_name/image.webp"
-                
-                # Use Wrangler to fetch the image from R2
-                if wrangler r2 object get ${{ secrets.R2_BUCKET_NAME }}/$r2_key --file $local_path; then
-                  echo "Successfully fetched image for $file"
-                  
-                  # Update the frontmatter with the new coverImage
-                  sed -i '1s/^/---\ncoverImage: ".\/image.webp"\n---\n/' "$file"
-                  echo "Updated frontmatter for $file"
-                else
-                  echo "Error: Failed to fetch image for $file"
-                  exit 1
-                fi
-              fi
-            done
+      - name: Update frontmatter
+        run: |
+          mdx_file="src/content/blog/${{ matrix.image }}/index.mdx"
+          sed -i '1s/^/---\ncoverImage: ".\/image.webp"\n---\n/' "$mdx_file"
+          echo "Updated frontmatter for $mdx_file"
 
-            echo "All MDX files now have coverImage frontmatter"
+  commit-changes:
+    needs: fetch-images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: yarn
+          cache-dependency-path: 'yarn.lock'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Fix Formatting
         run: yarn format:write
