@@ -117,7 +117,7 @@ jobs:
         if: env.CHANGES_EXIST == 'true'
         uses: planetscale/ghcommit-action@v0.1.33
         with:
-          commit_message: ${{ github.event.inputs.commit_message || 'Update MDX frontmatter and fetch missing images' }}
+          commit_message: ${{ github.event.inputs.commit_message || 'Set missing cover images in blog posts' }}
           repo: ${{ github.repository }}
           branch: ${{ github.head_ref || github.ref_name }}
         env:
