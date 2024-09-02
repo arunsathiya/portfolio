@@ -55,13 +55,13 @@ jobs:
         run: yarn format:write
 
       - name: Stage all changes
+        id: stage
         run: |
           git add .
-          git diff --staged --quiet || echo "CHANGES_EXIST=true" >> $GITHUB_ENV
-          echo "CHANGES_EXIST: ${{ env.CHANGES_EXIST }}"
+          git diff --staged --quiet || echo "CHANGES_EXIST=true" >> $GITHUB_OUTPUT
 
       - name: Commit Changes
-        if: env.CHANGES_EXIST == 'true'
+        if: ${{ steps.stage.outputs.CHANGES_EXIST == 'true' }}
         uses: planetscale/ghcommit-action@v0.1.33
         with:
           commit_message: ${{ github.event.inputs.commit_message || 'Update from Notion' }}
@@ -71,7 +71,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check for commit errors
-        if: env.CHANGES_EXIST == 'true'
+        if: ${{ steps.stage.outputs.CHANGES_EXIST == 'true' }}
         run: |
           if [ $? -ne 0 ]; then
             echo "Failed to commit changes. Check the logs for errors."
