@@ -112,6 +112,7 @@ jobs:
         run: |
           git add .
           git diff --staged --quiet || echo "CHANGES_EXIST=true" >> $GITHUB_ENV
+          echo "CHANGES_EXIST: ${{ env.CHANGES_EXIST }}"
 
       - name: Commit Changes
         if: env.CHANGES_EXIST == 'true'
