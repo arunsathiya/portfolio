@@ -55,6 +55,8 @@ jobs:
           fi
           done
           echo "missing_images=${missing_images[@]}" >> $GITHUB_OUTPUT
+    outputs:
+      missing_images: ${{ steps.scan.outputs.missing_images }}
 
   fetch-images:
     needs: scan-mdx-files
@@ -62,7 +64,7 @@ jobs:
     if: ${{ needs.scan-mdx-files.outputs.missing_images != '' }}
     strategy:
       matrix:
-        image: ${{ fromJson(needs.scan-mdx-files.outputs.missing_images) }}
+        image: ${{ fromJson(format('[{0}]', needs.scan-mdx-files.outputs.missing_images)) }}
       max-parallel: 5
     steps:
       - uses: actions/checkout@v4
