@@ -57,7 +57,7 @@ jobs:
           if [ ${#missing_images[@]} -eq 0 ]; then
             echo "missing_images=[]" >> $GITHUB_OUTPUT
           else
-            json_array=$(printf '%s\n' "${missing_images[@]}" | jq -R . | jq -s .)
+            json_array=$(printf '%s\n' "${missing_images[@]}" | jq -R . | jq -s -c .)
             echo "missing_images=$json_array" >> $GITHUB_OUTPUT
           fi
     outputs:
