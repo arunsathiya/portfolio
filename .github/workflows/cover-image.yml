@@ -79,7 +79,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: wrangler r2 object get ${{ secrets.R2_BUCKET_NAME }}/portfolio/blog/cover/${{ matrix.image }}/image.webp --file src/content/blog/${{ matrix.image }}/image.webp
+          command: r2 object get ${{ secrets.R2_BUCKET_NAME }}/portfolio/blog/cover/${{ matrix.image }}/image.webp --file src/content/blog/${{ matrix.image }}/image.webp
 
       - name: Update frontmatter
         run: |
