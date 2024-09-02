@@ -54,7 +54,12 @@ jobs:
             missing_images+=("$base_name")
           fi
           done
-          echo "missing_images=${missing_images[@]}" >> $GITHUB_OUTPUT
+          if [ ${#missing_images[@]} -eq 0 ]; then
+            echo "missing_images=[]" >> $GITHUB_OUTPUT
+          else
+            json_array=$(printf '%s\n' "${missing_images[@]}" | jq -R . | jq -s .)
+            echo "missing_images=$json_array" >> $GITHUB_OUTPUT
+          fi
     outputs:
       missing_images: ${{ steps.scan.outputs.missing_images }}
 
