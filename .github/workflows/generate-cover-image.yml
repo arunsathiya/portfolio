@@ -1,0 +1,56 @@
+name: Generate Image for New Blog Posts
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-cover-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check for new blog post
+        id: check-new-post
+        run: |
+          NEW_POST=$(git diff --name-only HEAD^ HEAD | grep 'src/content/blog/.*/index.mdx')
+          if [ -n "$NEW_POST" ]; then
+            echo "::set-output name=new_post_path::$NEW_POST"
+            echo "New blog post found: $NEW_POST"
+          else
+            echo "No new blog post found"
+            exit 0
+          fi
+
+      - name: Extract post information
+        id: extract-info
+        if: steps.check-new-post.outputs.new_post_path
+        run: |
+          POST_PATH="${{ steps.check-new-post.outputs.new_post_path }}"
+          DATE=$(echo $POST_PATH | sed -E 's/.*\/([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
+          SLUG=$(echo $POST_PATH | sed -E 's/.*\/([0-9]{4}-[0-9]{2}-[0-9]{2}-[^/]+).*/\1/')
+          TITLE=$(grep -m 1 'generateImageTitle:' "$POST_PATH" | sed 's/generateImageTitle: *//; s/^"//; s/"$//')
+
+          if [ -z "$TITLE" ]; then
+            echo "generateImageTitle not found in frontmatter"
+            exit 1
+          fi
+
+          echo "::set-output name=date::$DATE"
+          echo "::set-output name=slug::$SLUG"
+          echo "::set-output name=title::$TITLE"
+
+      - name: Generate Image
+        if: steps.extract-info.outputs.title
+        env:
+          IMAGE_GENERATION_SECRET: ${{ secrets.IMAGE_GENERATION_SECRET }}
+        run: |
+          curl -X POST 'https://www.arun.blog/api/generate-image' \
+          -H 'Content-Type: application/x-www-form-urlencoded' \
+          --data-urlencode 'date=${{ steps.extract-info.outputs.date }}' \
+          --data-urlencode 'slug=${{ steps.extract-info.outputs.slug }}' \
+          --data-urlencode 'generateImageTitle=${{ steps.extract-info.outputs.title }}'
