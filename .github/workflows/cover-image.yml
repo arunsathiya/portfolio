@@ -82,7 +82,7 @@ jobs:
       - name: Update frontmatter
         run: |
           mdx_file="src/content/blog/${{ matrix.image }}/index.mdx"
-          sed -i '1s/^/---\ncoverImage: ".\/image.webp"\n---\n/' "$mdx_file"
+          sed -i '0,/---/{/---/!b;s/---/---\ncoverImage: ".\/image.webp"/}' "$mdx_file"
           echo "Updated frontmatter for $mdx_file"
       - name: Upload changes
         uses: actions/upload-artifact@v3
@@ -114,8 +114,12 @@ jobs:
       - name: Move artifacts to correct locations
         run: |
           for dir in artifacts/updated-files-*; do
-            cp -R "$dir"/* src/content/blog/
+            blog_post_dir=$(basename "$dir" | sed 's/updated-files-//')
+            mkdir -p "src/content/blog/$blog_post_dir"
+            cp -R "$dir"/* "src/content/blog/$blog_post_dir/"
           done
+      - name: Clean up artifacts directory
+        run: rm -rf artifacts
       - name: Fix Formatting
         run: yarn format:write
       - name: Check for changes
