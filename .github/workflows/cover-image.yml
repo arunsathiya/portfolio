@@ -64,7 +64,7 @@ jobs:
     if: ${{ needs.scan-mdx-files.outputs.missing_images != '' }}
     strategy:
       matrix:
-        image: ${{ fromJson(format('[{0}]', needs.scan-mdx-files.outputs.missing_images)) }}
+        image: ${{ fromJson(needs.scan-mdx-files.outputs.missing_images) }}
       max-parallel: 5
     steps:
       - uses: actions/checkout@v4
