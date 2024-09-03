@@ -32,8 +32,8 @@ jobs:
         run: |
           POST_PATH="${{ steps.check-new-post.outputs.new_post_path }}"
           DATE=$(echo $POST_PATH | sed -E 's/.*\/([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
-          SLUG=$(echo $POST_PATH | sed -E 's/.*\/([0-9]{4}-[0-9]{2}-[0-9]{2}-[^/]+).*/\1/')
-          TITLE=$(grep -m 1 'generateImageTitle:' "$POST_PATH" | sed 's/generateImageTitle: *//; s/^"//; s/"$//')
+          SLUG=$(echo $POST_PATH | sed -E 's/.*\/[0-9]{4}-[0-9]{2}-[0-9]{2}-([^/]+).*/\1/')
+          TITLE=$(grep -m 1 'generateImageTitle:' "$POST_PATH" | sed "s/generateImageTitle: *//; s/^[\"']//; s/[\"']$//")
 
           if [ -z "$TITLE" ]; then
             echo "generateImageTitle not found in frontmatter"
@@ -51,6 +51,7 @@ jobs:
         run: |
           curl -X POST 'https://www.arun.blog/api/generate-image' \
           -H 'Content-Type: application/x-www-form-urlencoded' \
+          -H "Authorization: Bearer $IMAGE_GENERATION_SECRET" \
           --data-urlencode 'date=${{ steps.extract-info.outputs.date }}' \
           --data-urlencode 'slug=${{ steps.extract-info.outputs.slug }}' \
           --data-urlencode 'generateImageTitle=${{ steps.extract-info.outputs.title }}'
