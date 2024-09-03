@@ -42,7 +42,10 @@ async function updateSlugFrontmatter(page: PageObjectResponse) {
 					{
 						type: 'text',
 						text: {
-							content: page.properties.Slug.type === 'rich_text' ? page.properties.Slug.rich_text[0]?.plain_text : '',
+							content:
+								page.properties.Slug.type === 'rich_text'
+									? page.properties.Slug.rich_text[0]?.plain_text.trim().toLowerCase().replace(/\s+/g, '-')
+									: '',
 						},
 					},
 				],
