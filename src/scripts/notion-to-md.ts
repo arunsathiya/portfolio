@@ -36,7 +36,6 @@ function formatDateForFolder(dateString: string): string {
 async function processPage(page: PageObjectResponse) {
 	const pageId = page.id;
 	const mdblocks = await n2m.pageToMarkdown(pageId);
-
 	const title =
 		page.properties.Title.type === 'title' && page.properties.Title.title.length > 1
 			? page.properties.Title.title.map((t) => t.plain_text.trim()).join(' ')
@@ -44,8 +43,8 @@ async function processPage(page: PageObjectResponse) {
 				? page.properties.Title.title[0]?.plain_text.trim()
 				: 'Untitled';
 	const slug =
-		page.properties.Slug.type === 'rich_text'
-			? page.properties.Slug.rich_text[0]?.plain_text.trim().toLowerCase().replace(/\s+/g, '-')
+		page.properties.Slug.type === 'formula' && page.properties.Slug?.formula?.type == 'string'
+			? (page.properties.Slug.formula?.string as string)
 			: '';
 	const description = page.properties.Description.type === 'rich_text' ? page.properties.Description.rich_text[0]?.plain_text.trim() : '';
 
@@ -90,7 +89,7 @@ async function processPage(page: PageObjectResponse) {
 		});
 	}
 
-	// Use the Date property for folder name as well
+	// Use the Date property for folder name as well, because it's different from the page creation date
 	let folderDate = '';
 	if (page.properties.Date && page.properties.Date.type === 'date') {
 		folderDate = formatDateForFolder(page.properties.Date.date?.start || '');
