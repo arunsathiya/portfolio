@@ -114,6 +114,14 @@ async function processPage(page: PageObjectResponse) {
 		fs.mkdirSync(dir, { recursive: true });
 	}
 
+	const sourceImagePath = './src/scripts/image.webp';
+	const destinationImagePath = path.join(dir, 'image.webp');
+	if (fs.existsSync(sourceImagePath)) {
+		fs.copyFileSync(sourceImagePath, destinationImagePath);
+	} else {
+		console.warn(`Warning: image.webp not found in scripts folder`);
+	}
+
 	const filePath = path.join(dir, 'index.mdx');
 	const postContainsImages = mdblocks.some((block) => block.parent.includes('R2Image'));
 	const content = `---
