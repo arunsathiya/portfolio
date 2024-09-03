@@ -49,7 +49,9 @@ async function processPage(page: PageObjectResponse) {
 			: '';
 	const description = page.properties.Description.type === 'rich_text' ? page.properties.Description.rich_text[0]?.plain_text.trim() : '';
 	const generateImageTitle =
-		page.properties.GenerateImageTitle.type === 'rich_text' ? page.properties.GenerateImageTitle.rich_text[0]?.plain_text.trim() : '';
+		page.properties['Generate Image Title']?.type === 'rich_text'
+			? page.properties['Generate Image Title'].rich_text[0]?.plain_text.trim()
+			: '';
 
 	// Process image blocks
 	for (let i = 0; i < mdblocks.length; i++) {
