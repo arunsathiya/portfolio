@@ -1,0 +1,42 @@
+---
+title: 'My network setup'
+seoTitle: 'My network setup'
+slug: 'my-network-setup'
+description: 'A high-level blog post about my network setup, at the DNS and VPN-level.'
+pubDate: 'Jul 19 2020'
+updatedDate: 'Sep 03 2024'
+tags: ['Networking']
+coverImage: './image.webp'
+---
+
+I have written about [my DNS setup](https://blogarunsathiya.wordpress.com/2020/05/02/my-dns-setup/) in the past, but that setup is a bit outdated that I wanted to write a new post. I continue to use NextDNS as my primary DNS service. On the VPN side of things, I have switched from NordVPN to [Mullvad](https://mullvad.net/).
+
+I have stopped using Cloudflare Warp as well. It's not a VPN; they disclose IP to websites hosted on Cloudflare. They do claim it's not a VPN, and I appreciate that transparency.
+
+### Android
+
+On Android, I use NextDNS' DNS-over-TLS (DOT) address on Android's private DNS setting. That setting is available on Android 9 and above. Marking my private, secure, encrypted resolver as such ensures that it works even when I am connected to Mullvad.
+
+I use Wireguard Android client to use Mullvad, as I have noticed Mullvad's official app to disconnect often.
+
+### Mac
+
+Since I switched from NordVPN ([they announced a Wireguard-based implementation as well!](https://support.nordvpn.com/General-info/1438624372/What-is-NordLynx.htm)) to Mullvad, I started using Mullvad's Wireguard implementation. It's as simple as downloading the Wireguard configuration file from their website, and adding it to the Wireguard client app.
+
+Since I run NextDNS CLI, I setup that local resolver address `127.0.0.1` as my choice of DNS on the Wireguard config.
+
+As an additional measure, I use `127.0.0.1` as my resolver on Mac's network settings as well. This ensures that NextDNS continues to be used when disconnected from Mullvad.
+
+Taking this one step further, I have a Keyboard Maestro macro that periodically ensures that `127.0.0.1` is my Mac's DNS resolver. This is not a great way to implement DNS leak checks, but it works for me.
+
+### Windows
+
+Windows was an issue when I was using NordVPN. I could define NextDNS' IPv4 addresses, but that's not encrypted DNS. I wanted both encrypted DNS and VPN at the same time, which is when I learned about YogaDNS. [It's network interface-independent](http://yogadns.com/docs/interfaces/#problem) and works great with Mullvad. As usual, I use Wireguard Windows client for Mullvad.
+
+### iOS
+
+iOS is an issue at this time. I can either use NextDNS or Mullvad. The problem is, DNS implementation is done as VPN tunnels, and when NextDNS tunnel is active, Mullvad VPN cannot be. [This is changing with iOS 14](https://blogarunsathiya.wordpress.com/2020/06/26/encrypted-dns-on-ios/)!
+
+### Pi-hole
+
+I haven't shut down my Pi-hole yet. It's active and running, and serves all guests that connect to my home WiFi.
