@@ -48,6 +48,8 @@ async function processPage(page: PageObjectResponse) {
 			? page.properties.Slug.rich_text[0]?.plain_text.trim().toLowerCase().replace(/\s+/g, '-')
 			: '';
 	const description = page.properties.Description.type === 'rich_text' ? page.properties.Description.rich_text[0]?.plain_text.trim() : '';
+	const generateImageTitle =
+		page.properties.GenerateImageTitle.type === 'rich_text' ? page.properties.GenerateImageTitle.rich_text[0]?.plain_text.trim() : '';
 
 	// Process image blocks
 	for (let i = 0; i < mdblocks.length; i++) {
@@ -120,6 +122,7 @@ async function processPage(page: PageObjectResponse) {
 	const content = `---
 title: "${title}"
 seoTitle: "${title}"
+generateImageTitle: "${generateImageTitle}"
 slug: "${slug}"
 description: "${description}"
 pubDate: '${pubDate}'
