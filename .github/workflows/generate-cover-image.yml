@@ -1,9 +1,12 @@
-name: Generate Image for New Blog Posts
+name: Generate cover image for blog posts
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      commit_message:
+        type: string
+        description: Commit message to use for this content build step
+        required: false
 
 jobs:
   generate-cover-image:

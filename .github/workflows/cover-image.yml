@@ -1,10 +1,6 @@
-name: Fix missing cover images in blog posts
+name: Add cover image to blog posts
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
     inputs:
       commit_message:
