@@ -27,6 +27,11 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: r2 object get ${{ secrets.R2_BUCKET_NAME }}/blog/cover/${{ inputs.date_slug_combo }}/image.webp --file src/content/blog/${{ inputs.date_slug_combo }}/image.webp
+      - name: Upload image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cover-image
+          path: src/content/blog/${{ inputs.date_slug_combo }}/image.webp
 
   commit-changes:
     needs: fetch-images
@@ -43,6 +48,11 @@ jobs:
           cache-dependency-path: 'yarn.lock'
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cover-image
+          path: src/content/blog/${{ inputs.date_slug_combo }}
       - name: Fix Formatting
         run: yarn format:write
       - name: Check for changes
