@@ -1,0 +1,89 @@
+---
+title: 'Of messaging apps'
+seoTitle: 'Of messaging apps'
+slug: 'of-messaging-apps'
+description: 'Raw thoughts on the status of the messaging apps ecosystem today—and how Signal and WhatsApp stack against each other.'
+pubDate: 'Jan 18 2021'
+updatedDate: 'Sep 03 2024'
+tags: ['Privacy']
+coverImage: './image.webp'
+---
+
+import R2Image from 'src/components/R2Image.astro';
+
+[After WhatsApp announced an update to their privacy policy](https://blogarunsathiya.wordpress.com/2021/01/11/signal/), I have answered countless questions from my friends and family. In the last week, most of my family members have jumped shipped, and I have lost track of the amount of time where I explained differences between the apps.
+
+I figured it might be helpful to document these discussions as a blog here, here goes.
+
+## About WhatsApp's policy update
+
+It's misreported by most, that WhatsApp can now read personal conversations between two users, but that's not the case. With this policy update, the end-to-end encrypted communication aspect of WhatsApp does not change. WhatsApp will not be able to read personal, 1:1 conversations. The conversations on WhatsApp [have been end-to-end encrypted since April of 2016](https://blog.whatsapp.com/end-to-end-encryption/?lang=en), which is when they adopted Signal protocol.
+
+What's changing this time is that, or better said, what Facebook is disclosing this time is that, WhatsApp Business API customers may have access to tools that will enable them to communicate outside of WhatsApp. An example being, ability to communicate with their customers on WhatsApp, via Facebook interface, where Facebook is the vendor for this WhatsApp Business API.
+
+This Gizmodo article[[1]](https://www.notion.so/arunsathiya/8d62717492394debab4bea9262e3c066?v=65d30b5eb23245508fe8225f54937fb8&p=5f363314d33a450ab5df40e72dd56a2a&pm=s#foonotes) is a deep-drive and probably most accurate that I have read so far on the WhatsApp debacle:
+
+> Some organizations may choose to delegate management of their WhatsApp Business API endpoint to a third-party Business Solution Provider. In these instances, communication still uses the same Signal protocol encryption. However, because the WhatsApp Business API user has chosen a third party to manage their endpoint, WhatsApp does not consider these messages end-to-end encrypted. In the future, in 2021, this will also apply to businesses that choose to leverage the cloud-based version of the API hosted by Facebook.
+
+If you are someone that does not use the Business accounts functionality of WhatsApp, you are okay to continue using WhatsApp for personal conversations. Facebook, or WhatsApp, will not be able to read your personal communication.
+
+## Is WhatsApp the best choice though?
+
+While WhatsApp is unable to read your messages, WhatsApp has access to various other information surrounding your account, including your purchase history, location, your contact number, your contacts, identifiers (user ID specific to your installation of the app), diagnostics data, for troubleshooting bugs, financial information, user content, and usage data. This information is from the privacy policy that WhatsApp disclosed to Apple, to publish the app on the App Store.
+
+<R2Image
+	imageKey='blog/assets/of-messaging-apps-c40cae88-4a02-4817-b842-e83d15ee00ca.png'
+	alt='A screenshot of the data points gathered by WhatsApp and linked to you.'
+/>
+
+We will never know how Facebook is using this data. Some of these are mentioned to be used only for app functionality, but Facebook is known to be a company that has been sharing WhatsApp data for years. As such, we will never know what happens behind the scenes, and the onus is on the user to vet.
+
+## What happens in the future
+
+Millions across the world scrambled to alternatives, which include Signal and Telegram. Shortly after this exploding growth, WhatsApp made another announcement to bust some myth surrounding their update. They even went to the extent of buying full-page, front-page ads on top newspapers:
+
+[embed](https://twitter.com/adityakane/status/1349195490127081472)
+
+It's important to note their usage of `shared location` term in their ads. By shared location, WhatsApp is referring to the location sharing functionality inside of your 1:1, or group messages. This data is end-to-end encrypted as well, as it's part of your message. That's not visible to Facebook, or WhatsApp.
+
+But, WhatsApp is sneakingly dodging the fact that they have access to users' location. It must be concerning that they are not disclosing that on their ads, where their focus is to prove that they don't mess with users' privacy.
+
+## Signal vs Telegram
+
+In this section, I want to cover some fundamental differences between Signal and Telegram.
+
+In particular, it's worth noting that Telegram is a downgrade from WhatsApp.
+
+While WhatsApp and Signal are end-to-end encrypted with the Signal protocol, Telegram has its own encryption protocol[[2]](https://www.notion.so/arunsathiya/8d62717492394debab4bea9262e3c066?v=65d30b5eb23245508fe8225f54937fb8&p=5f363314d33a450ab5df40e72dd56a2a&pm=s#footnotes) called MTProto. While all of Telegram is using this technology, it's only secret chats that are end-to-end encrypted. The rest of the chats, including cloud-hosted 1:1 chats with other users, and group chats, are not end-to-end encrypted.
+
+Durov's explanation to why Telegram does not offer end-to-end encryption[[3]](https://www.notion.so/arunsathiya/8d62717492394debab4bea9262e3c066?v=65d30b5eb23245508fe8225f54937fb8&p=5f363314d33a450ab5df40e72dd56a2a&pm=s#footnotes) by default is that, they focus on speed, functionality and synchronization. The intention seems to be that, users must be able to access their data without losing it, when they switch between devices. Durov also goes on to cover how Telegram's cloud-hosted storage is a better solution over WhatsApp's backups on a Google Drive.
+
+The way I see it, storing personal messages on Telegram's servers is not any different from storing on Google Drive, via WhatsApp backups. True privacy starts when one chooses to store their messages locally on the device they use.
+
+Telegram's secret chats offer that, but that not being default is a deal breaker for me.
+
+Signal, on the other hand, is built with the core idea of not knowing anything about the user. It has end-to-end encryption enabled by default, thus enabling the user to get going. For those users that are moving away from WhatsApp, Signal must be the preferred choice. Should one choose to use Telegram, it's very important to note that only 1:1, opted-in, secret chats are end-to-end encryption.
+
+## Between Signal and WhatsApp
+
+You must be choosing Signal.
+
+While WhatsApp and Signal may seem similar, there is a vast difference in functionality and privacy aspects of the apps. I want to cover two primary factors.
+
+The only information that Signal knows is your mobile number, and Signal makes no attempt to link that to your identity. In other words, Signal wouldn't know that a certain mobile number belongs to you, wouldn't know who you are communicating with, using that mobile number, how often you do that, or use that information to map to external services/products. Even during the latest outage on the 15th of Jan, 2020, [Android developers from the Signal team had to ask for debug logs from the community](https://blogarunsathiya.wordpress.com/2021/01/16/signal-team-is-looking-for-android-debug-logs/), to troubleshoot the cause of the outage. It was necessary for them to ask for it, because Signal does not collect any details by default.
+
+<R2Image imageKey='blog/assets/of-messaging-apps-1afb49ea-a973-4fb5-973a-be4012642ddc.png' alt='Data linked to you with Signal.' />
+
+<R2Image imageKey='blog/assets/of-messaging-apps-8baf8b20-1cf8-40bc-a409-0db28a94cd77.png' alt='Data linked to you with Telegram.' />
+
+Signal also offers [linked devices](https://support.signal.org/hc/en-us/articles/360007320551-Linked-Devices), which include tablets, desktops and laptops, that can work without having your mobile device active. WhatsApp requires your mobile device to be active, or online, to have the desktop counterpart work.
+
+One may read the desktop version of WhatsApp as a "beam"-able version of your mobile display.
+
+Signal doesn't work that way. Signal can work even when your mobile device is switched off. And when your mobile device is activated again, your desktop messages sync over to mobile.
+
+[1] [This Was WhatsApp's Plan All Along](https://gizmodo.com/this-was-whatsapps-plan-all-along-1846060382)
+
+[2] [MTProto Mobile Protocol](https://core.telegram.org/mtproto)
+
+[3] [Why Isn’t Telegram End-to-End Encrypted by Default?](https://telegra.ph/Why-Isnt-Telegram-End-to-End-Encrypted-by-Default-08-14)
