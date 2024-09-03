@@ -116,7 +116,7 @@ async function processPage(page: PageObjectResponse) {
 
 	const sourceImagePath = './src/scripts/image.webp';
 	const destinationImagePath = path.join(dir, 'image.webp');
-	if (fs.existsSync(sourceImagePath)) {
+	if (fs.existsSync(sourceImagePath) && !fs.existsSync(destinationImagePath)) {
 		fs.copyFileSync(sourceImagePath, destinationImagePath);
 	} else {
 		console.warn(`Warning: image.webp not found in scripts folder`);
