@@ -54,4 +54,4 @@ jobs:
           -H "Authorization: Bearer $IMAGE_GENERATION_SECRET" \
           --data-urlencode 'date=${{ steps.extract-info.outputs.date }}' \
           --data-urlencode 'slug=${{ steps.extract-info.outputs.slug }}' \
-          --data-urlencode 'generateImageTitle=${{ steps.extract-info.outputs.title }}'
+          --data-urlencode 'title=${{ steps.extract-info.outputs.title }}'
