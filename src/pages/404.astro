@@ -7,12 +7,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout title={'404 Page Not Found - ' + SITE_TITLE} description={SITE_DESCRIPTION + ' 404 Page Not Found'}>
 	<div class='container text-center'>
-		<Image width={300} class='my-8 mx-auto' src={NotFoundImage} alt='404 Page Not Found' />
+		<Image class='my-8 mx-auto' src={NotFoundImage} alt='404 Page Not Found' />
 		<div class='p-4'>
-			<h1 class='text-5xl font-bold my-4'>Page Not Found</h1>
-			<p class='text-xl'>
+			<h1 class='text-2xl my-4'>Page Not Found</h1>
+			<p class='text'>
 				The page you're looking for is either moved or no longer exists. <br />
-				Please contact the site owner that linked you to the original URL and let them know their link is broken.
+				Please contact me at <a href='mailto:arun@arun.blog'>arun@arun.blog</a> if you think this is a mistake.
 			</p>
 		</div>
 	</div>
