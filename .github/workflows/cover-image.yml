@@ -17,8 +17,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  fetch-images:
+  fetch-and-commit-image:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - name: Fetch image from R2
@@ -27,41 +29,13 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: r2 object get ${{ secrets.R2_BUCKET_NAME }}/blog/cover/${{ inputs.date_slug_combo }}/image.webp --file src/content/blog/${{ inputs.date_slug_combo }}/image.webp
-      - name: Upload image as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: cover-image
-          path: src/content/blog/${{ inputs.date_slug_combo }}/image.webp
-
-  commit-changes:
-    needs: fetch-images
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: yarn
-          cache-dependency-path: 'yarn.lock'
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: cover-image
-          path: src/content/blog/${{ inputs.date_slug_combo }}
-      - name: Fix Formatting
-        run: yarn format:write
       - name: Check for changes
-        id: stage
+        id: check_changes
         run: |
           git add .
           git diff --staged --quiet || echo "CHANGES_EXIST=true" >> $GITHUB_OUTPUT
       - name: Commit Changes
-        if: steps.stage.outputs.CHANGES_EXIST == 'true'
+        if: steps.check_changes.outputs.CHANGES_EXIST == 'true'
         uses: planetscale/ghcommit-action@v0.1.33
         with:
           commit_message: ${{ github.event.inputs.commit_message || 'Update cover image in blog post' }}
@@ -71,11 +45,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   report-status:
-    needs: [fetch-images, commit-changes]
+    needs: fetch-and-commit-image
     if: failure()
     runs-on: ubuntu-latest
     steps:
       - name: Report failure
         run: |
-          echo "Some MDX files are missing coverImage frontmatter and images could not be fetched"
+          echo "Failed to update cover image in blog post"
           exit 1
