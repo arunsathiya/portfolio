@@ -69,6 +69,7 @@ async function processPage(page: PageObjectResponse) {
 	}
 
 	const mdString = n2m.toMarkdownString(mdblocks);
+	const convertedMdString = mdString.parent.replace(/\[embed\]\((https:\/\/twitter\.com\/\S+)\)/g, '$1');
 
 	// Use the Date property instead of created_time
 	let pubDate = '';
@@ -136,7 +137,7 @@ coverImage: "./image.webp"
 
 ${postContainsImages ? `import R2Image from 'src/components/R2Image.astro';` : ''}
 
-${mdString.parent.replace(/\n\n/g, '\n')}`;
+${convertedMdString.replace(/\n\n/g, '\n')}`;
 
 	fs.writeFileSync(filePath, content);
 	console.log(`Created/Updated: ${filePath}`);
