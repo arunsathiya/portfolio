@@ -69,7 +69,7 @@ async function processPage(page: PageObjectResponse) {
 	}
 
 	const mdString = n2m.toMarkdownString(mdblocks);
-	const convertedMdString = mdString.parent.replace(/\[embed\]\((https:\/\/twitter\.com\/\S+)\)/g, '$1');
+	const convertedMdString = mdString.parent.replace(/\[(embed|video)\]\((https?:\/\/\S+)\)/g, '$2');
 
 	// Use the Date property instead of created_time
 	let pubDate = '';
