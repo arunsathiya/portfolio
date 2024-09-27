@@ -4,7 +4,7 @@ seoTitle: 'DuckDuckGo Email Protection: First impressions'
 slug: 'duckduckgo-email-protection-first-impressions'
 description: 'DuckDuckGo Email Protection service removes email trackers before the message reaches your primary inbox. Read about my first impressions.'
 pubDate: 'Aug 09 2021'
-updatedDate: 'Sep 26 2024'
+updatedDate: 'Sep 27 2024'
 tags: ['Security']
 coverImage: './image.webp'
 ---
@@ -19,7 +19,10 @@ Replying to the email reveals your primary address to the sender. DuckDuckGo is 
 
 They promise to delete the email once they forward it, but we can never confirm as the service does not seem to be open source. Given DuckDuckGo's track record though, I trust them with my emails.
 
-<R2Image imageKey='blog/assets/duckduckgo-email-protection-first-impressions-10d1638e-cd98-80eb-9a61-ced2db6b354c.png' alt='' />
+<R2Image
+	imageKey='blog/assets/duckduckgo-email-protection-first-impressions-10d1638e-cd98-80eb-9a61-ced2db6b354c.png'
+	alt='An image illustrating how the DuckDuckGo Email Protection service works. It shows two mailboxes, one being the DuckDuckGo alias, and the other being the actual inbox where the email is forwarded to, with trackers removed.'
+/>
 
 At WWDC 2021, [Apple announced a client-wide email blocking functionality](https://blogarunsathiya.wordpress.com/2021/06/08/my-favorite-wwdc21-announcements/), but that's limited to the default Apple Mail client. I wanted something that works irrespective of what email client I use. pi-hole works in a way, because it blocks all DNS requests for these trackers, but I haven't done a detailed analysis of what kind of email trackers it actually blocks. Perhaps there a blocklist specifically tailored to email trackers.
 
@@ -41,13 +44,22 @@ You can distribute this personal address, or generate unique aliases per site, n
 
 When you receive your emails, DuckDuckGo will prepend the number of trackers removed, with a privacy report link attached to it, or a notice that there weren't any trackers.
 
-<R2Image imageKey='blog/assets/duckduckgo-email-protection-first-impressions-10d1638e-cd98-80d8-9729-d6968c6aff7e.png' alt='' />
+<R2Image
+	imageKey='blog/assets/duckduckgo-email-protection-first-impressions-10d1638e-cd98-80d8-9729-d6968c6aff7e.png'
+	alt="Image showing an email with DuckDuckGo's notice about the number of email trackers removed, and it has a link to a privacy report."
+/>
 
-<R2Image imageKey='blog/assets/duckduckgo-email-protection-first-impressions-10d1638e-cd98-8050-89cb-ed443429e09f.png' alt='' />
+<R2Image
+	imageKey='blog/assets/duckduckgo-email-protection-first-impressions-10d1638e-cd98-8050-89cb-ed443429e09f.png'
+	alt="Image showing an email with DuckDuckGo's notice about the email not containing any trackers."
+/>
 
 The arrow next to the notice points me to a privacy report web page, where details of the domain removed is listed. It also allows me to turn off the throwaway DuckDuckGo alias if needed.
 
-<R2Image imageKey='blog/assets/duckduckgo-email-protection-first-impressions-10d1638e-cd98-8033-9590-fa1443bb7e9d.png' alt='' />
+<R2Image
+	imageKey='blog/assets/duckduckgo-email-protection-first-impressions-10d1638e-cd98-8033-9590-fa1443bb7e9d.png'
+	alt="Image showing DuckDuckGo Email Protection service's privacy report page for an email that I received. It shows details of the tracker removed and an option to turn off the throwaway DuckDuckGo alias."
+/>
 
 [There's a dashboard](https://duckduckgo.com/email/account) where one can look at the number of addresses generated (but not the actual addresses or an option to turn them off), address being forwarded to, and some links to submit feedback or download browser add-ons. I was hoping to see an option to change the address being forwarded to, but that doesn't seem to be available. Guess one has to go through support to do that.
 
@@ -74,7 +86,10 @@ This part is tricky because the address in the `Reply-To` header in my setup is 
 
 Since reverse-alias can accept emails only for the mailbox that it is delivered to (in this case, the DuckDuckGo address), I had to add my regular email address to be an authorized sender too.
 
-<R2Image imageKey='blog/assets/duckduckgo-email-protection-first-impressions-10d1638e-cd98-80ac-a031-c4a7ac127c93.png' alt='' />
+<R2Image
+	imageKey='blog/assets/duckduckgo-email-protection-first-impressions-10d1638e-cd98-80ac-a031-c4a7ac127c93.png'
+	alt="Image showing a setting on the SimpleLogin website's mailbox settings page, to add an authorized sender address"
+/>
 
 With this in place, my incoming email setup looks like this:
 
