@@ -1,24 +1,27 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'selector',
+	darkMode: 'selector',
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
-    container: {
+		container: {
 			center: true,
-      padding: '1rem',
+			padding: '1rem',
 			screens: {
-				xl: '1024px'
-			}
+				xl: '1024px',
+			},
 		},
 		extend: {
-      typography: {
-        DEFAULT: {
-          css: {
-            maxWidth: '100%', // add required value here
-          }
-        }
-      }
-    },
+			typography: {
+				DEFAULT: {
+					css: {
+						maxWidth: '100%', // add required value here
+					},
+				},
+			},
+			fontFamily: {
+				sans: ['IBM Plex Sans', 'sans-serif'],
+			},
+		},
 	},
 	plugins: [require('@tailwindcss/typography')],
-}
+};
