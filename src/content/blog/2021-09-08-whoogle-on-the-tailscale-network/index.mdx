@@ -13,7 +13,7 @@ import R2Image from 'src/components/R2Image.astro';
 
 I am a happy DuckDuckGo user of many years. It matches all of my requirements: good results, ability to jump to the first result with a keyword (using "\"), bangs to search within particular websites and tracker-free search results.
 
-I recently learned about Whoogle though and I had been wanting to try that for a while. It's a self-hosted, ad and tracker-free search engine that fetches results from Google. The project promises that it's free of cookie and IP address tracking too. It's open source and it seems that it can be set up on any device. I have two Raspberry Pi devices at home, both connected on my Tailscale network, [acting as Pi-hole nodes to block ads](https://blogarunsathiya.wordpress.com/2021/03/30/pi-hole-on-tailscale/). One of the two Raspberry Pis [also acts as my Hydroxide node to fetch ProtonMail emails](https://blogarunsathiya.wordpress.com/2021/07/29/hydroxide-headless-bridge-for-protonmail-on-tailscale/).
+I recently learned about Whoogle though and I had been wanting to try that for a while. It's a self-hosted, ad and tracker-free search engine that fetches results from Google. The project promises that it's free of cookie and IP address tracking too. It's open source and it seems that it can be set up on any device. I have two Raspberry Pi devices at home, both connected on my Tailscale network, [acting as Pi-hole nodes to block ads](https://www.arun.blog/post/pi-hole-on-tailscale/). One of the two Raspberry Pis [also acts as my Hydroxide node to fetch ProtonMail emails](https://www.arun.blog/post/hydroxide-headless-bridge-for-protonmail-on-tailscale/).
 
 I decided to install Whoogle on the same Raspberry Pi that runs Hydroxide. The process turned out to be really simple. Whoogle has thoroughly documented instructions to install on a Raspberry Pi with Docker; [I installed using these Docker Hub instructions](https://github.com/benbusby/whoogle-search#docker-cli):
 
@@ -36,7 +36,7 @@ Since all of my devices are connected to the Tailscale network, my Android can a
 	alt='An image showing a Whoogle search query on Android.'
 />
 
-It's nice overall. I am not bothered by the `http` queries as [the communication between my device and the Raspberry Pi is end-to-end encrypted](https://tailscale.com/kb/1093/can-tailscale-decrypt-my-traffic/), thanks to [Tailscale](https://blogarunsathiya.wordpress.com/tag/tailscale/).
+It's nice overall. I am not bothered by the `http` queries as [the communication between my device and the Raspberry Pi is end-to-end encrypted](https://tailscale.com/kb/1093/can-tailscale-decrypt-my-traffic/), thanks to [Tailscale](https://www.arun.blog/tags/tailscale/).
 
 I configured access control lists on Tailscale to make this Whoogle instance available for my friends connected to the same Tailnet.
 
