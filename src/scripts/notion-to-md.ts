@@ -1,5 +1,12 @@
 import { Client } from '@notionhq/client';
-import type { ImageBlockObjectResponse, PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import type {
+	BlockObjectResponse,
+	ImageBlockObjectResponse,
+	PageObjectResponse,
+	PartialBlockObjectResponse,
+	RichTextItemResponse,
+	TextRichTextItemResponse,
+} from '@notionhq/client/build/src/api-endpoints';
 import { uploadImage } from '@src/utils/s3/uploadImage';
 import dotenv from 'dotenv';
 import fs from 'fs';
@@ -33,8 +40,64 @@ function formatDateForFolder(dateString: string): string {
 	return new Date(dateString).toISOString().split('T')[0];
 }
 
+type NotionClient = InstanceType<typeof Client>;
+type UpdateBlockParameters = Parameters<NotionClient['blocks']['update']>[0];
+
+function isTextRichTextItem(item: RichTextItemResponse): item is TextRichTextItemResponse {
+	return item.type === 'text';
+}
+
+function isParagraphBlock(block: BlockObjectResponse | PartialBlockObjectResponse): block is BlockObjectResponse & { type: 'paragraph' } {
+	return 'type' in block && block.type === 'paragraph';
+}
+
 async function processPage(page: PageObjectResponse) {
 	const pageId = page.id;
+	if (pageId.replaceAll('-', '') == '11a1638ecd98813a95a5c3b4d033a096') {
+		const searchString = 'blogarunsathiya.wordpress.com';
+		const replaceString = 'www.arun.blog';
+
+		const blocks = await notion.blocks.children.list({
+			block_id: pageId,
+		});
+
+		for (const block of blocks.results) {
+			if (isParagraphBlock(block)) {
+				let isBlockModified = false;
+				const updatedRichText = block.paragraph.rich_text.map((textBlock) => {
+					if (isTextRichTextItem(textBlock) && textBlock.text.link?.url.includes(searchString)) {
+						isBlockModified = true;
+						return {
+							type: 'text',
+							text: {
+								content: textBlock.text.content,
+								link: {
+									url: textBlock.text.link.url.replace(new RegExp(searchString, 'g'), replaceString),
+								},
+							},
+							annotations: textBlock.annotations,
+						};
+					}
+					return textBlock;
+				});
+
+				if (isBlockModified) {
+					try {
+						await notion.blocks.update({
+							block_id: block.id,
+							type: 'paragraph',
+							paragraph: {
+								rich_text: updatedRichText,
+							},
+						} as UpdateBlockParameters);
+						console.log(`Updated block ${block.id}`);
+					} catch (error) {
+						console.error(`Error updating block ${block.id}:`, error);
+					}
+				}
+			}
+		}
+	}
 	const mdblocks = await n2m.pageToMarkdown(pageId);
 	const title =
 		page.properties.Title.type === 'title' && page.properties.Title.title.length > 1
