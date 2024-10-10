@@ -107,12 +107,15 @@ async function processPage(page: PageObjectResponse) {
 			? page.properties.Title.title.map((t) => t.plain_text.trim()).join(' ')
 			: page.properties.Title.type === 'title'
 				? page.properties.Title.title[0]?.plain_text.trim()
-				: 'Untitled';
+				: 'Untitled'.replace('‘', "'").replace('’', "'").replace('“', "'").replace('”', "'").replace('"', "'");
 	const slug =
 		page.properties.Slug.type === 'formula' && page.properties.Slug?.formula?.type == 'string'
 			? (page.properties.Slug.formula?.string as string)
 			: '';
-	const description = page.properties.Description.type === 'rich_text' ? page.properties.Description.rich_text[0]?.plain_text.trim() : '';
+	const description =
+		page.properties.Description.type === 'rich_text'
+			? page.properties.Description.rich_text[0]?.plain_text.trim()
+			: ''.replace('‘', "'").replace('’', "'").replace('“', "'").replace('”', "'").replace('"', "'");
 
 	for (let i = 0; i < mdblocks.length; i++) {
 		const block = mdblocks[i];
