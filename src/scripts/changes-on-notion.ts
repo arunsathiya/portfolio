@@ -51,15 +51,35 @@ async function retryUpdate(pageId: string): Promise<void> {
 async function addIconAndCover(pageId: string): Promise<void> {
 	const page = await notion.pages.retrieve({ page_id: pageId });
 
-	const updates: any = {};
+	const iconUpdate = await addIcon(page as PageObjectResponse);
+	const coverUpdate = await addCover(page as PageObjectResponse);
 
+	const updates = { ...iconUpdate, ...coverUpdate };
+
+	if (Object.keys(updates).length > 0) {
+		await notion.pages.update({
+			page_id: pageId,
+			...updates,
+		});
+		console.log(`Updated page ${pageId} with ${Object.keys(updates).join(' and ')}`);
+	} else {
+		console.log(`No updates needed for page ${pageId}`);
+	}
+}
+
+async function addIcon(page: PageObjectResponse): Promise<any> {
 	if (isFullPageOrDatabase(page) && !page.icon) {
-		updates.icon = {
-			type: 'emoji',
-			emoji: '🚀',
+		return {
+			icon: {
+				type: 'emoji',
+				emoji: '🚀',
+			},
 		};
 	}
+	return {};
+}
 
+async function addCover(page: PageObjectResponse): Promise<any> {
 	if (isFullPageOrDatabase(page) && !page.cover) {
 		const coverOptions = [
 			{ type: 'solid', color: 'red' },
@@ -80,23 +100,16 @@ async function addIconAndCover(pageId: string): Promise<void> {
 			}
 		};
 
-		updates.cover = {
-			type: 'external',
-			external: {
-				url: getCoverUrl(randomCover),
+		return {
+			cover: {
+				type: 'external',
+				external: {
+					url: getCoverUrl(randomCover),
+				},
 			},
 		};
 	}
-
-	if (Object.keys(updates).length > 0) {
-		await notion.pages.update({
-			page_id: pageId,
-			...updates,
-		});
-		console.log(`Updated page ${pageId} with ${Object.keys(updates).join(' and ')}`);
-	} else {
-		console.log(`No updates needed for page ${pageId}`);
-	}
+	return {};
 }
 
 main().catch((error) => {
