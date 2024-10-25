@@ -31,6 +31,7 @@
     "@aws-sdk/client-s3": "^3.666.0",
     "@aws-sdk/lib-storage": "^3.666.0",
     "@aws-sdk/s3-request-presigner": "^3.666.0",
+    "@fontsource/ibm-plex-sans": "^5.1.0",
     "@notionhq/client": "^2.2.15",
     "astro": "^4.15.10",
     "astro-embed": "^0.7.2",

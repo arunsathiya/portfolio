@@ -1530,6 +1530,11 @@
   resolved "https://registry.yarnpkg.com/@fastify/busboy/-/busboy-2.1.1.tgz#b9da6a878a371829a0502c9b6c1c143ef6663f4d"
   integrity sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==
 
+"@fontsource/ibm-plex-sans@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/ibm-plex-sans/-/ibm-plex-sans-5.1.0.tgz#9cd6bcce9817c55565ae2cf92629ce9a9f617a6b"
+  integrity sha512-v2aFHGh33ogG+At6dVNUCX6vWlNAhQ6STWj5WrBKPxVWX1SsAnHNq8sXQBa7WHEt29Irmozuk7GTp6GzFlpwdQ==
+
 "@img/sharp-darwin-arm64@0.33.5":
   version "0.33.5"
   resolved "https://registry.yarnpkg.com/@img/sharp-darwin-arm64/-/sharp-darwin-arm64-0.33.5.tgz#ef5b5a07862805f1e8145a377c8ba6e98813ca08"

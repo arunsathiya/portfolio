@@ -1,7 +1,16 @@
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-sans/700.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
+	body {
+		font-family: 'IBM Plex Sans', sans-serif;
+	}
 	pre,
 	code {
 		font-size: 0.875rem;

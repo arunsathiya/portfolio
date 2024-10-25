@@ -18,9 +18,6 @@ export default {
 					},
 				},
 			},
-			fontFamily: {
-				sans: ['IBM Plex Sans', 'sans-serif'],
-			},
 		},
 	},
 	plugins: [require('@tailwindcss/typography')],
