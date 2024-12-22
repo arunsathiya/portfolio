@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@11ty/is-land@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@11ty/is-land/-/is-land-4.0.0.tgz#9c36c33b687550708cb74e7fdc8a180f79c29cbb"
+  integrity sha512-RxbjF2+FzSu3rerHrWLRsvsPX2YM47RwXpdWCCzLhwRSsz5sJe9TnK7mphEld1gZnp2GeD5ByvhqjIc4CqidsQ==
+
 "@alloc/quick-lru@^5.2.0":
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/@alloc/quick-lru/-/quick-lru-5.2.0.tgz#7bf68b20c0a350f936915fcae06f58e32007ce30"
@@ -2683,6 +2688,11 @@
   version "0.0.18"
   resolved "https://registry.yarnpkg.com/@vscode/l10n/-/l10n-0.0.18.tgz#916d3a5e960dbab47c1c56f58a7cb5087b135c95"
   integrity sha512-KYSIHVmslkaCDyw013pphY+d7x1qV8IZupYfeIfzNA+nsaWHbn5uPuQRvdRFsa9zFzGeudPuoGoZ1Op4jrJXIQ==
+
+"@zachleat/snow-fall@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@zachleat/snow-fall/-/snow-fall-1.0.3.tgz#0ce77508e535a976a30c64dffce47173a382764b"
+  integrity sha512-Y9srRbmO+k31vSm+eINYRV9DRoeWGV5/hlAn9o34bLpoWo+T5945v6XGBrFzQYjhyEGB4j/4zXuTW1zTxp2Reg==
 
 abbrev@1:
   version "1.1.1"

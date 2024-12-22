@@ -15,6 +15,13 @@ const { title, description, image } = Astro.props;
 		<BaseHead title={title} description={description} image={image} />
 	</head>
 	<body class='bg-white dark:bg-zinc-900 dark:text-zinc-100 pt-16 sm:pt-0'>
+		<script>
+			import('@zachleat/snow-fall');
+			import('@11ty/is-land/is-land.js');
+		</script>
+		<is-land on:media='(prefers-reduced-motion: no-preference)'>
+			<snow-fall> </snow-fall>
+		</is-land>
 		<Header />
 		<div class='py-8 min-h-[calc(100vh-160px)]'>
 			<slot />
@@ -24,8 +31,8 @@ const { title, description, image } = Astro.props;
 		{
 			GTAG_MEASUREMENT_ID && (
 				<>
-					<script type='text/partytown' async src={'https://www.googletagmanager.com/gtag/js?id=' + GTAG_MEASUREMENT_ID} />
-					<script type='text/partytown' define:vars={{ GTAG_MEASUREMENT_ID }}>
+					<script is:inline type='text/partytown' async src={'https://www.googletagmanager.com/gtag/js?id=' + GTAG_MEASUREMENT_ID} />
+					<script is:inline type='text/partytown' define:vars={{ GTAG_MEASUREMENT_ID }}>
 						window.dataLayer = window.dataLayer || []; function gtag() {dataLayer.push(arguments)}
 						gtag('js', new Date()); gtag('config', GTAG_MEASUREMENT_ID);
 					</script>
