@@ -25,4 +25,9 @@ export default defineConfig({
 		],
 	},
 	adapter: vercel(),
+	vite: {
+		ssr: {
+			noExternal: ['@zachleat/snow-fall'],
+		},
+	},
 });
