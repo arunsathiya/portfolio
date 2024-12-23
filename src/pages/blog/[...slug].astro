@@ -104,7 +104,15 @@ const getTagClasses = (tag: string) => `
 						</div>
 					</div>
 					<div class='py-3 overflow-hidden'>
-						{coverImage && <Image class='rounded-3xl w-full m-0 lg:mb-2' src={coverImage} alt={title} loading='eager' />}
+						<script>
+							import('@zachleat/snow-fall');
+							import('@11ty/is-land/is-land.js');
+						</script>
+						<is-land on:media='(prefers-reduced-motion: no-preference)'>
+							<snow-fall>
+								{coverImage && <Image class='rounded-3xl w-full m-0 lg:mb-2' src={coverImage} alt={title} loading='eager' />}
+							</snow-fall>
+						</is-land>
 					</div>
 					<Content />
 				</Prose>
