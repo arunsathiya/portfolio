@@ -9,4 +9,12 @@ const { imageKey, alt } = Astro.props;
 console.log('R2Image component rendering with props:', { imageKey, alt });
 ---
 
-<img src={`https://www.arun.blog/cdn/${imageKey}`} alt={alt} />
+<script>
+	import('@zachleat/snow-fall');
+	import('@11ty/is-land/is-land.js');
+</script>
+<is-land on:media='(prefers-reduced-motion: no-preference)'>
+	<snow-fall>
+		<img src={`https://www.arun.blog/cdn/${imageKey}`} alt={alt} />
+	</snow-fall>
+</is-land>
