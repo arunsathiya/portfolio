@@ -7,6 +7,9 @@ on:
         type: string
         description: Commit message to use for this content build step
         required: false
+  repository_dispatch:
+    types:
+      - notion
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
