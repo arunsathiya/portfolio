@@ -6,6 +6,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title='About Me' description='Lorem ipsum dolor sit amet'>
+	<script>
+		import('@zachleat/snow-fall');
+		import('@11ty/is-land/is-land.js');
+	</script>
+	<is-land class='dark:block hidden' on:media='(prefers-reduced-motion: no-preference)'>
+		<snow-fall style='--snow-fall-color: white'></snow-fall>
+	</is-land>
+	<is-land class='dark:hidden block' on:media='(prefers-reduced-motion: no-preference)'>
+		<snow-fall style='--snow-fall-color: cornflowerblue'></snow-fall>
+	</is-land>
 	<div class='container'>
 		<main class='prose text-lg dark:prose-invert'>
 			<article>

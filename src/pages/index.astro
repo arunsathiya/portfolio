@@ -19,6 +19,16 @@ const posts = (await getCollection('blog'))
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<script>
+		import('@zachleat/snow-fall');
+		import('@11ty/is-land/is-land.js');
+	</script>
+	<is-land class='dark:block hidden' on:media='(prefers-reduced-motion: no-preference)'>
+		<snow-fall style='--snow-fall-color: white'></snow-fall>
+	</is-land>
+	<is-land class='dark:hidden block' on:media='(prefers-reduced-motion: no-preference)'>
+		<snow-fall style='--snow-fall-color: cornflowerblue'></snow-fall>
+	</is-land>
 	<div class='container'>
 		<main>
 			<div class='mt-6 mb-12'>

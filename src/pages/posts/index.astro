@@ -12,6 +12,16 @@ const posts = (await getCollection('blog')).sort((a: BlogPost, b: BlogPost) => b
 ---
 
 <BaseLayout title={title} description={description}>
+	<script>
+		import('@zachleat/snow-fall');
+		import('@11ty/is-land/is-land.js');
+	</script>
+	<is-land class='dark:block hidden' on:media='(prefers-reduced-motion: no-preference)'>
+		<snow-fall style='--snow-fall-color: white'></snow-fall>
+	</is-land>
+	<is-land class='dark:hidden block' on:media='(prefers-reduced-motion: no-preference)'>
+		<snow-fall style='--snow-fall-color: cornflowerblue'></snow-fall>
+	</is-land>
 	<div class='container'>
 		<div class='mb-10'>
 			<h1 class='text-3xl font-bold mb-2'>{title}</h1>
