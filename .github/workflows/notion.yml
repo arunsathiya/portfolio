@@ -67,7 +67,7 @@ jobs:
         if: ${{ steps.stage.outputs.CHANGES_EXIST == 'true' }}
         uses: planetscale/ghcommit-action@v0.1.33
         with:
-          commit_message: ${{ github.event.inputs.commit_message || 'Update from Notion' }}
+          commit_message: ${{ github.event.client_payload.commit_message || github.event.inputs.commit_message || 'Update from Notion' }}
           repo: ${{ github.repository }}
           branch: ${{ github.head_ref || github.ref_name }}
         env:
