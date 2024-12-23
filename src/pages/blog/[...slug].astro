@@ -141,10 +141,7 @@ const getTagClasses = (tag: string) => `
 			</article>
 		</main>
 		<div class='shrink-0 w-[280px] hidden md:block'>
-			<div class='mb-4'>
-				<AboutTheAuthor />
-			</div>
-			<TableOfContent headings={headings} />
+			{headings.length > 0 && <TableOfContent headings={headings} />}
 		</div>
 	</div>
 </BaseLayout>
