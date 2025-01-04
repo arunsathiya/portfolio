@@ -22,7 +22,7 @@ export async function uploadImage(imageUrl: string, pageSlug: string, blockId: s
 	try {
 		// Generate a unique filename using blockId
 		const filename = `${pageSlug}-${blockId}${path.extname(imageUrl.split('?')[0])}`;
-		const key = `blog/assets/${filename}`;
+		const key = `assets/${filename}`;
 
 		// Check if the file already exists in the bucket
 		try {

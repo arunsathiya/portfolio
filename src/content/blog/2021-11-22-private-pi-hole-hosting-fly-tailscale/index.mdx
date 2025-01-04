@@ -9,18 +9,13 @@ tags: ['Tools', 'Automation']
 coverImage: './image.webp'
 ---
 
-import R2Image from 'src/components/R2Image.astro';
-
 Hosting a network-wide pi-hole for ad-blocking is easy. It comes with a one-step installation guide that you can run on most environments. [I run two pi-holes at my house](https://www.arun.blog/post/tailscale-tls-certificates-for-my-home-lab/), but the problem with my setup is, if my internet drops, both pi-holes stop working too. Ideally, I'd need to have a pi-hole outside my house, preferably where internet doesn't go down at the same time as my provider.
 
 That's where a cloud-hosted pi-hole proves helpful.
 
 I learned about Fly.io recently. It's an app hosting platform that makes it incredibly easy to deploy apps to multiple regions and scales as needed. [Their free tier offers a generous 2,340 hours per month of uptime](https://fly.io/docs/about/pricing/), which translates to about 3 shared-cpu-1x VMs with 256MB RAM full time. My pi-hole consumes about 200MB RAM consistently, so this means I could host upto 3 apps each with pi-hole on it. But I have only one as I have two others at my house.
 
-<R2Image
-	imageKey='blog/assets/private-pi-hole-hosting-fly-tailscale-2000cca4-0414-4908-b3f9-ff74c543ee9c.png'
-	alt='A screenshot of Fly.io’s pricing, shared-cpu, bandwidth, anycast IPs and certificates availability.'
-/>
+![A screenshot of Fly.io’s pricing, shared-cpu, bandwidth, anycast IPs and certificates availability.](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/1afa9f92-9838-4802-9e11-abae1186aa8a/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152040Z&X-Amz-Expires=3600&X-Amz-Signature=622692f61f7ee402d270405a61ca94e84c68a37c2e940748bfd6190f8c31456d&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 ## Setting up the pi-hole
 

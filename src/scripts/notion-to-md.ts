@@ -128,7 +128,7 @@ async function processPage(page: PageObjectResponse) {
 					await uploadImage(imageUrl, slug, blockId);
 					const blockObj = (await notion.blocks.retrieve({ block_id: blockId })) as ImageBlockObjectResponse;
 					const caption = blockObj.image?.caption[0]?.plain_text || '';
-					mdblocks[i].parent = `<R2Image imageKey="blog/assets/${imageKey}" alt="${caption}" />`;
+					mdblocks[i].parent = `<R2Image imageKey="assets/${imageKey}" alt="${caption}" />`;
 				} catch (error) {
 					console.error(`Failed to upload image: ${imageUrl}`, error);
 				}

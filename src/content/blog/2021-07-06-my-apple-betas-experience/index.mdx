@@ -9,8 +9,6 @@ tags: ['Infrastructure']
 coverImage: './image.webp'
 ---
 
-import R2Image from 'src/components/R2Image.astro';
-
 macOS Montrey and iOS 15 are the latest versions of macOS and iOS. They were announced at WWDC 2021. The public beta was released a couple of days ago, and I downloaded it as soon as they were available. I wanted to download them when the developer beta was announced, but I don't have an Apple developer account. And, admittedly, I was worried about how developer beta may fare. Glad I decided to wait for the public Apple betas.
 
 I am quite happy with the experience so far. I installed both betas on my personal devices and on my work Mac as well. They seem rock solid, and I don't see a hit on battery life either, which I hear is often the case on Apple beta rollouts.
@@ -21,10 +19,7 @@ I am quite happy with the experience so far. I installed both betas on my person
 
 I have enabled it on my Mail app for now, but haven't found if there are stats/analytics of how many trackers are blocked. As I am a pi-hole user, that must cover DNS-level blocks throughout my home but I am curious on seeing how this new feature complements pi-hole.
 
-<R2Image
-	imageKey='blog/assets/my-apple-betas-experience-708af2b4-482d-4e45-9289-fcfefb358cfd.png'
-	alt='A screenshot from iOS 15 that shows the new Mail Privacy Protection feature. It blocks trackers on your mailboxes.'
-/>
+![A screenshot from iOS 15 that shows the new Mail Privacy Protection feature. It blocks trackers on your mailboxes.](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/1c324d4f-7c25-4a49-ad19-076d7859c086/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152040Z&X-Amz-Expires=3600&X-Amz-Signature=8e5694225b9820e78f603a785efd2b8ef56846dba7c75b4099b6050c69bc7aad&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 ## Private Relay on both Apple betas
 
@@ -44,10 +39,7 @@ Private Relay has assigned me a Cloudflare and Fastly address so far. I hear the
 
 I have also noticed that my [pi-hole on the Tailscale network](https://www.arun.blog/post/pi-hole-on-tailscale/) doesn't work when Private Relay is active. That's alright in my opinion, because the very purpose of tunneled connections is to prevent leaks to other networks. Think of using a VPN, which assigns its own DNS resolvers, vs using the one assigned by your DHCP on the router. That's precisely what's happening here.
 
-<R2Image
-	imageKey='blog/assets/my-apple-betas-experience-8894757f-f598-452a-b5cb-87ee1afd53c4.png'
-	alt="A screenshot from iOS 15 that shows the Private Relay functionality's settings."
-/>
+![A screenshot from iOS 15 that shows the Private Relay functionality's settings.](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/b09c8665-30c3-4aa6-bfac-982f0cc00102/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152040Z&X-Amz-Expires=3600&X-Amz-Signature=0e400888e21f172f00aa09207a9c256da44cce1041d17d53e0ce5703a080f503&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 Private Relay is limited to Safari. That works great for me. When I need to browse websites from my regular, ISP-based IP address, I can use a different browser like Firefox.
 
@@ -66,10 +58,7 @@ Hide My Email is basically an email alias service that generates new addresses o
 
 It is limited to 100 aliases per account (read so on a beta thread on reddit.) That can be limiting for power users. On SimpleLogin, I have over 1000 aliases, spread across website and apps signups, newsletters, shopping and everything in between.
 
-<R2Image
-	imageKey='blog/assets/my-apple-betas-experience-2866bd0b-b450-48ba-8002-26ad964fe7f3.png'
-	alt="A screenshot showing the new Hide My Email functionality on Apple's iOS 15."
-/>
+![A screenshot showing the new Hide My Email functionality on Apple's iOS 15.](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/f52c0f0c-737c-49d8-84df-fb00e46922e7/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152040Z&X-Amz-Expires=3600&X-Amz-Signature=0476a71590298caa10b20f91b1ae52a9fd802c1433f5cb488663006f1db4d5e5&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 If you start using Hide My Email, consider saving them on a password manager like 1Password or Bitwarden. Otherwise, it's very easy to lose track of your alias usage across sites.
 

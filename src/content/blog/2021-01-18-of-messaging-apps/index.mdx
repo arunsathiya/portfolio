@@ -9,8 +9,6 @@ tags: ['Privacy']
 coverImage: './image.webp'
 ---
 
-import R2Image from 'src/components/R2Image.astro';
-
 [After WhatsApp announced an update to their privacy policy](https://www.arun.blog/post/signal/), I have answered countless questions from my friends and family. In the last week, most of my family members have jumped shipped, and I have lost track of the amount of time where I explained differences between the apps.
 
 I figured it might be helpful to document these discussions as a blog here, here goes.
@@ -31,10 +29,7 @@ If you are someone that does not use the Business accounts functionality of What
 
 While WhatsApp is unable to read your messages, WhatsApp has access to various other information surrounding your account, including your purchase history, location, your contact number, your contacts, identifiers (user ID specific to your installation of the app), diagnostics data, for troubleshooting bugs, financial information, user content, and usage data. This information is from the privacy policy that WhatsApp disclosed to Apple, to publish the app on the App Store.
 
-<R2Image
-	imageKey='blog/assets/of-messaging-apps-c40cae88-4a02-4817-b842-e83d15ee00ca.png'
-	alt='A screenshot of the data points gathered by WhatsApp and linked to you.'
-/>
+![A screenshot of the data points gathered by WhatsApp and linked to you.](https://blogarunsathiya.files.wordpress.com/2022/07/410dc-screenshot-2021-01-18-at-6.39.33-pm.png)
 
 We will never know how Facebook is using this data. Some of these are mentioned to be used only for app functionality, but Facebook is known to be a company that has been sharing WhatsApp data for years. As such, we will never know what happens behind the scenes, and the onus is on the user to vet.
 
@@ -72,9 +67,9 @@ While WhatsApp and Signal may seem similar, there is a vast difference in functi
 
 The only information that Signal knows is your mobile number, and Signal makes no attempt to link that to your identity. In other words, Signal wouldn't know that a certain mobile number belongs to you, wouldn't know who you are communicating with, using that mobile number, how often you do that, or use that information to map to external services/products. Even during the latest outage on the 15th of Jan, 2020, [Android developers from the Signal team had to ask for debug logs from the community](https://www.arun.blog/post/signal-team-is-looking-for-android-debug-logs/), to troubleshoot the cause of the outage. It was necessary for them to ask for it, because Signal does not collect any details by default.
 
-<R2Image imageKey='blog/assets/of-messaging-apps-1afb49ea-a973-4fb5-973a-be4012642ddc.png' alt='Data linked to you with Signal.' />
+![Data linked to you with Signal.](https://blogarunsathiya.files.wordpress.com/2022/07/9d59f-screenshot-2021-01-18-at-6.56.35-pm.png)
 
-<R2Image imageKey='blog/assets/of-messaging-apps-8baf8b20-1cf8-40bc-a409-0db28a94cd77.png' alt='Data linked to you with Telegram.' />
+![Data linked to you with Telegram.](https://blogarunsathiya.files.wordpress.com/2022/07/95055-screenshot-2021-01-18-at-6.55.59-pm.png)
 
 Signal also offers [linked devices](https://support.signal.org/hc/en-us/articles/360007320551-Linked-Devices), which include tablets, desktops and laptops, that can work without having your mobile device active. WhatsApp requires your mobile device to be active, or online, to have the desktop counterpart work.
 

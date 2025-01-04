@@ -9,8 +9,6 @@ tags: ['Automation']
 coverImage: './image.webp'
 ---
 
-import R2Image from 'src/components/R2Image.astro';
-
 Learned a neat thing today — [it's possible to set custom DNS resolvers for certain domains](https://news.ycombinator.com/item?id=29026068). I can create a custom config file for dnsmasq and specify the DNS resolvers to use for those domains. I don't have a need for it today, but may be handy in cases like archive.is not loading on Cloudflare DNS.
 
 These requests still go through pihole, so ad-blocking capabilities are available. It's just the upstream that changes. My test below confirms so: I have set `dnsleaktest.com` to be queried using Google DNS but requests still pass through pihole.
@@ -21,9 +19,6 @@ server=/dnsleaktest.com/8.8.8.8
 server=/dnsleaktest.com/8.8.4.4
 ```
 
-<R2Image
-	imageKey='blog/assets/dnsmasq-custom-dns-resolvers-for-specific-domains-42362915-5cb1-4239-b9c9-2284826ef946.png'
-	alt='A screenshot of pihole logs'
-/>
+![A screenshot of pihole logs](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/8e87097b-abe2-4015-8e4b-27a383843c30/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152040Z&X-Amz-Expires=3600&X-Amz-Signature=210c82a6573940cd2f78d41ed7e493096572ba76974e7d36aaec12e88571c277&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 I use two Raspberry Pi devices at home, both running pihole with Unbound as a recursive DNS resolver. These devices are connected to my [Tailscale network, so all of my devices (and my friends) can enjoy Unbound and pihole's ad-blocking capabilities](https://www.arun.blog/post/pi-hole-on-tailscale/).

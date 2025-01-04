@@ -9,8 +9,6 @@ tags: ['Content Management', 'Tools', 'OSS']
 coverImage: './image.webp'
 ---
 
-import R2Image from 'src/components/R2Image.astro';
-
 For years, design on WordPress had been in the form of PHP templates bundled together as a WordPress theme. The templates apply to specific content as desginated by the [WordPress Template Hierarchy](https://developer.wordpress.org/themes/basics/template-hierarchy/). The largest issue with this approach would be that anyone wanting a custom design on their site must have PHP skills to write theme code.
 
 Full Site Editing (FSE) is changing that process. Those with programming knowledge can design custom designs for their pages, posts or even for search archives or 404 pages. This is largely possible, thanks to the extensible nature of Gutenberg blocks. They are now available for use on sidebars in the form of widgets, on the header and footer areas, in the form of Full Site Editing.
@@ -23,29 +21,17 @@ Personally, I wanted a theme that shows all of my blog posts on the homepage, bu
 
 Right now, my homepage looks as shown below, this is a two column layout:
 
-<R2Image
-	imageKey='blog/assets/thoughts-on-wordpress-full-site-editing-53ae846c-1d75-424e-804c-2ea4301ed73a.png'
-	alt='A screenshot of my WordPress site homepage'
-/>
+![A screenshot of my WordPress site homepage](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/8330c6ba-57cd-47b9-92bd-f46d5d7d5886/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152043Z&X-Amz-Expires=3600&X-Amz-Signature=010f53692cf9bcbe5967ff4792ad40cb54ac5a53ebe472603b9b90f77ed35321&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 The content on the right isn't my sidebar. Rather is the right column of my homepage's FSE editor. For comparison, my editor view is as shown below:
 
-<R2Image
-	imageKey='blog/assets/thoughts-on-wordpress-full-site-editing-4a79b9de-cff0-41be-ba1d-7dd6fccdf17f.png'
-	alt='A screenshot of my editor view on WordPress with Gutenberg'
-/>
+![A screenshot of my editor view on WordPress with Gutenberg](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/ef2fb446-be92-4c6f-b08b-cebc43c365aa/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152043Z&X-Amz-Expires=3600&X-Amz-Signature=412ea6083d578e4251863865b49ee6276864565c3893de143ca58a21670026c9&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 Likewise, here's a comparison of the single blog post view:
 
-<R2Image
-	imageKey='blog/assets/thoughts-on-wordpress-full-site-editing-f180d5e9-7857-4305-af28-294e025d7254.png'
-	alt='A screenshot of my WordPress site’s single blog post view'
-/>
+![A screenshot of my WordPress site’s single blog post view](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/e830b2af-704b-46a7-a733-693ecfa5e169/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152043Z&X-Amz-Expires=3600&X-Amz-Signature=176c709bbd7a2ec16bf2624123805a65fc4384fd16897f94dc03c09c92628cad&X-Amz-SignedHeaders=host&x-id=GetObject)
 
-<R2Image
-	imageKey='blog/assets/thoughts-on-wordpress-full-site-editing-d2d99e7a-628f-46d9-a7bc-21c61db2a145.png'
-	alt='A screenshot of editor view on my WordPress site'
-/>
+![A screenshot of editor view on my WordPress site](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/80dc31c8-332e-43a7-b253-3de4b8e4d7d4/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152043Z&X-Amz-Expires=3600&X-Amz-Signature=25a515df2627f4a09bfde588d9be9ca8eab220f5548ff366bbcdd0ab4bc01bf1&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 See how the editor looks very similar to a blog post or page editor?
 

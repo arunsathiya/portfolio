@@ -9,8 +9,6 @@ tags: ['Automation']
 coverImage: './image.webp'
 ---
 
-import R2Image from 'src/components/R2Image.astro';
-
 One thing that I found lacking in the [SimpleLogin API](https://github.com/simple-login/app/blob/master/docs/api.md) is that, it doesn't expose an API endpoint to create a contact based on the alias' email address. Rather, the `POST /api/aliases/:alias_id/contacts` endpoint requires the alias ID. So, I ended up downloading all aliases as multiple batches (each query returns upto 20 results) and saved them as json files in a folder.
 
 With them in a folder, I could use jq to parse all of these json files for an alias email address, get its ID and further use it to create a new contact. All of this works like a charm now. My entire process works independent of the dashboard now: create a new alias, get its ID, create a contact, copy the reverse contact address, paste it on my email client.
@@ -33,9 +31,6 @@ If you are wondering what the `tr -d "\\""` part is, it's to remove the unwant
 
 The contact's reverse address is finally in my clipboard, which I can paste on Apple Mail:
 
-<R2Image
-	imageKey='blog/assets/jq-magic-to-create-contacts-for-simplelogin-aliases-3976fae0-0b0f-42c5-8361-c78f3f890db0.png'
-	alt='A screenshot of Apple mail composer that shows SimpleLogin reverse alias as a readable sender name'
-/>
+![A screenshot of Apple mail composer that shows SimpleLogin reverse alias as a readable sender name](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/be463ddd-b458-41b3-a63a-d151ddf8c2f2/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152042Z&X-Amz-Expires=3600&X-Amz-Signature=0eea7259f13890cbf4336cf5d10c24155cd7f021a0101e01366e3796801af42f&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 SimpleLogin recently announced an update to their Firefox extension too, to create reverse aliases (contact reverse address) on the go, but I like this API-based process better. The extension takes a while to populate all aliases.
