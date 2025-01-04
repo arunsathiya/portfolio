@@ -9,6 +9,8 @@ tags: ['Tools', 'DevOps']
 coverImage: './image.webp'
 ---
 
+import R2Image from 'src/components/R2Image.astro';
+
 I have grown up reading Raspberry Pi users build amazing projects on this wonderful reddit: [r/homelab](https://old.reddit.com/r/homelab/). Until an year ago, I didn't have a clue where to start, mostly because the idea of setting up Wireguard to access these self-hosted services was a bit intimidating. Tailscale changed everything.
 
 Tailscale is a mesh VPN software that makes it incredibly easy to connect your devices together. This includes your laptops, mobile devices, servers, and even printers. The idea is that, Tailscale acts as an interface for all devices to talk to each other, without having to create, manage and install Wireguard certificates manually.
@@ -29,7 +31,10 @@ But my use-case was to run Caddy as a reverse proxy, to serve each Docker contai
 - Whoogle on `mew.tailnet-b593.ts.net/google`
   A web application with SSL configured out of the box:
 
-![Tailscale TLS certificates on a Whoogle instance](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/da5014df-4435-4589-be90-bb347d6ecfb1/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152041Z&X-Amz-Expires=3600&X-Amz-Signature=96fdc7645181cd12f4033395072b83db8a418ca21592ee0b08b65c22486a29de&X-Amz-SignedHeaders=host&x-id=GetObject)
+<R2Image
+	imageKey='assets/tailscale-tls-certificates-for-my-home-lab-5e11ac3a-ce18-4dbb-8ff9-05c0afe3f875.png'
+	alt='Tailscale TLS certificates on a Whoogle instance'
+/>
 
 I wanted to access my pihole admin on HTTPS too, but I couldn't get it working on a subfolder, like `mew.tailnet-b593.ts.net/pihole`. When I assigned the root domain to pihole, libreddit had to go to a subfolder like `mew.tailnet-b593.ts.net/reddit` and when I tried that, CSS on my libreddit instance broke.
 

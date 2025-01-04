@@ -9,6 +9,8 @@ tags: ['OSS', 'Tools']
 coverImage: './image.webp'
 ---
 
+import R2Image from 'src/components/R2Image.astro';
+
 I am a happy DuckDuckGo user of many years. It matches all of my requirements: good results, ability to jump to the first result with a keyword (using "\"), bangs to search within particular websites and tracker-free search results.
 
 I recently learned about Whoogle though and I had been wanting to try that for a while. It's a self-hosted, ad and tracker-free search engine that fetches results from Google. The project promises that it's free of cookie and IP address tracking too. It's open source and it seems that it can be set up on any device. I have two Raspberry Pi devices at home, both connected on my Tailscale network, [acting as Pi-hole nodes to block ads](https://www.arun.blog/post/pi-hole-on-tailscale/). One of the two Raspberry Pis [also acts as my Hydroxide node to fetch ProtonMail emails](https://www.arun.blog/post/hydroxide-headless-bridge-for-protonmail-on-tailscale/).
@@ -22,11 +24,17 @@ docker run --publish 5000:5000 --detach --name whoogle-search benbusby/whoogle-s
 
 I ran into a hurdle involving a dependency's compatibility with my Raspberry Pi image, but [that was easily solvable](https://github.com/benbusby/whoogle-search/issues/420#issuecomment-914547346). Once all that of was done, the Whoogle instance was available at `0.0.0.0:5000` but it was neatly exposed on the Tailscale interface too, thus being available at my Tailscale node's IP address: `100.71.84.105:5000`. Thanks to Tailscale's [Magic DNS](https://tailscale.com/kb/1081/magicdns/), this instance becomes available at a readable address too: `http://mew:5000`. `mew` is the name of my Tailscale node. It's configurable on the Tailscale admin.
 
-![An image showing a search query on my Whoogle instance.](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/6dff2886-fd23-4ca4-8cba-1a6d26a00c68/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152039Z&X-Amz-Expires=3600&X-Amz-Signature=c0c89897384d3f946ad5275c61597dbebf14438f5c3e3263f8ee6611d714491c&X-Amz-SignedHeaders=host&x-id=GetObject)
+<R2Image
+	imageKey='assets/whoogle-on-the-tailscale-network-10d1638e-cd98-8063-b1a4-df5732895590.png'
+	alt='An image showing a search query on my Whoogle instance.'
+/>
 
 Since all of my devices are connected to the Tailscale network, my Android can access it as well:
 
-![An image showing a Whoogle search query on Android.](https://prod-files-secure.s3.us-west-2.amazonaws.com/cf01b7e0-f679-450a-bd3e-1da011ac3be5/a58baedd-4140-4660-9564-c252e4cf3f69/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45FSPPWI6X%2F20250104%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250104T152039Z&X-Amz-Expires=3600&X-Amz-Signature=0bab3368168fe20e4da2726197d010dd00daa9ce007cbe8e8adba21c7c691472&X-Amz-SignedHeaders=host&x-id=GetObject)
+<R2Image
+	imageKey='assets/whoogle-on-the-tailscale-network-10d1638e-cd98-802e-8b03-e5fac44bee13.png'
+	alt='An image showing a Whoogle search query on Android.'
+/>
 
 It's nice overall. I am not bothered by the `http` queries as [the communication between my device and the Raspberry Pi is end-to-end encrypted](https://tailscale.com/kb/1093/can-tailscale-decrypt-my-traffic/), thanks to [Tailscale](https://www.arun.blog/tags/tailscale/).
 
