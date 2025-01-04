@@ -14,7 +14,7 @@ console.log('R2Image component rendering with props:', { imageKey, alt });
 	import('@11ty/is-land/is-land.js');
 </script>
 <is-land on:media='(prefers-reduced-motion: no-preference)'>
-	<snow-fall>
+	<snow-fall count='20'>
 		<img src={`https://www.arun.blog/cdn/${imageKey}`} alt={alt} />
 	</snow-fall>
 </is-land>
