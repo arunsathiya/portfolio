@@ -1,5 +1,12 @@
 import { Client, isFullPageOrDatabase } from '@notionhq/client';
-import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import type {
+	BlockObjectResponse,
+	PageObjectResponse,
+	PartialBlockObjectResponse,
+	RichTextItemResponse,
+	TextRichTextItemResponse,
+	UpdateBlockParameters,
+} from '@notionhq/client/build/src/api-endpoints';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -29,11 +36,69 @@ async function main() {
 	await Promise.all(processPromises);
 }
 
+function isTextRichTextItem(item: RichTextItemResponse): item is TextRichTextItemResponse {
+	return item.type === 'text';
+}
+
+function isParagraphBlock(block: BlockObjectResponse | PartialBlockObjectResponse): block is BlockObjectResponse & { type: 'paragraph' } {
+	return 'type' in block && block.type === 'paragraph';
+}
+
+async function onceOffUpdates(pageId: string): Promise<void> {
+	const page = await notion.pages.retrieve({ page_id: pageId });
+	if (!isFullPageOrDatabase(page)) {
+		throw new Error(`Page ${pageId} is not a page or database`);
+	}
+	const blocks = await notion.blocks.children.list({
+		block_id: pageId,
+	});
+	for (const block of blocks.results) {
+		if (isParagraphBlock(block)) {
+			let isBlockModified = false;
+			const updatedRichText = block.paragraph.rich_text.map((textBlock) => {
+				if (isTextRichTextItem(textBlock) && textBlock.text.link?.url.includes('arun.blog/blog/')) {
+					isBlockModified = true;
+					return {
+						type: 'text',
+						text: {
+							content: textBlock.text.content,
+							link: {
+								url: textBlock.text.link.url
+									.replace(new RegExp('arun.blog/blog/', 'g'), 'arun.blog/')
+									.replace(/\/\d{4}\/\d{2}\/\d{2}\//, '/post/')
+									.replace(/\/tag\//, '/tags/'),
+							},
+						},
+						annotations: textBlock.annotations,
+					};
+				}
+				return textBlock;
+			});
+
+			if (isBlockModified) {
+				try {
+					await notion.blocks.update({
+						block_id: block.id,
+						type: 'paragraph',
+						paragraph: {
+							rich_text: updatedRichText,
+						},
+					} as UpdateBlockParameters);
+					console.log(`Updated block ${block.id}`);
+				} catch (error) {
+					console.error(`Error updating block ${block.id}:`, error);
+				}
+			}
+		}
+	}
+}
+
 async function retryUpdate(pageId: string): Promise<void> {
 	let retries = 0;
 	while (retries < MAX_RETRIES) {
 		try {
 			await addIconAndCover(pageId);
+			await onceOffUpdates(pageId);
 			return;
 		} catch (error) {
 			if (error instanceof Error && error.message.includes('Rate limited')) {
