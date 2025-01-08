@@ -1,43 +1,132 @@
 ---
-title: 'Patching hundreds of GitHub repositories in seconds'
-seoTitle: 'Patching hundreds of GitHub repositories in seconds'
+title: 'Patching hundreds of GitHub repositories with APIs and Go’s concurrency features'
+seoTitle: 'Patching hundreds of GitHub repositories with APIs and Go’s concurrency features'
 slug: 'patch-github-with-api'
 description: 'Using GitHub API to commit patches and generate pull requests.'
 pubDate: 'Jan 27 2024'
-updatedDate: 'Dec 23 2024'
+updatedDate: 'Jan 08 2025'
 tags: ['DevOps', 'Automation', 'APIs']
 coverImage: './image.webp'
 ---
 
-The traditional approach for submitting a patch upstream is to fork (if you don't have write access to that upstream repository), clone the fork, make changes, commit and submit a pull request upstream.
+I recently came across [GitHub's changelog about the ](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/)[`set-output`](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/)[ command being deprecated](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/). When I found [over 220,000 workflow files still using this deprecated syntax](https://github.com/search?q=set-output%20language%3AYAML%20path%3A%2F%5E.github%5C%2Fworkflows%5C%2F%2F&type=code), I knew I needed an automated solution.
 
-This can take a lot of time depending on how big the repository is.
+## Architecture
 
-I recently came across [this GitHub changelog](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/) about `set-output` command being deprecated, so I looked at the number of repositories that are still using this command, and [over 220,000 workflow files are still using it](https://github.com/search?q=set-output%20language%3AYAML%20path%3A%2F%5E.github%5C%2Fworkflows%5C%2F%2F&type=code). Cloning hundreds of thousands of these repositories, opening the workflow files in an IDE, making changes and creating pull requests obviously takes a lot of time.
+The solution combines multiple GitHub APIs:
 
-I wanted to simplify the whole approach with these guidelines:
+- GraphQL for precise file operations and commits
+- REST API for repository and PR management
+- [`patch2pr`](https://github.com/bluekeyes/patch2pr?tab=readme-ov-file) for handling patches
 
-- Clone only the files that need to be patched.
-- Make changes programmatically, instead of manually on an IDE.
-- Generate patch files for the changes made.
-- Create commit on the fork.
-- Prepare pull request from the fork to the upstream repository.
-  I was pleasantly surprised to learn that the last three points are possible with [patch2pr](https://github.com/bluekeyes/patch2pr?tab=readme-ov-file), and GitHub API endpoints to [create commits](https://docs.github.com/en/graphql/reference/mutations#createcommitonbranch) and [pull requests](https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request).
+### GraphQL Query Structure
 
-I tied all of this together into a Go program [set-output-janitor](https://github.com/arunsathiya/set-output-janitor):
+First, I needed to fetch specific workflow files. Here's the GraphQL query structure:
 
-- It looks for a list of repositories (owner/repo format) in a `repos.txt` file,
-- Creates folders for individual workflow files,
-- Makes changes, generates patch files,
-- Commits and submits a pull request.
-  All automatically, in seconds, thanks to Go's concurrency capabilities.
+```go
+type FileContentQuery struct {
+    Repository struct {
+        Object struct {
+            Blob struct {
+                Text githubv4.String
+            } `graphql:"... on Blob"`
+        } `graphql:"object(expression: $expression)"`
+    } `graphql:"repository(name: $name, owner: $owner)"`
+}
+func fetchFileContent(client *githubv4.Client, owner, name, expression string) (string, error) {
+    var query FileContentQuery
+    variables := map[string]interface{}{
+        "owner":      githubv4.String(owner),
+        "name":       githubv4.String(name),
+        "expression": githubv4.String(expression),
+    }
+    err := client.Query(context.Background(), &query, variables)
+    return string(query.Repository.Object.Blob.Text), err
+}
+```
 
-This was a really fun exercise, but also got a bit of hate because I was spamming organizations with the same content across different repositories. A few people unfollowed me on GitHub because whenever my PR was merged, it appeared on their newsfeed, one person reached out with a comment that I was flooding their inbox, and a few even looked me up on LinkedIn to figure out what was happening.
+### Creating Commits via GraphQL Mutation
 
-Next steps:
+The interesting part is using GraphQL mutations to create commits. Here's how I structured it:
 
-- I have stopped running this program because submitting many pull requests puts my GitHub account at the risk of suspension.
-- I want to [use a bot token](https://github.com/arunsathiya/set-output-janitor/issues/17) to run this workflow.
-  On the bot token front, I am currently blocked by GitHub's [fine-grained tokens not having access to public-but-unowned data](https://github.com/orgs/community/discussions/36441#discussioncomment-7635050) (which means, I can create commits on my forks, but not submit pull requests upstream just yet). In talking to support, it looks like fine-grained tokens won't have the ability to submit pull requests, but I am going to hold out hope and see what happens in the future. Of course, without needing the [GitHub app to be installed on the organization](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation), like in the case of [dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/configuring-dependabot-security-updates).
+```go
+graphqlApplier := patch2pr.NewGraphQLApplier(
+    client,
+    patch2pr.Repository{
+        Owner: *fork.Owner.Login,
+        Name:  *fork.Name,
+    },
+    oid,
+)
+// Create commit using the mutation
+sha, err := graphqlApplier.Commit(
+    context.Background(),
+    "refs/heads/"+*fork.DefaultBranch,
+    &gitdiff.PatchHeader{
+        Author: &gitdiff.PatchIdentity{
+            Name:  "Arun",
+            Email: "arun@arun.blog",
+        },
+        Title: "ci: Use GITHUB_OUTPUT envvar instead of set-output command",
+        Body:  "Updating deprecated GitHub Actions commands",
+    },
+)
+```
 
-I think this kind of consistent change can be a GitHub product feature in itself, with disclaimers that the maintainers will need to verify and test before deploying.
+### REST API for Pull Request Creation
+
+After creating commits, I use GitHub's REST API to create pull requests:
+
+```go
+prRequest := &github.NewPullRequest{
+    Title:               &prTitle,
+    Body:                &prBody,
+    MaintainerCanModify: &maintainerCanModify,
+    Draft:              &draft,
+    Base:               &base,
+    Head:               &head,
+}
+pr, _, err = clientv3.PullRequests.Create(
+    context.Background(),
+    repoOwner,
+    repoName,
+    prRequest,
+)
+```
+
+### Concurrency Management
+
+To handle multiple repositories efficiently, I implemented concurrent processing with proper error handling:
+
+```go
+errChan := make(chan error, len(scannedLines))
+for _, scannedLine := range scannedLines {
+    wg.Add(1)
+    go func(line string) {
+        defer wg.Done()
+        parts := strings.Split(line, "/")
+        repoOwner := parts[0]
+        repoName := parts[1]
+        fork, _, err := client.Repositories.CreateFork(context.Background(),
+            repoOwner, repoName, nil)
+        if err != nil {
+            errChan <- err
+            return
+        }
+        // Process repository updates
+    }(scannedLine)
+}
+```
+
+## Current Limitations
+
+I hit a few technical roadblocks:
+
+1. [Fine-grained tokens lack access to public-but-unowned data](https://github.com/orgs/community/discussions/36441#discussioncomment-7635050)
+2. GitHub's rate limiting affects mass operations
+3. Need for proper authentication without full [GitHub App installation](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation)
+   I'm working on [implementing a bot token solution](https://github.com/arunsathiya/set-output-janitor/issues/17), similar to how [Dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/configuring-dependabot-security-updates) handles authentication, but the current token limitations are blocking progress.
+
+This approach shows how GitHub's APIs can be combined for efficient repository maintenance, though it also highlights some areas where the platform could potentially offer native support for such mass updates.
+
+The complete implementation is available in the [`set-output-janitor`](https://github.com/arunsathiya/set-output-janitor) repository.
