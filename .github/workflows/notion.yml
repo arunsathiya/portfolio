@@ -1,4 +1,4 @@
-name: Commit Notion changes
+name: Fetch and commit Notion changes
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
         required: false
   repository_dispatch:
     types:
-      - notion
+      - 'chore: fetch and commit Notion changes'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
