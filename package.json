@@ -56,5 +56,6 @@
   },
   "resolutions": {
     "cssesc": "./overrides/cssesc"
-  }
+  },
+  "packageManager": "yarn@4.6.0"
 }
