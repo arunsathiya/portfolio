@@ -11,8 +11,62 @@
 	body {
 		font-family: 'IBM Plex Sans', sans-serif;
 	}
+
 	pre,
 	code {
 		font-size: 0.875rem;
 	}
+
+	/* Add these new styles for code blocks */
+	pre {
+		position: relative;
+		padding: 1rem;
+		margin: 1.5rem 0;
+		border-radius: 0.5rem;
+		background-color: #1e1e1e;
+		color: #d4d4d4;
+		white-space: pre-wrap !important;
+		word-wrap: break-word !important;
+		max-width: 100%;
+		overflow-x: hidden !important;
+	}
+
+	/* Remove scrollbars */
+	pre::-webkit-scrollbar {
+		display: none !important;
+	}
+
+	pre {
+		-ms-overflow-style: none !important;
+		scrollbar-width: none !important;
+	}
+
+	/* Handle long content */
+	pre code {
+		display: block;
+		width: 100%;
+		overflow-wrap: break-word !important;
+		word-break: break-all !important;
+	}
+}
+
+/* Syntax highlighting - outside of @layer to ensure it takes precedence */
+pre .token.tag {
+	color: #569cd6;
+}
+
+pre .token.attr-name {
+	color: #9cdcfe;
+}
+
+pre .token.attr-value {
+	color: #ce9178;
+}
+
+pre .token.string {
+	color: #ce9178;
+}
+
+pre .token.punctuation {
+	color: #d4d4d4;
 }
