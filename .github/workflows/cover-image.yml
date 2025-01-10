@@ -36,7 +36,7 @@ jobs:
         id: check_changes
         run: |
           git add .
-          git diff --staged --quiet || echo "CHANGES_EXIST=true" >> $GITHUB_OUTPUT
+          git diff --staged || echo "CHANGES_EXIST=true" >> $GITHUB_OUTPUT
       - name: Commit Changes
         if: steps.check_changes.outputs.CHANGES_EXIST == 'true'
         uses: planetscale/ghcommit-action@v0.1.33
