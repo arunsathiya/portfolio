@@ -31,7 +31,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: r2 object get portfolio/sandbox/${{ inputs.date_slug_combo }}/image.webp --file src/content/blog/${{ inputs.date_slug_combo }}/image.webp
-          wranglerVersion: '3.80.1'
+          wranglerVersion: '3.101.0'
       - name: Check for changes
         id: check_changes
         run: |
