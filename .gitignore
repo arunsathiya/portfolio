@@ -24,3 +24,4 @@ pnpm-debug.log*
 .idea/
 .aider*
 .vercel
+.yarn/install-state.gz
