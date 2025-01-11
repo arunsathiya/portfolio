@@ -1,24 +1,25 @@
 ---
-title: 'Patching GitHub repositories in bulk with APIs and Go’s concurrency features'
-seoTitle: 'Patching GitHub repositories in bulk with APIs and Go’s concurrency features'
-slug: 'patch-github-with-api'
-description: 'Using GitHub API to commit patches and generate pull requests.'
+title: "Patching GitHub repositories in bulk with APIs and Go’s concurrency features"
+seoTitle: "Patching GitHub repositories in bulk with APIs and Go’s concurrency features"
+slug: "patch-github-with-api"
+description: "Using GitHub API to commit patches and generate pull requests."
 pubDate: 'Jan 27 2024'
-updatedDate: 'Jan 08 2025'
-tags: ['DevOps', 'Automation', 'APIs']
-coverImage: './image.webp'
+updatedDate: 'Jan 11 2025'
+tags: ["DevOps","Automation","APIs"]
+coverImage: "./image.webp"
 ---
+
+
+
 
 I recently came across [GitHub's changelog about the ](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/)[`set-output`](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/)[ command being deprecated](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/). When I found [over 220,000 workflow files still using this deprecated syntax](https://github.com/search?q=set-output%20language%3AYAML%20path%3A%2F%5E.github%5C%2Fworkflows%5C%2F%2F&type=code), I knew I needed an automated solution.
 
 ## Architecture
 
 The solution combines multiple GitHub APIs:
-
 - GraphQL for precise file operations and commits
 - REST API for repository and PR management
 - [`patch2pr`](https://github.com/bluekeyes/patch2pr?tab=readme-ov-file) for handling patches
-
 ### GraphQL Query Structure
 
 First, I needed to fetch specific workflow files. Here's the GraphQL query structure:
@@ -87,9 +88,9 @@ prRequest := &github.NewPullRequest{
     Head:               &head,
 }
 pr, _, err = clientv3.PullRequests.Create(
-    context.Background(),
-    repoOwner,
-    repoName,
+    context.Background(), 
+    repoOwner, 
+    repoName, 
     prRequest,
 )
 ```
@@ -107,7 +108,7 @@ for _, scannedLine := range scannedLines {
         parts := strings.Split(line, "/")
         repoOwner := parts[0]
         repoName := parts[1]
-        fork, _, err := client.Repositories.CreateFork(context.Background(),
+        fork, _, err := client.Repositories.CreateFork(context.Background(), 
             repoOwner, repoName, nil)
         if err != nil {
             errChan <- err
@@ -121,11 +122,10 @@ for _, scannedLine := range scannedLines {
 ## Current Limitations
 
 I hit a few technical roadblocks:
-
 1. [Fine-grained tokens lack access to public-but-unowned data](https://github.com/orgs/community/discussions/36441#discussioncomment-7635050)
 2. GitHub's rate limiting affects mass operations
 3. Need for proper authentication without full [GitHub App installation](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation)
-   I'm working on [implementing a bot token solution](https://github.com/arunsathiya/set-output-janitor/issues/17), similar to how [Dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/configuring-dependabot-security-updates) handles authentication, but the current token limitations are blocking progress.
+I'm working on [implementing a bot token solution](https://github.com/arunsathiya/set-output-janitor/issues/17), similar to how [Dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/configuring-dependabot-security-updates) handles authentication, but the current token limitations are blocking progress.
 
 This approach shows how GitHub's APIs can be combined for efficient repository maintenance, though it also highlights some areas where the platform could potentially offer native support for such mass updates.
 

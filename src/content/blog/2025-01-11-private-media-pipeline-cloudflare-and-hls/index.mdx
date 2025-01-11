@@ -1,38 +1,44 @@
 ---
-title: 'Building a private media pipeline with Cloudflare and HTTP Live Streaming ( HLS)'
-seoTitle: 'Building a private media pipeline with Cloudflare and HTTP Live Streaming ( HLS)'
-slug: 'private-media-pipeline-cloudflare-and-hls'
-description: 'Combine HLS with Cloudflare R2, Cloudflare Access, and Cloudflare Workers to build a secure, private media pipeline.'
+title: "Building a private media pipeline with Cloudflare and HTTP Live Streaming ( HLS)"
+seoTitle: "Building a private media pipeline with Cloudflare and HTTP Live Streaming ( HLS)"
+slug: "private-media-pipeline-cloudflare-and-hls"
+description: "Combine HLS with Cloudflare R2, Cloudflare Access, and Cloudflare Workers to build a secure, private media pipeline."
 pubDate: 'Jan 11 2025'
 updatedDate: 'Jan 10 2025'
-tags: ['Content Management']
-coverImage: './image.webp'
+tags: ["Content Management"]
+coverImage: "./image.webp"
 ---
+
+
+
 
 I've been experimenting with HTTP Live Streaming (HLS) recently, and it's fascinating how a large video file can be broken down into smaller chunks for efficient streaming. The process involves converting a video into multiple quality levels and small segments, making it perfect for adaptive streaming based on network conditions.
 
 The interesting part is how simple the implementation becomes with modern web components. Using `hls-video-element`, you can create a video player with just a few lines of code:
 
 ```html
-<hls-video controls src="https://example.com/videos/playlist.m3u8" crossorigin="use-credentials"> </hls-video>
+<hls-video 
+  controls
+  src="https://example.com/videos/playlist.m3u8"
+  crossorigin="use-credentials"
+>
+</hls-video>
 ```
 
 While exploring this, I realized how this could be the foundation for a private media sharing platform. Combine HLS with Cloudflare R2 for storage, Cloudflare Access for authentication, Cloudflare Workers for HLS segment generation from the video file, and other scripting that might be needed, and you have all the pieces for a secure, private media pipeline.
 
 The workflow would look something like this:
-
 1. Upload media files to R2 storage
 2. Convert videos to HLS format with multiple quality levels
 3. Protect access using Cloudflare Access
 4. Stream content through an authenticated HLS player
-   What makes this setup particularly interesting is the cost efficiency. R2's free egress means you're not paying for bandwidth when streaming videos, and Cloudflare Access provides enterprise-grade authentication without the enterprise price tag.
+What makes this setup particularly interesting is the cost efficiency. R2's free egress means you're not paying for bandwidth when streaming videos, and Cloudflare Access provides enterprise-grade authentication without the enterprise price tag.
 
 I plan to build this into a full-fledged platform for sharing photos and videos with family. The traditional solutions like Google Photos or SmugMug are great, but they don't offer control I'm looking for. And being that prefers having full autonomy and ownership of one’s content, hosting media myself on a personal blog is very tempting. With this setup, I'd have:
-
 - Complete control over my media files
 - Zero trust security model with Cloudflare Access
 - Efficient streaming with HLS
 - Cost-effective storage and delivery with R2
-  The next steps would be building the upload pipeline, automating the HLS conversion process, and creating a clean interface for browsing and viewing media. I'm particularly excited about using this for sharing 4K videos that traditionally eat up cloud storage quotas.
+The next steps would be building the upload pipeline, automating the HLS conversion process, and creating a clean interface for browsing and viewing media. I'm particularly excited about using this for sharing 4K videos that traditionally eat up cloud storage quotas.
 
 Related reading: [Delivering 15TB of 4K video with Cloudflare R2 for $2.18](https://screencasting.com/cheap-video-hosting)

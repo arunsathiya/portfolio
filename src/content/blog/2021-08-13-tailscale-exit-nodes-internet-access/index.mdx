@@ -1,15 +1,16 @@
 ---
-title: 'Exit nodes: Control internet access using Tailscale ACLs'
-seoTitle: 'Exit nodes: Control internet access using Tailscale ACLs'
-slug: 'tailscale-exit-nodes-internet-access'
-description: 'Tailscale has a new host to control internet access on an exit nodes. Add it to your Tailscale ACLs to allow access only for certain devices.'
+title: "Exit nodes: Control internet access using Tailscale ACLs"
+seoTitle: "Exit nodes: Control internet access using Tailscale ACLs"
+slug: "tailscale-exit-nodes-internet-access"
+description: "Tailscale has a new host to control internet access on an exit nodes. Add it to your Tailscale ACLs to allow access only for certain devices."
 pubDate: 'Aug 13 2021'
 updatedDate: 'Jan 08 2025'
-tags: ['Tools', 'Infrastructure', 'Security']
-coverImage: './image.webp'
+tags: ["Tools","Infrastructure","Security"]
+coverImage: "./image.webp"
 ---
 
 import R2Image from 'src/components/R2Image.astro';
+
 
 I love Tailscale's exit nodes functionality. Makes it easy to tunnel out of a virtual machine in any country. The idea is very similar to commercial VPNs like Mullvad and NordVPN, but is self-hosted.
 
@@ -17,9 +18,6 @@ I share my Tailscale network with friends and family, mostly to allow their usag
 
 Last week, I found that Tailscale has [a new Access Control Lists (ACLs) functionality to enable or disable internet access](https://github.com/tailscale/tailscale/issues/1742#issuecomment-884469202) on such nodes. Add `autogroup:internet:443,22` to your devices' accept rule, and you are good to go.
 
-<R2Image
-	imageKey='assets/tailscale-exit-nodes-internet-access-1181638e-cd98-80a0-a9d0-ee3b36b88c1b.png'
-	alt='A screenshot of a GitHub comment, which describes a new host to control internet access on the exit nodes using Tailscale Access Control Lists.'
-/>
+<R2Image imageKey="assets/tailscale-exit-nodes-internet-access-1181638e-cd98-80a0-a9d0-ee3b36b88c1b.png" alt="A screenshot of a GitHub comment, which describes a new host to control internet access on the exit nodes using Tailscale Access Control Lists." />
 
 Every other device on your Tailscale network wouldn't be able to use the public internet when they tunnel out of such nodes.

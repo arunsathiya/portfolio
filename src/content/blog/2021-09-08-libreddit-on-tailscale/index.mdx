@@ -1,15 +1,16 @@
 ---
-title: 'libreddit: Self-hosted reddit on the Tailscale network'
-seoTitle: 'libreddit: Self-hosted reddit on the Tailscale network'
-slug: 'libreddit-on-tailscale'
+title: "libreddit: Self-hosted reddit on the Tailscale network"
+seoTitle: "libreddit: Self-hosted reddit on the Tailscale network"
+slug: "libreddit-on-tailscale"
 description: "I use libreddit, a self-hosted reddit without trackers on my Raspberry Pi. It's configurable, comes with a beautiful UI and handles subscriptions very well."
 pubDate: 'Sep 08 2021'
 updatedDate: 'Dec 24 2024'
-tags: ['OSS', 'Networking', 'Tools']
-coverImage: './image.webp'
+tags: ["OSS","Networking","Tools"]
+coverImage: "./image.webp"
 ---
 
 import R2Image from 'src/components/R2Image.astro';
+
 
 If you have been following my posts, you might have noticed a trend recently, where I am looking for self-hostable alternatives for common websites and apps that I access. And I put them all on the [Tailscale](https://www.arun.blog/tags/tailscale/) network so that they are easily accessible from other devices.
 
@@ -23,10 +24,7 @@ The installation process was fairly straightforward: SSH into my Raspberry Pi, a
 
 I like how libreddit is fast on desktop and mobile views, and is configurable in many ways: wide UI, theme, sorting of posts and comments, and most importantly, supports importing of existing subreddits that you follow. [Here's a guide on that process](https://github.com/spikecodes/libreddit/issues/229#issuecomment-851065996).
 
-<R2Image
-	imageKey='assets/libreddit-on-tailscale-10d1638e-cd98-8071-b229-f224b106b690.png'
-	alt='A screenshot from GitHub that shows instructions from the author of libreddit project to import subreddit subscriptions from reddit'
-/>
+<R2Image imageKey="assets/libreddit-on-tailscale-10d1638e-cd98-8071-b229-f224b106b690.png" alt="A screenshot from GitHub that shows instructions from the author of libreddit project to import subreddit subscriptions from reddit" />
 
 Since one doesn't have to log into their reddit account, all of libreddit settings and subreddit subscriptions are stored locally. They will be lost when browser cookies are cleared, but libreddit goes one step further in allowing one to import back settings and subreddits using a link. Look for the details at the bottom of the libreddit settings page.
 
