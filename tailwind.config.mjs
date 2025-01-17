@@ -7,14 +7,14 @@ export default {
 			center: true,
 			padding: '1rem',
 			screens: {
-				xl: '1024px',
+				lg: '1024px',
 			},
 		},
 		extend: {
 			typography: {
 				DEFAULT: {
 					css: {
-						maxWidth: '100%', // add required value here
+						maxWidth: '100%',
 					},
 				},
 			},
