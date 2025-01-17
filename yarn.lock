@@ -2255,6 +2255,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource/ibm-plex-mono@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "@fontsource/ibm-plex-mono@npm:5.1.1"
+  checksum: 10c0/7c823e8379a27199e6fe11e84e47c391fae8794f106712404b71ea9d30eb0acba4035ecbdf20b5e0d58146bd8bec9589b4ff7936f23e9d42f954298eb151da80
+  languageName: node
+  linkType: hard
+
 "@fontsource/ibm-plex-sans@npm:^5.1.0":
   version: 5.1.1
   resolution: "@fontsource/ibm-plex-sans@npm:5.1.1"
@@ -7789,6 +7796,7 @@ __metadata:
     "@aws-sdk/client-s3": "npm:^3.666.0"
     "@aws-sdk/lib-storage": "npm:^3.666.0"
     "@aws-sdk/s3-request-presigner": "npm:^3.666.0"
+    "@fontsource/ibm-plex-mono": "npm:^5.1.1"
     "@fontsource/ibm-plex-sans": "npm:^5.1.0"
     "@notionhq/client": "npm:^2.2.15"
     "@tailwindcss/typography": "npm:^0.5.15"

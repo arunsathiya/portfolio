@@ -32,6 +32,7 @@
     "@aws-sdk/client-s3": "^3.666.0",
     "@aws-sdk/lib-storage": "^3.666.0",
     "@aws-sdk/s3-request-presigner": "^3.666.0",
+    "@fontsource/ibm-plex-mono": "^5.1.1",
     "@fontsource/ibm-plex-sans": "^5.1.0",
     "@notionhq/client": "^2.2.15",
     "@zachleat/snow-fall": "^1.0.3",

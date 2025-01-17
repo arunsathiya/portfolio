@@ -2,6 +2,7 @@
 @import '@fontsource/ibm-plex-sans/500.css';
 @import '@fontsource/ibm-plex-sans/600.css';
 @import '@fontsource/ibm-plex-sans/700.css';
+@import '@fontsource/ibm-plex-mono/400.css';
 
 @tailwind base;
 @tailwind components;
@@ -14,6 +15,7 @@
 
 	pre,
 	code {
+		font-family: 'IBM Plex Mono', monospace;
 		font-size: 0.875rem;
 	}
 
