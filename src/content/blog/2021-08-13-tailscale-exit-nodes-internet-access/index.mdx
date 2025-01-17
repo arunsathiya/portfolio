@@ -16,6 +16,6 @@ I share my Tailscale network with friends and family, mostly to allow their usag
 
 Last week, I found that Tailscale has [a new Access Control Lists (ACLs) functionality to enable or disable internet access](https://github.com/tailscale/tailscale/issues/1742#issuecomment-884469202) on such nodes. Add `autogroup:internet:443,22` to your devices' accept rule, and you are good to go.
 
-<R2Image imageKey="assets/tailscale-exit-nodes-internet-access-1181638e-cd98-80a0-a9d0-ee3b36b88c1b.png" alt="/" />
+<R2Image imageKey="assets/tailscale-exit-nodes-internet-access-1181638e-cd98-80a0-a9d0-ee3b36b88c1b.png" alt="A screenshot of a GitHub comment, which describes a new host to control internet access on the exit nodes using Tailscale Access Control Lists." />
 
 Every other device on your Tailscale network wouldn't be able to use the public internet when they tunnel out of such nodes.
