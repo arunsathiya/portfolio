@@ -9,9 +9,6 @@ tags: ["DevOps","Security"]
 coverImage: "./image.webp"
 ---
 
-
-
-
 I recently discovered a security improvement while working on authentication in a Cloudflare Worker. My endpoints were using simple string comparison (`===`) to validate auth tokens, which turns out to be vulnerable to timing attacks. Here's how I fixed it and what I learned along the way.
 
 Initially, I tried using `crypto.subtle.timingSafeEqual`, but this method isn't available in the Web Crypto API (which means it's not available in Cloudflare Workers or any browser-based JavaScript). Instead, I found we can achieve the same security using a double HMAC pattern. Here's the implementation:
