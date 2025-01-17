@@ -9,9 +9,6 @@ tags: ["DevOps","Automation","Content Management"]
 coverImage: "./image.webp"
 ---
 
-
-
-
 I ran into an interesting issue today while automating some GitHub repository tasks with shell scripts. The problem? Shell variables inside JSON payloads weren't expanding as expected. If you've ever tried something like `curl -d '{"message": "$MY_VAR"}'`, you've probably seen the literal `$MY_VAR` show up in your API calls instead of the actual value.
 
 The fix is simple but not immediately obvious - swap those single quotes for double quotes and escape the JSON quotes: `curl -d "{\"message\": \"$MY_VAR\"}"`. While it looks a bit messier, it allows the shell to expand your variables while keeping the JSON structure intact.

@@ -9,9 +9,6 @@ tags: ["DevOps"]
 coverImage: "./image.webp"
 ---
 
-
-
-
 I've been using [GitHub Actions to handle my blog's cover images](https://github.com/arunsathiya/portfolio/actions/workflows/cover-image.yml) - whenever an image is uploaded to R2, a workflow copies it to the right blog post directory. While it works most of the time, it's been hit or miss. Sometimes the workflow fails silently, and other times it just feels slower than it should be.
 
 Today I switched to using [Cloudflare Queues](https://developers.cloudflare.com/queues/) instead, and I'm quite impressed with how much simpler and more reliable it is. The idea is straightforward - R2 events trigger queue messages, and a [Worker](https://developers.cloudflare.com/workers/) processes these messages to handle the images. Here's what my queue handler looks like:
