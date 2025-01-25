@@ -23,8 +23,9 @@
 		font-family: 'IBM Plex Sans', sans-serif;
 	}
 
-	.prose-lg p {
-		margin-block: 0.25rem;
+	.prose p {
+		margin-block: 1.5rem;
+		line-height: 1.75;
 	}
 	
 	pre,
