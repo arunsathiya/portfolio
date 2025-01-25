@@ -13,6 +13,10 @@
 		font-family: 'IBM Plex Sans', sans-serif;
 	}
 
+	.prose-lg p {
+		margin-block: 0.25rem;
+	}
+	
 	pre,
 	code {
 		font-family: 'IBM Plex Mono', monospace;
