@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /rss.xml
+
+Sitemap: https://www.arun.blog/sitemap-index.xml
+Sitemap: https://www.arun.blog/rss.xml
