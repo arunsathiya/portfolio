@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import PostItem from './PostItem.astro';
+import ExpandedPostItem from './ExpandedPostItem.astro';
 
 type BlogPost = CollectionEntry<'blog'>;
 const { posts } = Astro.props;
@@ -35,7 +35,7 @@ const groupedPosts = groupPostsByYear(posts);
 			<h2 class='text-2xl font-bold mb-4'>{year}</h2>
 			<div>
 				{posts.map((post: BlogPost) => (
-					<PostItem post={post} />
+					<ExpandedPostItem post={post} />
 				))}
 			</div>
 		</div>
