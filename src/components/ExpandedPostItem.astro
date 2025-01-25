@@ -8,7 +8,7 @@ import Prose from './Prose.astro';
 type BlogPost = CollectionEntry<'blog'>;
 const { post }: Record<string, any> | { post: BlogPost } = Astro.props;
 
-const showContent = post.data.tags?.includes('Networking');
+const showContent = post.data.tags?.includes('Asides');
 const { Content } = showContent ? await post.render() : { Content: null };
 
 const getTagClasses = (tag: string) => `
