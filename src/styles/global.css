@@ -22,11 +22,6 @@
 	body {
 		font-family: 'IBM Plex Sans', sans-serif;
 	}
-
-	.prose p {
-		margin-block: 1.5rem;
-		line-height: 1.75;
-	}
 	
 	pre,
 	code {
