@@ -10,23 +10,25 @@
 
 @layer components {
   .list-view-prose {
-    @apply prose-sm dark:prose-invert
-      prose-p:my-0.5
-      prose-img:max-h-48 prose-img:w-auto
-      prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-      dark:prose-a:text-blue-400;
+    @apply prose dark:prose-invert
+	prose-p:my-2
+	prose-img:max-h-48 prose-img:w-auto
+	prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+	dark:prose-a:text-blue-400;
   }
 }
 
 @layer base {
 	body {
 		font-family: 'IBM Plex Sans', sans-serif;
+		font-size: 16px;
+		line-height: 1.75;
 	}
 	
 	pre,
 	code {
 		font-family: 'IBM Plex Mono', monospace;
-		font-size: 0.875rem;
+		font-size: 1rem;
 	}
 
 	/* Add these new styles for code blocks */
