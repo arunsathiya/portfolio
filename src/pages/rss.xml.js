@@ -20,7 +20,7 @@ export async function GET(context) {
       link: `/${post.slug}/`,
       description: post.data.tags?.includes('Asides')
         ? cleanContent(post.body)
-        : `${post.data.description} <a href="${context.site}/${post.slug}/">Read full post</a>`
+        : `${post.data.description} <a href="${context.site}${post.slug}/">Read full post</a>`
     })),
   });
 }
