@@ -1,8 +1,9 @@
 ---
-import Arun from '@src/assets/img/arun.jpg';
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
+import Arun from '@src/assets/img/arun.jpg';
+import ExpandedPostItem from '@src/components/ExpandedPostItem.astro';
 import PostItem from '../components/PostItem.astro';
 import ProjectList from '../components/ProjectList.astro';
 import Prose from '../components/Prose.astro';
@@ -37,7 +38,7 @@ const posts = (await getCollection('blog'))
 					<a href='/posts/' class='inline-block py-2 underline text-zinc-950 dark:text-zinc-100'>All posts &raquo;</a>
 				</div>
 				<div>
-					{posts.map((post: BlogPost) => <PostItem post={post} />)}
+					{posts.map((post: BlogPost) => <ExpandedPostItem post={post} />)}
 				</div>
 				<div class='text-right'></div>
 			</div>
