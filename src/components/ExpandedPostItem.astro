@@ -3,7 +3,6 @@ import { getTagBackgroundColor } from '@src/utils/tagColors';
 import type { CollectionEntry } from 'astro:content';
 import { slugify } from '../utils';
 import FormattedDate from './FormattedDate.astro';
-import Prose from './Prose.astro';
 
 type BlogPost = CollectionEntry<'blog'>;
 const { post }: Record<string, any> | { post: BlogPost } = Astro.props;
@@ -47,9 +46,9 @@ const getTagClasses = (tag: string) => `
 	{
 		showContent && (
 			<div class='mt-1 ml-0 lg:ml-28 max-w-3xl'>
-				<Prose>
+				<div class={`list-view-prose ${Astro.url.pathname === '/' ? '' : 'prose-lg'}`}>
 					<Content />
-				</Prose>
+				</div>
 			</div>
 		)
 	}
