@@ -8,7 +8,8 @@ export async function GET(context) {
     return content
       .replace(/^import.*astro';?\n?/gm, '')
       .replace(/<R2Image.*?\/>/g, '')
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+      .replace(/\[([^\]]+)\]\(([^)]+?)\)/g, '<a href="$2">$1</a>')
+      .replace(/\n\n/g, '<br><br>')
       .trim();
   };
   return rss({
