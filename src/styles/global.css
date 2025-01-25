@@ -8,6 +8,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .list-view-prose {
+    @apply prose-sm dark:prose-invert
+      prose-p:my-0.5
+      prose-img:max-h-48 prose-img:w-auto
+      prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+      dark:prose-a:text-blue-400;
+  }
+}
+
 @layer base {
 	body {
 		font-family: 'IBM Plex Sans', sans-serif;
