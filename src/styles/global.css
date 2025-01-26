@@ -16,6 +16,10 @@
 	prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
 	dark:prose-a:text-blue-400;
   }
+
+  .prose :where(blockquote) {
+    font-style: normal;
+  }
 }
 
 @layer base {
