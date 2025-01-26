@@ -2,18 +2,12 @@ import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
-const ALLOWED_USER_AGENTS = [
-  'wordpress.com; public-api.wordpress.com',
-  'wordpress.com',
-  'wordPress.com calypso',
-  'jetpack',
-  'wp-android',
-  'wp-iphone',
-  'wp-desktop',
-];
+const WP_USER_AGENT_PATTERNS = ['wp.com', 'wp-desktop', 'wp-iphone', 'wp-android'];
 
 function isAllowedUserAgent(userAgent) {
-  return ALLOWED_USER_AGENTS.some(allowed => userAgent?.toLowerCase().includes(allowed.toLowerCase()));
+  return userAgent && WP_USER_AGENT_PATTERNS.some(pattern =>
+    userAgent.toLowerCase().includes(pattern.toLowerCase())
+  );
 }
 
 function cleanContent(content) {
