@@ -1,13 +1,13 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
-import Prose from '../components/Prose.astro';
-import BaseLayout from '../layouts/BaseLayout.astro';
 import { Image } from 'astro:assets';
-import FormattedDate from '../components/FormattedDate.astro';
-import TableOfContent from '../components/widgets/TableOfContent.astro';
-import { slugify } from '../utils';
-import { loadEnv } from 'vite';
+import { type CollectionEntry, getCollection } from 'astro:content';
 import { getTagBackgroundColor } from '@src/utils/tagColors';
+import { loadEnv } from 'vite';
+import FormattedDate from '../components/FormattedDate.astro';
+import Prose from '../components/Prose.astro';
+import TableOfContent from '../components/widgets/TableOfContent.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { slugify } from '../utils';
 
 export const prerender = true;
 
@@ -109,7 +109,11 @@ const getTagClasses = (tag: string) => `
 						</script>
 						<is-land on:media='(prefers-reduced-motion: no-preference)'>
 							<snow-fall count='20'>
-								{coverImage && <Image class='rounded-3xl w-full m-0 lg:mb-2' src={coverImage} alt={title} loading='eager' />}
+								{
+									coverImage && !tags?.includes('Asides') && (
+										<Image class='rounded-3xl w-full m-0 lg:mb-2' src={coverImage} alt={title} loading='eager' />
+									)
+								}
 							</snow-fall>
 						</is-land>
 					</div>
