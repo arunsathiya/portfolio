@@ -5,6 +5,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 const ALLOWED_USER_AGENTS = [
   'wordpress.com; public-api.wordpress.com',
   'wordpress.com',
+  'wordpress',
   'jetpack',
   'wp-android',
   'wp-iphone',
