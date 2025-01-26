@@ -15,7 +15,7 @@ function isAllowedUserAgent(userAgent) {
 function cleanContent(content) {
   return content
     .replace(/^import.*astro';?\n?/gm, '')
-    .replace(/<R2Image.*?\/>/g, '')
+    .replace(/<R2Image\s+imageKey="([^"]+)"\s+alt="([^"]+)"\s*\/>/g, '<img src="https://www.arun.blog/$1" alt="$2"/>')
     .replace(/\[([^\]]+)\]\(([^)]+?)\)/g, '<a href="$2">$1</a>')
     .replace(/\n\n/g, '<br><br>')
     .trim();
