@@ -5,10 +5,11 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 const ALLOWED_USER_AGENTS = [
   'wordpress.com; public-api.wordpress.com',
   'wordpress.com',
-  'wordpress',
+  'WordPress.com Calypso',
   'jetpack',
   'wp-android',
   'wp-iphone',
+  'wp-desktop',
 ];
 
 function isAllowedUserAgent(userAgent) {
