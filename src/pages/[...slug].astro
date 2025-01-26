@@ -83,11 +83,11 @@ const getTagClasses = (tag: string) => `
 							}
 							<div>
 								{
-									updatedDate ? (
+									pubDate ? (
 										<>
-											Updated on{' '}
+											Published on{' '}
 											<strong>
-												<FormattedDate date={updatedDate} />
+												<FormattedDate date={pubDate} />
 											</strong>
 										</>
 									) : (
