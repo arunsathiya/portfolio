@@ -9,16 +9,30 @@
 @tailwind utilities;
 
 @layer components {
-  .list-view-prose {
-    @apply prose dark:prose-invert
-	prose-p:my-2
-	prose-img:my-4 prose-img:max-h-48 prose-img:w-auto
-	prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-	dark:prose-a:text-blue-400;
+  /* Blog post view prose styles */
+  .prose img {
+    @apply my-4;
   }
 
-  .prose :where(blockquote) {
-    font-style: normal;
+  .prose p:has(img) {
+    @apply my-0;
+  }
+
+  .prose img + img {
+    @apply mt-8;
+  }
+
+  .prose p + p:not(:has(img)) {
+    @apply mt-4;
+  }
+
+  /* Your existing list view styles */
+  .list-view-prose {
+    @apply prose dark:prose-invert
+    prose-p:my-2
+    prose-img:my-4 prose-img:max-h-48 prose-img:w-auto
+    prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+    dark:prose-a:text-blue-400;
   }
 }
 
