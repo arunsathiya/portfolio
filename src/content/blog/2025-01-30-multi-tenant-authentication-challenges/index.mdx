@@ -16,7 +16,7 @@ The challenge stems from a GitHub OAuth2 limitation: each OAuth app can only hav
 - Local development (localhost)
 - Vercel-generated deployment URLs
 
-Initially, I tried Cloudflare Access for protection, but discovered a limitation: Vercel automatically generates unique deployment URLs not just for feature branches (which I expected), but also for the main branch. While Vercel's built-in authentication can protect feature branch deployments, it doesn't cover these auto-generated production URLs.
+Initially, I tried [Cloudflare Access](https://www.cloudflare.com/zero-trust/products/access/) for protection, but discovered a limitation: [Vercel automatically generates unique deployment URLs](https://vercel.com/docs/deployments/preview-deployments) not just for feature branches (which I expected), but also for the main branch. While [Vercel's built-in authentication can protect feature branch deployments](https://vercel.com/docs/security/deployment-protection#deployment-protection-on-vercel), it doesn't cover these auto-generated production URLs.
 
 My first attempt at a solution was NextAuth. The implementation focused on matching different GitHub OAuth credentials based on the domain:
 
@@ -53,9 +53,9 @@ const getGitHubCredentials = () => {
 }
 ```
 
-However, I ran into issues with host detection reliability since NextAuth initializes providers before having access to the request context. This made the domain-based credential selection inconsistent.
+However, I ran into issues with host detection reliability since NextAuth initializes providers before having access to the request context. [This made the domain-based credential selection inconsistent](https://github.com/nextauthjs/next-auth/issues/600).
 
-That's when I moved to Clerk. While Clerk also has its limitations - it only supports one domain per application (production domain for production and localhost for development) - it provides a useful workaround through its `<Protect />` module. This component can protect access to elements without requiring login, essentially acting as a gatekeeper.
+That's when I moved to [Clerk](https://clerk.com/). While Clerk also has its limitations - it only supports one domain per application (production domain for production and localhost for development) - it provides a useful workaround through [its ](https://clerk.com/docs/components/protect)[`<Protect />`](https://clerk.com/docs/components/protect)[ component](https://clerk.com/docs/components/protect). This component can protect access to elements without requiring login, essentially acting as a gatekeeper.
 
 Here's what my current setup looks like:
 1. Production domain works with the production Clerk application
