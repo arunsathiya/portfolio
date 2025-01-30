@@ -8,6 +8,7 @@ updatedDate: 'Jan 30 2025'
 tags: ["Development","Security"]
 coverImage: "./image.webp"
 ---
+import R2Image from 'src/components/R2Image.astro';
 
 I recently ran into an interesting authentication challenge with my Vercel deployments. The core issue wasn't just about protecting the application - it was about managing GitHub OAuth authentication across multiple domains: my production domain, localhost for development, and those auto-generated Vercel deployment URLs.
 
@@ -57,10 +58,14 @@ However, I ran into issues with host detection reliability since NextAuth initia
 
 That's when I moved to [Clerk](https://clerk.com/). While Clerk also has its limitations - it only supports one domain per application (production domain for production and localhost for development) - it provides a useful workaround through [its ](https://clerk.com/docs/components/protect)[`<Protect />`](https://clerk.com/docs/components/protect)[ component](https://clerk.com/docs/components/protect). This component can protect access to elements without requiring login, essentially acting as a gatekeeper.
 
+<R2Image imageKey="assets/multi-tenant-authentication-challenges-18b1638e-cd98-80fb-8ab9-cee670a4fe09.png" alt="A screenshot of Clerk’s <Protect /> component that prevents access to parts of a frontend application based on roles." />
+
 Here's what my current setup looks like:
 1. Production domain works with the production Clerk application
 2. localhost works with the development Clerk application
 3. Vercel-generated deployment URLs are protected via Clerk's `<Protect />` module - not a perfect solution, but a workable one for now
+<R2Image imageKey="assets/multi-tenant-authentication-challenges-18b1638e-cd98-80a8-936c-c8f8bda288a2" alt="A screenshot of a frontend application on a Vercel deployment URL (which cannot be disabled) gated by Clerk login." />
+
 Is it ideal? Not quite. I'd prefer either of these:
 1. GitHub OAuth supporting multiple callback URLs per app (eliminating the need for multiple apps)
 2. Clerk supporting multiple domains per application
