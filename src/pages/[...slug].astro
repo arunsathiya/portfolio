@@ -107,15 +107,15 @@ const getTagClasses = (tag: string) => `
 							import('@zachleat/snow-fall');
 							import('@11ty/is-land/is-land.js');
 						</script>
-						<is-land on:media='(prefers-reduced-motion: no-preference)'>
-							<snow-fall count='20'>
-								{
-									coverImage && !tags?.includes('Asides') && (
+						{
+							coverImage && !tags?.includes('Asides') && (
+								<is-land on:media='(prefers-reduced-motion: no-preference)'>
+									<snow-fall count='20'>
 										<Image class='rounded-3xl w-full m-0 lg:mb-2' src={coverImage} alt={title} loading='eager' />
-									)
-								}
-							</snow-fall>
-						</is-land>
+									</snow-fall>
+								</is-land>
+							)
+						}
 					</div>
 					<Content />
 				</Prose>
