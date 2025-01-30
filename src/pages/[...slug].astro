@@ -111,7 +111,7 @@ const getTagClasses = (tag: string) => `
 							coverImage && !tags?.includes('Asides') && (
 								<is-land on:media='(prefers-reduced-motion: no-preference)'>
 									<snow-fall count='20'>
-										<Image class='rounded-3xl w-full m-0 lg:mb-2' src={coverImage} alt={title} loading='eager' />
+										<Image class='w-full m-0 lg:mb-2' src={coverImage} alt={title} loading='eager' />
 									</snow-fall>
 								</is-land>
 							)
