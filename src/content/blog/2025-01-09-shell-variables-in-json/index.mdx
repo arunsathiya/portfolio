@@ -1,12 +1,12 @@
 ---
-title: "Making Shell Variables Work in JSON"
-seoTitle: "Making Shell Variables Work in JSON"
-slug: "shell-variables-in-json"
-description: "Making shell variables work in JSON."
+title: 'Making Shell Variables Work in JSON'
+seoTitle: 'Making Shell Variables Work in JSON'
+slug: 'shell-variables-in-json'
+description: 'Making shell variables work in JSON.'
 pubDate: 'Jan 09 2025'
 updatedDate: 'Jan 11 2025'
-tags: ["DevOps","Automation","Content Management"]
-coverImage: "./image.webp"
+tags: ['DevOps', 'Automation', 'Content Management']
+coverImage: './image.webp'
 ---
 
 I ran into an interesting issue today while automating some GitHub repository tasks with shell scripts. The problem? Shell variables inside JSON payloads weren't expanding as expected. If you've ever tried something like `curl -d '{"message": "$MY_VAR"}'`, you've probably seen the literal `$MY_VAR` show up in your API calls instead of the actual value.

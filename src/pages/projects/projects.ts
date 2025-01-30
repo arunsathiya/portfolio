@@ -11,7 +11,8 @@ export interface Project {
 export const projects: Project[] = [
 	{
 		name: 'portfolio',
-		description: 'Astro based portfolio with blog served from Notion and Cloudflare R2, supported by Cloudflare Workers, Cloudflare Queues, Replicate and GitHub API.',
+		description:
+			'Astro based portfolio with blog served from Notion and Cloudflare R2, supported by Cloudflare Workers, Cloudflare Queues, Replicate and GitHub API.',
 		demoLink: 'https://github.com/arunsathiya/portfolio',
 		tags: ['Notion', 'GitHub', 'DevOps'],
 	},

@@ -5,16 +5,6 @@ interface Props {
 }
 
 const { imageKey, alt } = Astro.props;
-
-console.log('R2Image component rendering with props:', { imageKey, alt });
 ---
 
-<script>
-	import('@zachleat/snow-fall');
-	import('@11ty/is-land/is-land.js');
-</script>
-<is-land on:media='(prefers-reduced-motion: no-preference)'>
-	<snow-fall count='20'>
-		<img src={`https://www.arun.blog/${imageKey}`} alt={alt} />
-	</snow-fall>
-</is-land>
+<img src={`https://www.arun.blog/${imageKey}`} alt={alt} />

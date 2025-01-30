@@ -1,12 +1,12 @@
 ---
-title: "Whisper API for voice to text conversion"
-seoTitle: "Whisper API for voice to text conversion"
-slug: "whisper-api-implementations"
+title: 'Whisper API for voice to text conversion'
+seoTitle: 'Whisper API for voice to text conversion'
+slug: 'whisper-api-implementations'
 description: "This post details my streamlined method for using OpenAI's Whisper speech recognition model via the ChatGPT iOS app, seamlessly transferring the results to my MacBook. I explore the advantages of this approach over other implementations and share my efficient workflow using Apple's Universal Clipboard feature."
 pubDate: 'Mar 11 2024'
 updatedDate: 'Dec 26 2024'
-tags: ["Whisper","AI","APIs","Productivity","OSS"]
-coverImage: "./image.webp"
+tags: ['Whisper', 'AI', 'APIs', 'Productivity', 'OSS']
+coverImage: './image.webp'
 ---
 
 Most people know OpenAI for ChatGPT, but they've got some other amazing tools up their sleeve. [Whisper](https://openai.com/research/whisper), their advanced speech recognition model, has completely changed how I approach content creation.
@@ -16,10 +16,11 @@ I discovered Whisper about three months ago and immediately got hooked on the id
 The open-source community has been quick to jump on Whisper, creating various implementations. You can find everything from [CLI programs](https://github.com/Vaibhavs10/insanely-fast-whisper) to [third-party APIs](https://developers.cloudflare.com/workers-ai/models/whisper/) that handle caching and access control. I've tried quite a few of these, each with its own quirks and benefits.
 
 But after all my experimenting, I keep coming back to the version built into the ChatGPT iOS and Android apps. It's just the smoothest experience I've found so far. Here's why I love it:
+
 1. It corrects words automatically, saving me tons of editing time.
 2. It handles filler words like "hmm" and "um" really well, capturing the natural flow of speech.
 3. The punctuation is spot-on, which is a huge time-saver.
-I've settled on a workflow that I think is pretty slick. I use the ChatGPT iOS app for voice input, then leverage [Apple's Universal Clipboard feature](https://support.apple.com/en-us/102430). This means I can speak into my phone, copy the text, and it's instantly available on my Mac. No manual transferring needed!
+   I've settled on a workflow that I think is pretty slick. I use the ChatGPT iOS app for voice input, then leverage [Apple's Universal Clipboard feature](https://support.apple.com/en-us/102430). This means I can speak into my phone, copy the text, and it's instantly available on my Mac. No manual transferring needed!
 
 In the past, I played around with more complex setups. I tried sending the input to a [webhook](https://webhook.site/) using a [custom GPT](https://openai.com/blog/introducing-gpts), then manually copying the text. It worked, but it was clunky. This new setup with the ChatGPT app and Universal Clipboard is so much more elegant and efficient.
 

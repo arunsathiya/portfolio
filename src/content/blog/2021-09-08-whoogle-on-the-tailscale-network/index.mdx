@@ -1,13 +1,14 @@
 ---
-title: "Whoogle on the Tailscale network"
-seoTitle: "Whoogle on the Tailscale network"
-slug: "whoogle-on-the-tailscale-network"
-description: "I deployed an instance of Whoogle on my Tailscale network so that I can make ad-free and tracker-free Google search queries from my desktop and on the go."
+title: 'Whoogle on the Tailscale network'
+seoTitle: 'Whoogle on the Tailscale network'
+slug: 'whoogle-on-the-tailscale-network'
+description: 'I deployed an instance of Whoogle on my Tailscale network so that I can make ad-free and tracker-free Google search queries from my desktop and on the go.'
 pubDate: 'Sep 08 2021'
 updatedDate: 'Dec 24 2024'
-tags: ["OSS","Tools"]
-coverImage: "./image.webp"
+tags: ['OSS', 'Tools']
+coverImage: './image.webp'
 ---
+
 import R2Image from 'src/components/R2Image.astro';
 
 I am a happy DuckDuckGo user of many years. It matches all of my requirements: good results, ability to jump to the first result with a keyword (using "\"), bangs to search within particular websites and tracker-free search results.
@@ -23,11 +24,17 @@ docker run --publish 5000:5000 --detach --name whoogle-search benbusby/whoogle-s
 
 I ran into a hurdle involving a dependency's compatibility with my Raspberry Pi image, but [that was easily solvable](https://github.com/benbusby/whoogle-search/issues/420#issuecomment-914547346). Once all that of was done, the Whoogle instance was available at `0.0.0.0:5000` but it was neatly exposed on the Tailscale interface too, thus being available at my Tailscale node's IP address: `100.71.84.105:5000`. Thanks to Tailscale's [Magic DNS](https://tailscale.com/kb/1081/magicdns/), this instance becomes available at a readable address too: `http://mew:5000`. `mew` is the name of my Tailscale node. It's configurable on the Tailscale admin.
 
-<R2Image imageKey="assets/whoogle-on-the-tailscale-network-10d1638e-cd98-8063-b1a4-df5732895590.png" alt="An image showing a search query on my Whoogle instance." />
+<R2Image
+	imageKey='assets/whoogle-on-the-tailscale-network-10d1638e-cd98-8063-b1a4-df5732895590.png'
+	alt='An image showing a search query on my Whoogle instance.'
+/>
 
 Since all of my devices are connected to the Tailscale network, my Android can access it as well:
 
-<R2Image imageKey="assets/whoogle-on-the-tailscale-network-10d1638e-cd98-802e-8b03-e5fac44bee13.png" alt="An image showing a Whoogle search query on Android." />
+<R2Image
+	imageKey='assets/whoogle-on-the-tailscale-network-10d1638e-cd98-802e-8b03-e5fac44bee13.png'
+	alt='An image showing a Whoogle search query on Android.'
+/>
 
 It's nice overall. I am not bothered by the `http` queries as [the communication between my device and the Raspberry Pi is end-to-end encrypted](https://tailscale.com/kb/1093/can-tailscale-decrypt-my-traffic/), thanks to [Tailscale](https://www.arun.blog/tags/tailscale/).
 

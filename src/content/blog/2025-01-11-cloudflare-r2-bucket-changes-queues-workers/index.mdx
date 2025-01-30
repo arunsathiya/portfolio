@@ -1,12 +1,12 @@
 ---
-title: "Cloudflare R2 bucket changes to blog with Cloudflare Queues and Workers"
-seoTitle: "Cloudflare R2 bucket changes to blog with Cloudflare Queues and Workers"
-slug: "cloudflare-r2-bucket-changes-queues-workers"
-description: "Using Cloudflare Queues and Cloudflare Workers to update blog post cover image, instead of a GitHub Actions-based approach."
+title: 'Cloudflare R2 bucket changes to blog with Cloudflare Queues and Workers'
+seoTitle: 'Cloudflare R2 bucket changes to blog with Cloudflare Queues and Workers'
+slug: 'cloudflare-r2-bucket-changes-queues-workers'
+description: 'Using Cloudflare Queues and Cloudflare Workers to update blog post cover image, instead of a GitHub Actions-based approach.'
 pubDate: 'Jan 11 2025'
 updatedDate: 'Jan 11 2025'
-tags: ["DevOps"]
-coverImage: "./image.webp"
+tags: ['DevOps']
+coverImage: './image.webp'
 ---
 
 I've been using [GitHub Actions to handle my blog's cover images](https://github.com/arunsathiya/portfolio/actions/workflows/cover-image.yml) - whenever an image is uploaded to R2, a workflow copies it to the right blog post directory. While it works most of the time, it's been hit or miss. Sometimes the workflow fails silently, and other times it just feels slower than it should be.
@@ -18,11 +18,11 @@ async queue(batch: MessageBatch<R2EventMessage>, env: Env, ctx: ExecutionContext
   for (const message of batch.messages) {
     try {
       const event = message.body;
-      
+
       if (event.action === 'CopyObject' && event.object.key.startsWith('sandbox/')) {
         const r2Object = await env.PORTFOLIO_BUCKET.get(event.object.key);
         const imagePath = `src/content/blog/${dateSlugPart}/image.webp`;
-        
+
         // Commit to GitHub using GraphQL API
         await commitToGitHub(imagePath, r2Object, env);
         message.ack();
