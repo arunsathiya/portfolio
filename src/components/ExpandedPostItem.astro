@@ -20,15 +20,15 @@ const getTagClasses = (tag: string) => `
 ---
 
 <div class='flex flex-col border-b py-2 mb-1 dark:border-b-zinc-700'>
-	<div class='grid sm:grid-cols-[6.5rem_1fr] gap-2 capitalize'>
-		<div class='text-zinc-700 text-base dark:text-zinc-300'>
+	<div class='grid sm:grid-cols-[6.5rem_1fr] gap-2'>
+		<div class='text-zinc-700 text-base dark:text-zinc-300 leading-normal'>
 			<a href={`/${post.slug}/`}><FormattedDate date={post.data.pubDate} /></a>
 		</div>
 
 		{
 			!hasAsidesTag ? (
-				<div class='flex flex-wrap gap-2 items-baseline'>
-					<h3 class='text-lg font-normal normal-case grow'>
+				<div class='flex flex-wrap gap-2 items-baseline -mt-0.5'>
+					<h3 class='text-lg font-normal normal-case grow leading-normal'>
 						<a href={`/${post.slug}/`}>{post.data.title}</a>
 					</h3>
 					<div class='flex gap-2 shrink-0'>
@@ -40,7 +40,7 @@ const getTagClasses = (tag: string) => `
 					</div>
 				</div>
 			) : (
-				<div class='list-view-prose'>
+				<div class='list-view-prose -mt-0.5 leading-normal'>
 					<Content />
 				</div>
 			)
