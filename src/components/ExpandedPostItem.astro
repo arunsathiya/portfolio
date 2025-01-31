@@ -21,7 +21,7 @@ ${getTagBackgroundColor(tag).includes('dark:bg-') ? 'text-zinc-800 dark:text-zin
 	<div class='flex flex-wrap sm:flex-row gap-2 sm:items-start capitalize'>
 		<div class='flex flex-wrap items-center gap-2 sm:w-[6.5rem] shrink-0'>
 			<div class='text-zinc-700 text-base dark:text-zinc-300'>
-				<FormattedDate date={post.data.pubDate} />
+				<a href={`/${post.slug}/`}><FormattedDate date={post.data.pubDate} /></a>
 			</div>
 		</div>
 		{
