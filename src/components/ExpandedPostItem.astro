@@ -3,53 +3,48 @@ import { getTagBackgroundColor } from '@src/utils/tagColors';
 import type { CollectionEntry } from 'astro:content';
 import { slugify } from '../utils';
 import FormattedDate from './FormattedDate.astro';
-
 type BlogPost = CollectionEntry<'blog'>;
 const { post }: Record<string, any> | { post: BlogPost } = Astro.props;
-
-const showContent = post.data.tags?.includes('Asides');
-const { Content } = showContent ? await post.render() : { Content: null };
-
+const hasAsidesTag = post.data.tags?.includes('Asides');
+const { Content } = hasAsidesTag ? await post.render() : { Content: null };
 const getTagClasses = (tag: string) => `
-  rounded-2xl
-  text-sm no-underline px-2 py-0.5
-  transition-all duration-700
-  hover:opacity-80
-  ${getTagBackgroundColor(tag)}
-  ${getTagBackgroundColor(tag).includes('dark:bg-') ? 'text-zinc-800 dark:text-zinc-200' : 'text-zinc-700 dark:text-zinc-300'}
+ rounded-2xl
+ text-sm no-underline px-2 py-0.5
+ transition-all duration-700
+ hover:opacity-80
+${getTagBackgroundColor(tag)}
+${getTagBackgroundColor(tag).includes('dark:bg-') ? 'text-zinc-800 dark:text-zinc-200' : 'text-zinc-700 dark:text-zinc-300'}
 `;
 ---
 
-<div class='flex flex-col gap-2 border-b py-2 mb-1 dark:border-b-zinc-700'>
-	<div class='flex flex-wrap sm:flex-row gap-2 sm:items-center capitalize'>
+<div class='flex flex-col border-b py-2 mb-1 dark:border-b-zinc-700'>
+	<div class='flex flex-wrap sm:flex-row gap-2 sm:items-start capitalize'>
 		<div class='flex flex-wrap items-center gap-2 sm:w-[6.5rem] shrink-0'>
 			<div class='text-zinc-700 text-base dark:text-zinc-300'>
 				<FormattedDate date={post.data.pubDate} />
 			</div>
 		</div>
-		<h3 class='text-lg font-normal normal-case grow'>
-			<a href={`/${post.slug}/`}>
-				{post.data.title}
-			</a>
-		</h3>
-		<div class='flex gap-2 shrink-0'>
-			{
-				(post.data.tags || [])?.map((tag: string) => (
-					<a class={getTagClasses(tag)} href={`/tags/${slugify(tag)}`}>
-						{tag}
-					</a>
-				))
-			}
-		</div>
-	</div>
-
-	{
-		showContent && (
-			<div class='mt-1 ml-0 lg:ml-28 max-w-3xl'>
-				<div class={`list-view-prose`}>
-					<Content />
+		{
+			!hasAsidesTag ? (
+				<>
+					<h3 class='text-lg font-normal normal-case grow'>
+						<a href={`/${post.slug}/`}>{post.data.title}</a>
+					</h3>
+					<div class='flex gap-2 shrink-0'>
+						{(post.data.tags || [])?.map((tag: string) => (
+							<a class={getTagClasses(tag)} href={`/tags/${slugify(tag)}`}>
+								{tag}
+							</a>
+						))}
+					</div>
+				</>
+			) : (
+				<div class='grow'>
+					<div class={`list-view-prose`}>
+						<Content />
+					</div>
 				</div>
-			</div>
-		)
-	}
+			)
+		}
+	</div>
 </div>
