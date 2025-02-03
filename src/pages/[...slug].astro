@@ -65,41 +65,43 @@ const getTagClasses = (tag: string) => `
 		<main class='overflow-hidden grow lg:max-w-[65%]'>
 			<article>
 				<Prose>
-					{
-						!tags?.includes('Asides') && (
-							<div>
-								{!tags?.includes('Asides') && <h1 class='!my-1 leading-tight'>{title}</h1>}
-								<div class='text-sm font-[500] mt-2 sm:mt-0 py-1 md:text-right flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center'>
-									{
-										<div class='flex gap-2'>
-											{(tags || [])?.map((tag: string) => (
-												<a class={getTagClasses(tag)} href={`/tags/${slugify(tag)}`}>
-													{tag}
-												</a>
-											))}
-										</div>
-									}
-									<div>
-										{pubDate ? (
-											<>
-												Published on{' '}
-												<strong>
-													<FormattedDate date={pubDate} />
-												</strong>
-											</>
-										) : (
-											<>
-												Published on{' '}
-												<strong>
-													<FormattedDate date={pubDate} />
-												</strong>
-											</>
-										)}
+					<div>
+						{!tags?.includes('Asides') && <h1 class='!my-1 leading-tight'>{title}</h1>}
+						<div
+							class='text-sm font-[500] mt-2 sm:mt-0 py-1 md:text-right flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center'
+						>
+							{
+								(
+									<div class='flex gap-2'>
+										{(tags || [])?.map((tag: string) => (
+											<a class={getTagClasses(tag)} href={`/tags/${slugify(tag)}`}>
+												{tag}
+											</a>
+										))}
 									</div>
-								</div>
+								)
+							}
+							<div>
+								{
+									pubDate ? (
+										<>
+											Published on{' '}
+											<strong>
+												<FormattedDate date={pubDate} />
+											</strong>
+										</>
+									) : (
+										<>
+											Published on{' '}
+											<strong>
+												<FormattedDate date={pubDate} />
+											</strong>
+										</>
+									)
+								}
 							</div>
-						)
-					}
+						</div>
+					</div>
 					<div class='py-3 overflow-hidden'>
 						<script>
 							import('@zachleat/snow-fall');
