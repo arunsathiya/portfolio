@@ -4,7 +4,7 @@ seoTitle: 'Growing my home lab - Tailscale TLS certificates for each Docker with
 slug: 'tailscale-tls-certificates-for-my-home-lab'
 description: 'I am starting to grow my home lab with Raspberry Pi, Docker, Caddy and Tailscale. Right now, I have Whoogle, libreddit, pihole and Caddy running on my nodes.'
 pubDate: 'Sep 27 2021'
-updatedDate: 'Feb 02 2025'
+updatedDate: 'Feb 03 2025'
 tags: ["Tools","DevOps"]
 coverImage: './image.webp'
 ---
@@ -22,7 +22,7 @@ Tailscale is a mesh VPN software that makes it incredibly easy to connect your d
 Thanks to Docker, [I have been running a Whoogle instance](https://www.arun.blog/whoogle-on-the-tailscale-network/) and [a libreddit instance](https://www.arun.blog/libreddit-on-tailscale/) for a while. Each on a different port, while Tailscale and pihole are installed on the Raspberry Pi directly. It has worked well so far, but one thing that bugged me is the lack of HTTPS support.
 
 
-That changed a while ago because Tailscale TLS certificates are now available for each node address: [Provision TLS certificates for your internal Tailscale services](https://tailscale.com/blog/tls-certs/). Obtaining the certificate and its key was very easy. Setting up my services ([pihole](https://www.arun.blog/post/pi-hole-on-tailscale/), libreddit and Whoogle) to use the TLS certificate was a different challenge though.
+That changed a while ago because Tailscale TLS certificates are now available for each node address: [Provision TLS certificates for your internal Tailscale services](https://tailscale.com/blog/tls-certs/). Obtaining the certificate and its key was very easy. Setting up my services ([pihole](https://www.arun.blog/pi-hole-on-tailscale/), libreddit and Whoogle) to use the TLS certificate was a different challenge though.
 
 
 ## Caddy to the rescue
