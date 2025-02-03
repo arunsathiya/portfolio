@@ -5,40 +5,57 @@ slug: 'my-dns-setup'
 description: 'Here’s how my DNS is configured across all of my personal devices and the home router.'
 pubDate: 'May 02 2020'
 updatedDate: 'Dec 24 2024'
-tags: ['Networking']
+tags: ["Networking"]
 coverImage: './image.webp'
 ---
 
 I have been obsessed (in a good way!) with DNS lately. Mostly around pihole and NextDNS.
 
+
 [Pi-hole](https://pi-hole.net/) is a [free, open-source software](https://pi-hole.net/donate/) that enables you to block or monitor DNS queries. It [supports a variety of operating systems and is straightforward to setup](https://github.com/pi-hole/pi-hole/#one-step-automated-install). The [community on reddit](https://www.reddit.com/r/pihole/) is helpful as well. It's meant to be used on a private network, like your home WiFi. You could optionally pair it with a VPN, so that you have access to this pi-hole on the go. That means, you can block ads/DNS queries while on your tablet or smartphone as well.
+
 
 I used it briefly, but I recently switched to NextDNS, because I want a public/online DNS resolver (as opposed to a local DNS resolver, which is Pi-hole) that can work with a commercial VPN like NordVPN or Cloudflare Warp. NextDNS is nothing but Pi-hole on the cloud. It's [in beta and free at the moment](https://my.nextdns.io/).
 
+
 I wanted to write about my DNS setup across devices, here goes.
+
 
 ## On Android
 
+
 I use NextDNS' DOT (DNS-over-TLS) setup. This is easy because of [the "Private DNS](https://www.androidpolice.com/2020/03/26/make-android-use-dns-server-choice/)"[ feature on Android 9 and above](https://www.androidpolice.com/2020/03/26/make-android-use-dns-server-choice/). This also works well when I turn on NordVPN or Cloudflare Warp. I suspected that their own DNS servers would take precedence, but it doesn't seem to be the case. That's nice!
+
 
 ## On Mac
 
+
 I use [NextDNS' CLI app](https://github.com/nextdns/nextdns). This runs a NextDNS daemon locally and all DNS queries are encrypted.
+
 
 ## On Windows
 
+
 I don’t see a CLI app for it, so, I use the official NextDNS Windows app. It seems to be work pretty well with [wgcf for Cloudflare Warp](https://github.com/ViRb3/wgcf). Because Cloudflare Warp is based on Wireguard protocol, so, is easy to use with the Wireguard Windows client. The wgcf app that I have linked to, can help generate a config file. NextDNS and Wireguard seem to be work well!
+
 
 One point to note would be, remove all DNS resolvers that you have entered on your Wireguard config file. When you do that and save the changes, you will also see an option kill-internet switch.
 
+
 Wireguard Windows client does not seem to fallback to the system-level or router-level DNS resolver when no DNS resolvers are listed on the Wireguard config file. Without unchecking it, all DNS queries/internet just stop working.
+
 
 ## On iOS
 
+
 I couldn't get NextDNS to play well with NordVPN, Cloudflare Warp so far. This is mostly due to how iOS defines VPN settings - there are two kinds, "VPN configuration" and "personal VPN". I haven't got the hang of either so far; as and when I do, I shall publish a new blog post.
+
 
 ## On router
 
+
 I have setup NextDNS on invidual operating systems, but as a fallback, I have it setup on my router as well. This must also benefit all my guests when they connect to my home network. As I use pihole (running on a Raspberry Pi) as my DHCP server, I could enter any DNS resolver on its settings. I used NextDNS' stubby configuration and it works like a charm.
 
+
 I found [this blog post to be helpful in setting up stubby on pihole](https://blog.plip.com/2018/10/12/easy-pi-hole-and-stubby-on-orange-pi-zero-raspberry-pi-3/).
+

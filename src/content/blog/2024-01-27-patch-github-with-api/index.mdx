@@ -5,13 +5,15 @@ slug: 'patch-github-with-api'
 description: 'Using GitHub API to commit patches and generate pull requests.'
 pubDate: 'Jan 27 2024'
 updatedDate: 'Jan 11 2025'
-tags: ['DevOps', 'Automation', 'APIs']
+tags: ["DevOps","Automation","APIs"]
 coverImage: './image.webp'
 ---
 
 I recently came across [GitHub's changelog about the ](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/)[`set-output`](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/)[ command being deprecated](https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/). When I found [over 220,000 workflow files still using this deprecated syntax](https://github.com/search?q=set-output%20language%3AYAML%20path%3A%2F%5E.github%5C%2Fworkflows%5C%2F%2F&type=code), I knew I needed an automated solution.
 
+
 ## Architecture
+
 
 The solution combines multiple GitHub APIs:
 
@@ -21,7 +23,9 @@ The solution combines multiple GitHub APIs:
 
 ### GraphQL Query Structure
 
+
 First, I needed to fetch specific workflow files. Here's the GraphQL query structure:
+
 
 ```go
 type FileContentQuery struct {
@@ -33,6 +37,7 @@ type FileContentQuery struct {
         } `graphql:"object(expression: $expression)"`
     } `graphql:"repository(name: $name, owner: $owner)"`
 }
+
 func fetchFileContent(client *githubv4.Client, owner, name, expression string) (string, error) {
     var query FileContentQuery
     variables := map[string]interface{}{
@@ -43,11 +48,15 @@ func fetchFileContent(client *githubv4.Client, owner, name, expression string) (
     err := client.Query(context.Background(), &query, variables)
     return string(query.Repository.Object.Blob.Text), err
 }
+
 ```
+
 
 ### Creating Commits via GraphQL Mutation
 
+
 The interesting part is using GraphQL mutations to create commits. Here's how I structured it:
+
 
 ```go
 graphqlApplier := patch2pr.NewGraphQLApplier(
@@ -58,6 +67,7 @@ graphqlApplier := patch2pr.NewGraphQLApplier(
     },
     oid,
 )
+
 // Create commit using the mutation
 sha, err := graphqlApplier.Commit(
     context.Background(),
@@ -73,9 +83,12 @@ sha, err := graphqlApplier.Commit(
 )
 ```
 
+
 ### REST API for Pull Request Creation
 
+
 After creating commits, I use GitHub's REST API to create pull requests:
+
 
 ```go
 prRequest := &github.NewPullRequest{
@@ -86,17 +99,21 @@ prRequest := &github.NewPullRequest{
     Base:               &base,
     Head:               &head,
 }
+
 pr, _, err = clientv3.PullRequests.Create(
-    context.Background(),
-    repoOwner,
-    repoName,
+    context.Background(), 
+    repoOwner, 
+    repoName, 
     prRequest,
 )
 ```
 
+
 ### Concurrency Management
 
+
 To handle multiple repositories efficiently, I implemented concurrent processing with proper error handling:
+
 
 ```go
 errChan := make(chan error, len(scannedLines))
@@ -107,7 +124,8 @@ for _, scannedLine := range scannedLines {
         parts := strings.Split(line, "/")
         repoOwner := parts[0]
         repoName := parts[1]
-        fork, _, err := client.Repositories.CreateFork(context.Background(),
+
+        fork, _, err := client.Repositories.CreateFork(context.Background(), 
             repoOwner, repoName, nil)
         if err != nil {
             errChan <- err
@@ -118,15 +136,21 @@ for _, scannedLine := range scannedLines {
 }
 ```
 
+
 ## Current Limitations
+
 
 I hit a few technical roadblocks:
 
 1. [Fine-grained tokens lack access to public-but-unowned data](https://github.com/orgs/community/discussions/36441#discussioncomment-7635050)
 2. GitHub's rate limiting affects mass operations
 3. Need for proper authentication without full [GitHub App installation](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation)
-   I'm working on [implementing a bot token solution](https://github.com/arunsathiya/set-output-janitor/issues/17), similar to how [Dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/configuring-dependabot-security-updates) handles authentication, but the current token limitations are blocking progress.
+
+I'm working on [implementing a bot token solution](https://github.com/arunsathiya/set-output-janitor/issues/17), similar to how [Dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/configuring-dependabot-security-updates) handles authentication, but the current token limitations are blocking progress.
+
 
 This approach shows how GitHub's APIs can be combined for efficient repository maintenance, though it also highlights some areas where the platform could potentially offer native support for such mass updates.
 
+
 The complete implementation is available in the [`set-output-janitor`](https://github.com/arunsathiya/set-output-janitor) repository.
+

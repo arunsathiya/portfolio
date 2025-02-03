@@ -4,25 +4,27 @@ seoTitle: 'Cloudflare R2 bucket changes to blog with Cloudflare Queues and Worke
 slug: 'cloudflare-r2-bucket-changes-queues-workers'
 description: 'Using Cloudflare Queues and Cloudflare Workers to update blog post cover image, instead of a GitHub Actions-based approach.'
 pubDate: 'Jan 11 2025'
-updatedDate: 'Jan 11 2025'
-tags: ['DevOps']
+updatedDate: 'Feb 03 2025'
+tags: ["DevOps"]
 coverImage: './image.webp'
 ---
 
 I've been using [GitHub Actions to handle my blog's cover images](https://github.com/arunsathiya/portfolio/actions/workflows/cover-image.yml) - whenever an image is uploaded to R2, a workflow copies it to the right blog post directory. While it works most of the time, it's been hit or miss. Sometimes the workflow fails silently, and other times it just feels slower than it should be.
 
+
 Today I switched to using [Cloudflare Queues](https://developers.cloudflare.com/queues/) instead, and I'm quite impressed with how much simpler and more reliable it is. The idea is straightforward - R2 events trigger queue messages, and a [Worker](https://developers.cloudflare.com/workers/) processes these messages to handle the images. Here's what my queue handler looks like:
+
 
 ```typescript
 async queue(batch: MessageBatch<R2EventMessage>, env: Env, ctx: ExecutionContext): Promise<void> {
   for (const message of batch.messages) {
     try {
       const event = message.body;
-
+      
       if (event.action === 'CopyObject' && event.object.key.startsWith('sandbox/')) {
         const r2Object = await env.PORTFOLIO_BUCKET.get(event.object.key);
         const imagePath = `src/content/blog/${dateSlugPart}/image.webp`;
-
+        
         // Commit to GitHub using GraphQL API
         await commitToGitHub(imagePath, r2Object, env);
         message.ack();
@@ -36,10 +38,15 @@ async queue(batch: MessageBatch<R2EventMessage>, env: Env, ctx: ExecutionContext
 }
 ```
 
+
 What I love about this approach is that I don't have to worry about retries or error handling anymore. If something fails, the queue automatically retries with exponential backoff. No more checking GitHub Actions logs or manually re-running workflows.
+
 
 Playing with queues has got me thinking about my private media pipeline project I wrote about earlier. Creating HLS segments for video streaming from a video file uploaded to a R2 bucket, Cloudflare Queues along with Cloudflare Workers would be perfect for that. When someone uploads a video, I could spawn multiple queue messages to handle segment creation in parallel.
 
+
 I'm quite excited about this shift to queues. Not just for my blog's image processing, but for all sorts of media handling tasks. The combination of Workers for processing, R2 for storage, and Queues for coordination feels like the right way to build these systems. No more waiting for GitHub Actions to complete or dealing with flaky workflows.
 
+
 Related: Check out my [previous post about building a private media pipeline](https://www.arun.blog/private-media-pipeline-cloudflare-and-hls) to see where I'm headed with this.
+
