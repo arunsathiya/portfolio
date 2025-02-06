@@ -1,0 +1,122 @@
+---
+title: 'Hydroxide as a headless bridge for ProtonMail on Tailscale'
+seoTitle: 'Hydroxide as a headless bridge for ProtonMail on Tailscale'
+slug: 'hydroxide-headless-bridge-for-protonmail-on-tailscale'
+description: 'Hydroxide as a headless bridge for ProtonMail on Tailscale.'
+pubDate: 'Jul 29 2021'
+updatedDate: 'Feb 06 2025'
+tags: ["DevOps","Tools","Networking"]
+coverImage: './image.webp'
+---
+import R2Image from 'src/components/R2Image.astro';
+
+I had fun setting up Hydroxide on the Tailscale network so that I can access my ProtonMail inbox from any IMAP client. If you are not familiar with ProtonMail, it's an encrypted email provider. Given the nature of this product, they do not offer IMAP access as other standard email providers do. Rather, they require a paid account and a connector by the name ProtonMail Bridge for desktop IMAP clients to work.
+
+
+That works great for most users, but what about IMAP clients on mobile devices? Access on the mobile devices is limited to the official ProtonMail app. As a ProtonMail customer of over 3 years, I haven't seen any significant improvements in the mobile front. They did promise an update to the ProtonMail Android app, seemingly with support for threaded conversations, but that was a long time ago.
+
+
+https://twitter.com/ProtonMail/status/1233026497604091904
+
+
+My favorite IMAP clients on Android are [Nine Mail](https://www.9folders.com/en/index.html) and [K-9 Mail](https://k9mail.app/) at the moment. I have been using K-9 Mail only since a week, and my experience so far has indicated that the two are not any different. Nine Mail has a free trial, but [the latter is free forever and is donation-supported](https://liberapay.com/k9mail/).
+
+
+## Tailscale to the rescue
+
+
+Since I previously [set up pi-hole on the Tailscale network](https://blogarunsathiya.wordpress.com/2021/03/30/pi-hole-on-tailscale/), I started exploring the idea of using [ProtonMail](https://blogarunsathiya.wordpress.com/tag/protonmail/) on the [Tailscale](https://blogarunsathiya.wordpress.com/tag/tailscale/) network.
+
+
+While ProtonMail Bridge is open source, it's limited to Windows, Mac and Linux at the moment. That's a GUI version. ProtonMail Bridge is not available in a headless format, but it appears to be planned.
+
+
+<R2Image imageKey="assets/hydroxide-headless-bridge-for-protonmail-on-tailscale-1921638e-cd98-8071-a14b-f07941051964.png" alt="208b8-proton-staff-comment-about-a-headless-bridge.png" />
+
+
+[Proton staff comment about a headless bridge](https://github.com/ProtonMail/proton-bridge/issues/66#issuecomment-671753499)
+
+
+I wanted the headless version to run on my Raspberry Pi so that it's accessible from any Tailscale-authenticated node.
+
+
+In exploring for third-party Bridges, I found [Hydroxide](https://github.com/emersion/hydroxide) which seems open source and popular among users. It also seems to support any ProtonMail account, while the official ProtonMail Bridge is only for paid users.
+
+
+## Setting up the bridge
+
+
+Setting up Hydroxide is rather simple, but I ran into some challenges along the way.
+
+
+For starters, [it appears Proton recently modified their authentication API endpoint](https://github.com/emersion/hydroxide/issues/179) that prevented generating the Bridge password on Hydroxide. Some users found workarounds, but updating to the old endpoint didn't quite work for me.
+
+
+<R2Image imageKey="assets/hydroxide-headless-bridge-for-protonmail-on-tailscale-1921638e-cd98-8024-ba65-e3293f0af834.png" alt="d7a2b-tomoqvs-github-comment-about-updating-the-protonmail-authentication-endpoint.png" />
+
+
+[tomoqv's GitHub comment about updating the ProtonMail authentication endpoint](https://github.com/emersion/hydroxide/issues/181#issuecomment-884180824)
+
+
+I found another workaround that involves using a SessionID from a web-authenticated ProtonMail session, and that worked for me.
+
+
+<R2Image imageKey="assets/hydroxide-headless-bridge-for-protonmail-on-tailscale-1921638e-cd98-80c3-942c-d3645032408c.png" alt="a12cc-dvalters-github-comment-about-using-a-sessionid-cookie-for-protonmail-bridge-authentication.png" />
+
+
+[dvalter's GitHub comment about using a SessionID cookie for ProtonMail bridge authentication](https://github.com/emersion/hydroxide/issues/179#issuecomment-855228269)
+
+
+<R2Image imageKey="assets/hydroxide-headless-bridge-for-protonmail-on-tailscale-1921638e-cd98-8039-a88b-ee3d5bf83754.png" alt="23747-dvalters-github-comment-about-using-session-id-as-an-authentication-parameter-for-hydroxide.png" />
+
+
+[dvalter's GitHub comment about using Session ID as an authentication parameter for Hydroxide](https://github.com/emersion/hydroxide/issues/179#issuecomment-855283386)
+
+
+Secondly, I had to get Hydroxide listening on the Tailscale network instead of 127.0.0.1, which would be a local address. [There are flags that allow configuring a different network interface](https://github.com/emersion/hydroxide/commit/a46986a871f3942d5eb8a646f814d344477b48ef), but entering my Raspberry Pi Tailscale node address didn't quite work. So, I ended up updating the default network interface within the Hydroxide code. [The lines below had to be replaced with my Raspberry Pi node address.](https://github.com/emersion/hydroxide/blob/master/cmd/hydroxide/main.go#L187-L197)
+
+
+<R2Image imageKey="assets/hydroxide-headless-bridge-for-protonmail-on-tailscale-1921638e-cd98-80e1-87fe-e873131c5aac.png" alt="44182-image-1.png" />
+
+
+Replacing the local host and ports with Tailscale node address
+
+
+With this done, all that I had to do was enter my Raspberry Pi Tailscale node address as the IMAP and SMTP server on my mobile IMAP clients. The [official ProtonMail Bridge documentation recommends adding a SSL exception](https://protonmail.com/bridge/install) for desktop clients. I couldn't quite figure out how to configure a similar exception on the mobile clients. Also because both devices (my mobile device and Raspberry Pi running Hydroxide) are within the same Tailscale network, I chose to authenticate without SSL. That means my Bridge password being visible somewhere along the communication between the device and Raspberry Pi, but that's alright as it's a private network.
+
+
+## Preventing Hydroxide bridge access for others on my Tailnet
+
+
+Since my friends and family use my Tailscale network (I share my pi-hole ad blocker with them) as well, I configured access control rules (Tailscale ACLs) on the Tailscale web admin.
+
+
+<R2Image imageKey="assets/hydroxide-headless-bridge-for-protonmail-on-tailscale-1921638e-cd98-8052-a890-e1d4e3296bb7.png" alt="c21b0-tailscale-acls-to-block-hydroxide-access-for-others.png" />
+
+
+An image from my Tailscale admin that shows access control rules for my Hydroxide ports
+
+
+This setup is safe in my understanding, as Hydroxide runs on a hardware that I control. And, it is available only within my Tailscale network. To authentication on this Tailscale network, one requires my approval. I use a GitHub organization as a multi-user tailnet. Even if someone manages to get in, ACLs must prevent them from accessing the Hydroxide IMAP and SMTP ports.
+
+
+I am not a network engineer but enjoy hacking on things by self. Don't treat this guide as a bulletproof workflow if you value secure, encrypted communication.
+
+
+[Whoogle on Tailscale](https://blogarunsathiya.wordpress.com/2021/09/08/whoogle-on-the-tailscale-network/)
+
+
+Access ad-free, tracker-free Google search results.
+
+
+[libreddit on Tailscale](https://blogarunsathiya.wordpress.com/2021/09/08/libreddit-on-tailscale/)
+
+
+Self-host a private, ad and tracker-free reddit frontend UI with libreddit.
+
+
+[Pi-hole on Tailscale](https://blogarunsathiya.wordpress.com/2021/03/30/pi-hole-on-tailscale/)
+
+
+Install pi-hole on Tailscale, to get ad-blocker functionality on all devices
+
