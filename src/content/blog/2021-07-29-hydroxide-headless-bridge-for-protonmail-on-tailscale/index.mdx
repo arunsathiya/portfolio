@@ -76,7 +76,7 @@ I found another workaround that involves using a SessionID from a web-authentica
 Secondly, I had to get Hydroxide listening on the Tailscale network instead of 127.0.0.1, which would be a local address. [There are flags that allow configuring a different network interface](https://github.com/emersion/hydroxide/commit/a46986a871f3942d5eb8a646f814d344477b48ef), but entering my Raspberry Pi Tailscale node address didn't quite work. So, I ended up updating the default network interface within the Hydroxide code. [The lines below had to be replaced with my Raspberry Pi node address.](https://github.com/emersion/hydroxide/blob/master/cmd/hydroxide/main.go#L187-L197)
 
 
-<R2Image imageKey="assets/hydroxide-headless-bridge-for-protonmail-on-tailscale-1921638e-cd98-80e1-87fe-e873131c5aac.png" alt="" />
+<R2Image imageKey="assets/hydroxide-headless-bridge-for-protonmail-on-tailscale-1921638e-cd98-80e1-87fe-e873131c5aac.png" alt="44182-image-1.png" />
 
 
 Replacing the local host and ports with Tailscale node address
@@ -91,7 +91,7 @@ With this done, all that I had to do was enter my Raspberry Pi Tailscale node ad
 Since my friends and family use my Tailscale network (I share my pi-hole ad blocker with them) as well, I configured access control rules (Tailscale ACLs) on the Tailscale web admin.
 
 
-<R2Image imageKey="assets/hydroxide-headless-bridge-for-protonmail-on-tailscale-1921638e-cd98-8052-a890-e1d4e3296bb7.png" alt="c21b0-tailscale-acls-to-block-hydroxide-access-for-others.png" />
+<R2Image imageKey="assets/hydroxide-headless-bridge-for-protonmail-on-tailscale-1921638e-cd98-8052-a890-e1d4e3296bb7.png" alt="" />
 
 
 An image from my Tailscale admin that shows access control rules for my Hydroxide ports
