@@ -42,7 +42,7 @@ const findClosestSlug = (requestedSlug: string, currentSlugs: string[]): string 
 ```
 
 
-While this worked, it led to a bigger challenge: my domain uses a combination of Cloudflare Workers (for specific paths) and Vercel (for everything else). Workers need predefined route patterns, which means I’ll need to handle route handling at fetch time:
+While this worked, it led to a bigger challenge: my domain uses a combination of [Cloudflare Workers (for specific paths)](https://github.com/arunsathiya/portfolio-workers/blob/db4c73c0bd84ca1fd5770b1ccaa48ae1503f5f18/wrangler.toml#L6-L23) and [Vercel (for everything else)](https://github.com/arunsathiya/portfolio). Workers need predefined route patterns, which means I’ll need to handle route handling at fetch time:
 
 
 ```typescript
