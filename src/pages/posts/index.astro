@@ -1,21 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import PostsByYear from '../../components/PostsByYear.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-export const prerender = false;
-
-if (!Astro.response.headers) {
-	Astro.response.headers = new Headers();
-}
-
-return new Response(null, {
-	status: 301,
-	headers: {
-		'Location': '/posts/1'
-	}
-});
+export const prerender = true;
 
 type BlogPost = CollectionEntry<'blog'>;
 const title = 'Posts';
@@ -29,27 +18,10 @@ const allPosts = (await getCollection('blog')).sort(
 	(a: BlogPost, b: BlogPost) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-// Calculate total pages
+// Get first page of posts
+const posts = allPosts.slice(0, POSTS_PER_PAGE);
 const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
-
-// Get current page from params or default to 1
-const currentPage = Number(Astro.params.page) || 1;
-
-// Validate current page
-if (currentPage < 1 || currentPage > totalPages) {
-	return Astro.redirect('/posts/1');
-}
-
-// Calculate start and end indices for current page
-const start = (currentPage - 1) * POSTS_PER_PAGE;
-const end = start + POSTS_PER_PAGE;
-const posts = allPosts.slice(start, end);
-
-export async function getStaticPaths() {
-	return Array.from({ length: totalPages }, (_, i) => ({
-		params: { page: (i + 1).toString() },
-	}));
-}
+const currentPage = 1;
 ---
 
 <BaseLayout title={title} description={description}>
@@ -63,20 +35,12 @@ export async function getStaticPaths() {
 		<!-- Pagination -->
 		{totalPages > 1 && (
 			<div class="flex items-center gap-4 mt-8 mb-4">
-				{currentPage > 1 && (
-					<a 
-						href={`/posts/${currentPage - 1}`}
-						class="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
-					>
-						Previous
-					</a>
-				)}
 				<span class="text-zinc-700 dark:text-zinc-300">
 					Page {currentPage} of {totalPages}
 				</span>
 				{currentPage < totalPages && (
 					<a 
-						href={`/posts/${currentPage + 1}`}
+						href={`/posts/2`}
 						class="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
 					>
 						Next
