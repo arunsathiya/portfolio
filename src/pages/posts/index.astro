@@ -6,8 +6,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export const prerender = false;
 
-Astro.response.status = 301;
-Astro.response.headers.set('Location', '/posts/1');
+if (!Astro.response.headers) {
+	Astro.response.headers = new Headers();
+}
+
+return new Response(null, {
+	status: 301,
+	headers: {
+		'Location': '/posts/1'
+	}
+});
 
 type BlogPost = CollectionEntry<'blog'>;
 const title = 'Posts';
