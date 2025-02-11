@@ -1,14 +1,13 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import PostsByYear from '../../components/PostsByYear.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-// Redirect root /posts to /posts/1
-return Astro.redirect('/posts/1');
-
-// Tell Astro this is not a static page
 export const prerender = false;
+
+Astro.response.status = 301;
+Astro.response.headers.set('Location', '/posts/1');
 
 type BlogPost = CollectionEntry<'blog'>;
 const title = 'Posts';
