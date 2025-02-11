@@ -6,16 +6,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title={'404 Page Not Found - ' + SITE_TITLE} description={SITE_DESCRIPTION + ' 404 Page Not Found'}>
-	<script>
-		import('@zachleat/snow-fall');
-		import('@11ty/is-land/is-land.js');
-	</script>
-	<is-land class='dark:block hidden' on:media='(prefers-reduced-motion: no-preference)'>
-		<snow-fall count='10' style='--snow-fall-color: white'></snow-fall>
-	</is-land>
-	<is-land class='dark:hidden block' on:media='(prefers-reduced-motion: no-preference)'>
-		<snow-fall count='10' style='--snow-fall-color: cornflowerblue'></snow-fall>
-	</is-land>
 	<div class='container text-center'>
 		<Image class='my-8 mx-auto' src={NotFoundImage} alt='404 Page Not Found' />
 		<div class='p-4'>
