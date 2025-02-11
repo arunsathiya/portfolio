@@ -4,6 +4,9 @@ import { getCollection } from 'astro:content';
 import PostsByYear from '../../components/PostsByYear.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
+// Redirect root /posts to /posts/1
+return Astro.redirect('/posts/1');
+
 // Tell Astro this is not a static page
 export const prerender = false;
 
@@ -22,18 +25,24 @@ const allPosts = (await getCollection('blog')).sort(
 // Calculate total pages
 const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
 
-// Get current page from URL or default to 1
-const currentPage = Astro.url.searchParams.get('page') ? Number(Astro.url.searchParams.get('page')) : 1;
+// Get current page from params or default to 1
+const currentPage = Number(Astro.params.page) || 1;
 
 // Validate current page
 if (currentPage < 1 || currentPage > totalPages) {
-	return Astro.redirect('/posts');
+	return Astro.redirect('/posts/1');
 }
 
 // Calculate start and end indices for current page
 const start = (currentPage - 1) * POSTS_PER_PAGE;
 const end = start + POSTS_PER_PAGE;
 const posts = allPosts.slice(start, end);
+
+export async function getStaticPaths() {
+	return Array.from({ length: totalPages }, (_, i) => ({
+		params: { page: (i + 1).toString() },
+	}));
+}
 ---
 
 <BaseLayout title={title} description={description}>
@@ -49,7 +58,7 @@ const posts = allPosts.slice(start, end);
 			<div class="flex items-center gap-4 mt-8 mb-4">
 				{currentPage > 1 && (
 					<a 
-						href={currentPage === 2 ? '/posts' : `/posts?page=${currentPage - 1}`}
+						href={`/posts/${currentPage - 1}`}
 						class="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
 					>
 						Previous
@@ -60,7 +69,7 @@ const posts = allPosts.slice(start, end);
 				</span>
 				{currentPage < totalPages && (
 					<a 
-						href={`/posts?page=${currentPage + 1}`}
+						href={`/posts/${currentPage + 1}`}
 						class="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
 					>
 						Next

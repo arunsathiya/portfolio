@@ -1,0 +1,84 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import PostsByYear from '../../components/PostsByYear.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export const prerender = true;
+
+type BlogPost = CollectionEntry<'blog'>;
+const title = 'Posts';
+const description = 'Articles, guides, tutorials about productivity, DevOps, data-driven applications, life and everything in between.';
+
+// Define how many posts per page
+export const POSTS_PER_PAGE = 10;
+
+export async function getStaticPaths() {
+    // Get all posts and sort them
+    const allPosts = (await getCollection('blog')).sort(
+        (a: BlogPost, b: BlogPost) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+    );
+
+    // Calculate total pages
+    const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+
+    return Array.from({ length: totalPages }, (_, i) => ({
+        params: { page: (i + 1).toString() },
+        props: { 
+            posts: allPosts.slice(i * POSTS_PER_PAGE, (i + 1) * POSTS_PER_PAGE),
+            currentPage: i + 1,
+            totalPages,
+            totalPosts: allPosts.length
+        }
+    }));
+}
+
+type Props = {
+    posts: BlogPost[];
+    currentPage: number;
+    totalPages: number;
+    totalPosts: number;
+};
+
+const { posts, currentPage, totalPages, totalPosts } = Astro.props;
+
+// Validate current page
+if (currentPage < 1 || currentPage > totalPages) {
+    return Astro.redirect('/posts/1');
+}
+---
+
+<BaseLayout title={title} description={description}>
+    <div class='container'>
+        <div class='mb-10'>
+            <h1 class='text-3xl font-bold mb-2'>{title}</h1>
+            <p class='text-zinc-700 dark:text-zinc-300 text-lg'>{description}</p>
+        </div>
+        <PostsByYear posts={posts} />
+        
+        <!-- Pagination -->
+        {totalPages > 1 && (
+            <div class="flex items-center gap-4 mt-8 mb-4">
+                {currentPage > 1 && (
+                    <a 
+                        href={currentPage === 2 ? '/posts/1' : `/posts/${currentPage - 1}`}
+                        class="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
+                    >
+                        Previous
+                    </a>
+                )}
+                <span class="text-zinc-700 dark:text-zinc-300">
+                    Page {currentPage} of {totalPages}
+                </span>
+                {currentPage < totalPages && (
+                    <a 
+                        href={`/posts/${currentPage + 1}`}
+                        class="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
+                    >
+                        Next
+                    </a>
+                )}
+            </div>
+        )}
+    </div>
+</BaseLayout> 
