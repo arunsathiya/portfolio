@@ -15,12 +15,13 @@ const { title, description, image } = Astro.props;
 	<head>
 		<BaseHead title={title} description={description} image={image} />
 	</head>
-	<GradientHeader>
 	<body class='bg-white dark:bg-zinc-900 dark:text-zinc-300 text-zinc-900 pt-16 sm:pt-0'>
-		<Header />
+		<GradientHeader>
+			<Header />
 			<div class='py-8 min-h-[calc(100vh-160px)]'>
 				<slot />
 			</div>
+		</GradientHeader>
 		<Footer />
 		<!-- Google tag (gtag.js) -->
 		{
@@ -35,5 +36,4 @@ const { title, description, image } = Astro.props;
 			)
 		}
 	</body>
-	</GradientHeader>
 </html>
