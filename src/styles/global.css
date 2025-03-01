@@ -31,6 +31,17 @@
 	.list-view-prose {
 		@apply prose dark:prose-invert prose-p:my-2 prose-p:mt-0 prose-img:my-4 prose-img:max-h-48 prose-img:w-auto prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline dark:prose-a:text-blue-400;
 	}
+
+	/* To remove italic formatting from blockquotes */
+	.prose blockquote {
+		font-style: normal;
+	}
+
+	/* To remove bold from quotes if they are bold by default */
+	.prose blockquote strong,
+	.prose blockquote b {
+		font-weight: normal;
+	}
 }
 
 @layer base {
