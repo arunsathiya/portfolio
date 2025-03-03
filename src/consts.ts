@@ -4,4 +4,4 @@
 export const SITE_TITLE = 'Arun';
 export const SITE_TAGLINE = 'Pushing Boundaries';
 export const SITE_DESCRIPTION =
-	"I'm Arun, a full-stack engineer with Data Analytics expertise, crafting efficient solutions in Golang, TypeScript, and Python.My focus spans data-driven applications, serverless architectures, and DevOps practices.";
+	'Full-stack engineer specializing in data analytics. Building efficient solutions with Golang, TypeScript, and Python. Expert in data-driven applications and serverless architecture.';
