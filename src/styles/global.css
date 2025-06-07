@@ -55,6 +55,7 @@
 	code {
 		font-family: 'IBM Plex Mono', monospace;
 		font-size: 1rem;
+		width: fit-content;
 	}
 
 	/* Add these new styles for code blocks */
