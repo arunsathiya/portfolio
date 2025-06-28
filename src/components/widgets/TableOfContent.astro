@@ -22,9 +22,9 @@ function buildToc(headings: any) {
 
 {
 	toc.length > 0 && (
-		<nav class='toc sticky top-4 py-2 lg:-ml-3'>
+		<nav class='toc py-2 lg:-ml-3'>
 			<h3 class='font-extrabold uppercase mb-1 px-3 text-sm'>On This Page</h3>
-			<ul class='toc-list max-h-[calc(100vh-70px)] overflow-auto text-[.825rem] text-[var(--color-content-secondary)]'>
+			<ul class='toc-list max-h-[calc(100vh-200px)] overflow-auto text-[.825rem] text-[var(--color-content-secondary)]'>
 				{toc.map((heading: any) => (
 					<li>
 						<a
