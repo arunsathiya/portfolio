@@ -122,10 +122,11 @@ const getTagClasses = (tag: string) => `
 			</article>
 		</main>
 
-		<aside class='shrink-0 lg:w-[35%] space-y-8'>
-			<div>{headings.length > 0 && <TableOfContent headings={headings} />}</div>
+		<aside class='shrink-0 lg:w-[35%]'>
+			<div class='sticky top-24 space-y-8'>
+				<div>{headings.length > 0 && <TableOfContent headings={headings} />}</div>
 
-			<div class='sticky top-24'>
+				<div>
 				{
 					GISCUS_REPO && (
 						<script
@@ -148,6 +149,7 @@ const getTagClasses = (tag: string) => `
 						/>
 					)
 				}
+				</div>
 			</div>
 		</aside>
 	</div>
