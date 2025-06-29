@@ -1,0 +1,29 @@
+---
+title: 'Parakeet and Llama 4 on Groq'
+seoTitle: 'Parakeet and Llama 4 on Groq'
+slug: 'parakeet-llama-4-on-groq'
+description: 'My experience switching from OpenAI Whisper to Nvidia''s Parakeet model in MacWhisper, and Llama 4 on Groq-powered cleanup.'
+pubDate: 'Jun 29 2025'
+updatedDate: 'Jun 29 2025'
+tags: ["AI","Whisper"]
+coverImage: './image.webp'
+---
+import R2Image from 'src/components/R2Image.astro';
+
+I've been using [OpenAI's Whisper model](https://openai.com/index/whisper/) through the [Superwhisper app](https://superwhisper.com/) for quite a while now, and honestly, the experience has been solid. But last week, I noticed that the developer of MacWhisper published support for Nvidia's Parakeet model. The performance claims of being 250x faster is genuinely impressive, and true - the technical benchmarks back up the real-world experience.
+
+
+According to [3Play Media's 2025 State of ASR Report](https://go.3playmedia.com/rs-2025-asr) and [Soniox's comprehensive benchmarking study](https://soniox.com/benchmarks/), Parakeet v2 achieves a 6.05% Word Error Rate (WER) compared to Whisper's 7-12% WER depending on conditions, making it currently #2 on the [Hugging Face ASR leaderboard](https://huggingface.co/spaces/hf-audio/open_asr_leaderboard). Parakeet also delivers an RTFx (Real-Time Factor) of 3386.02, meaning it can process 10 minutes of audio in just one second on appropriate hardware. That's roughly 50x faster than Whisper-large-v3's RTFx of 2-5. 
+
+
+<R2Image imageKey="assets/parakeet-llama-4-on-groq-2211638e-cd98-80f3-aa35-d222fd492f45.png" alt="Hugging Face ASR leaderboard." />
+
+
+The accuracy for voice-to-text conversion is solid, but where I noticed the difference was in punctuation - it wasn't quite as polished as I'd hoped. I set up a workflow to clean up the transcriptions automatically.
+
+
+The combination I settled on creates an interesting technical pipeline: [Groq](https://groq.com/) with Meta's Llama `meta-llama/llama-4-maverick-17b-128e-instruct` model as the backend for fast post-processing cleanup. This setup leverages what [NVIDIA's technical documentation](https://developer.nvidia.com/blog/pushing-the-boundaries-of-speech-recognition-with-nemo-parakeet-asr-models/) describes as Parakeet's strength in raw transcription speed and accuracy, while compensating for its limitations in punctuation and formatting. The model's training on 64,000 hours of English audio data (compared to Whisper's 680,000 hours of multilingual data) makes it incredibly fast and accurate for English-only use cases, but the AI cleanup step handles the nuanced language formatting that makes the final output publication-ready.
+
+
+It's genuinely impressive where transcription technology has landed in 2025. The combination of ultra-fast local models like Parakeet with AI-powered post-processing creates an experience that feels almost magical. According to [Market Research Future's analysis](https://www.marketresearchfuture.com/reports/automatic-speech-recognition-asr-software-market-27251), the ASR software market is projected to grow from $6.82 billion in 2025 to $47.83 billion by 2034, with a CAGR of 24.16%. If we're seeing 50x speed improvements now with 6.05% error rates, and AI cleanup is becoming this seamless, the productivity implications are significant. The workflow is simple but powerful: speak naturally, let Parakeet handle the heavy lifting on transcription speed and accuracy, and let AI models polish the output. It's the kind of setup that just works, which is exactly what I want from my tools.
+
