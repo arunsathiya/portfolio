@@ -32,7 +32,13 @@ function groupPostsByYear(posts: BlogPost[]) {
 				// If same publication date, sort by updated date (most recent first)
 				const aUpdated = a.data.updatedDate || a.data.pubDate;
 				const bUpdated = b.data.updatedDate || b.data.pubDate;
-				return bUpdated.getTime() - aUpdated.getTime();
+				const updatedDateDiff = bUpdated.getTime() - aUpdated.getTime();
+				if (updatedDateDiff !== 0) {
+					return updatedDateDiff;
+				}
+				
+				// If same publication and updated dates, sort by slug (alphabetically)
+				return a.slug.localeCompare(b.slug);
 			}),
 		}));
 }
