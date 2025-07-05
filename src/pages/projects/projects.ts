@@ -20,7 +20,7 @@ export const projects: Project[] = [
 	},
 	{
 		name: 'portfolio-workers',
-		description: 'Cloudflare Workers logic that supports the portfolio website.',
+		description: 'Cloudflare Workers logic that supports the portfolio website',
 		demoLink: 'https://github.com/arunsathiya/portfolio-workers',
 		tags: ['Notion', 'Cloudflare', 'DevOps'],
 		image: 'https://repository-images.githubusercontent.com/850488767/60df865d-4117-42ff-b82b-c798df8e7d2b',
