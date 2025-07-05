@@ -15,7 +15,24 @@ export const POSTS_PER_PAGE = 10;
 
 // Get all posts and sort them
 const allPosts = (await getCollection('blog')).sort(
-	(a: BlogPost, b: BlogPost) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+	(a: BlogPost, b: BlogPost) => {
+		// First, sort by publication date (most recent first)
+		const pubDateDiff = b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+		if (pubDateDiff !== 0) {
+			return pubDateDiff;
+		}
+		
+		// If same publication date, sort by updated date (most recent first)
+		const aUpdated = a.data.updatedDate || a.data.pubDate;
+		const bUpdated = b.data.updatedDate || b.data.pubDate;
+		const updatedDateDiff = bUpdated.valueOf() - aUpdated.valueOf();
+		if (updatedDateDiff !== 0) {
+			return updatedDateDiff;
+		}
+		
+		// If same publication and updated dates, sort by slug (alphabetically)
+		return a.slug.localeCompare(b.slug);
+	}
 );
 
 // Get first page of posts
