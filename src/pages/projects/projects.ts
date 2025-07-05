@@ -13,7 +13,7 @@ export const projects: Project[] = [
 	{
 		name: 'portfolio',
 		description:
-			'Astro based portfolio with blog served from Notion and Cloudflare R2, supported by Cloudflare Workers, Cloudflare Queues, Replicate and GitHub API.',
+			'Astro-based portfolio with blog served from Notion and Cloudflare R2, supported by Cloudflare Workers, Cloudflare Queues, Replicate and GitHub API.',
 		demoLink: 'https://github.com/arunsathiya/portfolio',
 		tags: ['Notion', 'GitHub', 'DevOps'],
 		image: 'https://repository-images.githubusercontent.com/692625109/595932d7-6bfa-4dc6-95e2-7cfb16b8775e',
