@@ -22,7 +22,18 @@ function groupPostsByYear(posts: BlogPost[]) {
 		.sort(([a], [b]) => Number(b) - Number(a))
 		.map(([year, posts]) => ({
 			year: Number(year),
-			posts: posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()),
+			posts: posts.sort((a, b) => {
+				// First, sort by publication date (most recent first)
+				const pubDateDiff = b.data.pubDate.getTime() - a.data.pubDate.getTime();
+				if (pubDateDiff !== 0) {
+					return pubDateDiff;
+				}
+				
+				// If same publication date, sort by updated date (most recent first)
+				const aUpdated = a.data.updatedDate || a.data.pubDate;
+				const bUpdated = b.data.updatedDate || b.data.pubDate;
+				return bUpdated.getTime() - aUpdated.getTime();
+			}),
 		}));
 }
 
