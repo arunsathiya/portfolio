@@ -62,7 +62,7 @@ const getTagClasses = (tag: string) => `
 
 <BaseLayout title={seoTitle || title} description={description} image={coverImage?.src || undefined}>
 	<div class='container'>
-		<main class='overflow-hidden mx-auto max-w-3xl'>
+		<main class='overflow-hidden mx-auto max-w-2xl'>
 			<article>
 				<Prose>
 					<div>
@@ -120,33 +120,33 @@ const getTagClasses = (tag: string) => `
 					<Content />
 				</Prose>
 			</article>
-			
+
 			<div class='mt-8 space-y-8'>
 				<div>{headings.length > 0 && <TableOfContent headings={headings} />}</div>
 
 				<div>
-				{
-					GISCUS_REPO && (
-						<script
-							id='giscus-script'
-							is:inline
-							src='https://giscus.app/client.js'
-							data-repo={GISCUS_REPO}
-							data-repo-id={GISCUS_REPO_ID}
-							data-category={GISCUS_CATEGORY}
-							data-category-id={GISCUS_CATEGORY_ID}
-							data-mapping='pathname'
-							data-strict='0'
-							data-reactions-enabled='0'
-							data-emit-metadata='0'
-							data-input-position='bottom'
-							data-theme='preferred_color_scheme'
-							data-lang='en'
-							crossorigin='anonymous'
-							async
-						/>
-					)
-				}
+					{
+						GISCUS_REPO && (
+							<script
+								id='giscus-script'
+								is:inline
+								src='https://giscus.app/client.js'
+								data-repo={GISCUS_REPO}
+								data-repo-id={GISCUS_REPO_ID}
+								data-category={GISCUS_CATEGORY}
+								data-category-id={GISCUS_CATEGORY_ID}
+								data-mapping='pathname'
+								data-strict='0'
+								data-reactions-enabled='0'
+								data-emit-metadata='0'
+								data-input-position='bottom'
+								data-theme='preferred_color_scheme'
+								data-lang='en'
+								crossorigin='anonymous'
+								async
+							/>
+						)
+					}
 				</div>
 			</div>
 		</main>
