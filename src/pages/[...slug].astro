@@ -61,8 +61,8 @@ const getTagClasses = (tag: string) => `
 ---
 
 <BaseLayout title={seoTitle || title} description={description} image={coverImage?.src || undefined}>
-	<div class='container lg:flex gap-10'>
-		<main class='overflow-hidden grow'>
+	<div class='container'>
+		<main class='overflow-hidden mx-auto max-w-3xl'>
 			<article>
 				<Prose>
 					<div>
@@ -120,10 +120,8 @@ const getTagClasses = (tag: string) => `
 					<Content />
 				</Prose>
 			</article>
-		</main>
-
-		<aside class='shrink-0 lg:w-80'>
-			<div class='sticky top-24 space-y-8'>
+			
+			<div class='mt-8 space-y-8'>
 				<div>{headings.length > 0 && <TableOfContent headings={headings} />}</div>
 
 				<div>
@@ -151,7 +149,7 @@ const getTagClasses = (tag: string) => `
 				}
 				</div>
 			</div>
-		</aside>
+		</main>
 	</div>
 </BaseLayout>
 
