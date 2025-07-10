@@ -78,6 +78,26 @@
 		width: fit-content;
 	}
 
+	/* Inline code styling - Notion-inspired orange theme */
+	:not(pre) > code {
+		background-color: #fef3e3;
+		color: #c4621a;
+		padding: 0.125rem 0.375rem;
+		border-radius: 0.25rem;
+		font-size: 1rem !important;
+		font-weight: 500;
+		border: 1px solid #fed7aa;
+	}
+
+	/* Dark mode inline code */
+	@media (prefers-color-scheme: dark) {
+		:not(pre) > code {
+			background-color: #431407;
+			color: #fdba74;
+			border-color: #9a3412;
+		}
+	}
+
 	/* Add these new styles for code blocks */
 	pre {
 		position: relative;
