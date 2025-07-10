@@ -122,9 +122,9 @@ const getTagClasses = (tag: string) => `
 			</article>
 
 			<div class='mt-8 space-y-8'>
-				<div>{headings.length > 0 && <TableOfContent headings={headings} />}</div>
+				<div class='mx-auto max-w-2xl'>{headings.length > 0 && <TableOfContent headings={headings} />}</div>
 
-				<div>
+				<div class='mx-auto max-w-2xl'>
 					{
 						GISCUS_REPO && (
 							<script
