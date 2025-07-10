@@ -10,7 +10,27 @@
 
 @layer components {
 
-	/* Blog post view prose styles */
+	/* Blog post view prose styles - only for individual posts, not list view */
+	.prose:not(.list-view-prose) > *,
+	.prose:not(.list-view-prose) p,
+	.prose:not(.list-view-prose) ul,
+	.prose:not(.list-view-prose) ol,
+	.prose:not(.list-view-prose) blockquote,
+	.prose:not(.list-view-prose) h1,
+	.prose:not(.list-view-prose) h2,
+	.prose:not(.list-view-prose) h3,
+	.prose:not(.list-view-prose) h4,
+	.prose:not(.list-view-prose) h5,
+	.prose:not(.list-view-prose) h6 {
+		@apply mx-auto max-w-2xl;
+	}
+
+	/* Only content embeds in individual posts get wider treatment */
+	.prose:not(.list-view-prose) :where(img, iframe, video, pre):not(.prose > div img):not(.prose > div:first-child *):not(.prose > div:nth-child(2) *) {
+		@apply w-full max-w-none mx-0;
+	}
+
+	/* Ensure regular images still get proper spacing - both individual posts and list view */
 	.prose img {
 		@apply my-4;
 	}
