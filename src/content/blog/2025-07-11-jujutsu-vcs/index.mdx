@@ -1,0 +1,99 @@
+---
+title: 'Thoughts on jujutsu version control system'
+seoTitle: 'Thoughts on jujutsu version control system'
+slug: 'jujutsu-vcs'
+description: 'My experience with jujutsu version control system - fits my linear development needs, but lots to learn to unlock the full powers of it.'
+pubDate: 'Jul 11 2025 12:00 AM'
+updatedDate: 'Jul 10 2025 9:16 PM'
+tags: ["Development"]
+coverImage: './image.webp'
+---
+
+I've been using Jujutsu (jj) for about a week now after reading [Matthew’s blog post on using jj with Claude Code hooks](https://matthewsanabria.dev/posts/running-jujutsu-with-claude-code-hooks/), and my shell history shows 635 commands - which is a lot for a week’s usage but I learn by doing. 
+
+
+I wasn't really a Git power user to begin with, so switching wasn't about figuring out advanced workflows I could unlock with jj, rather just plain curiosity to learn a new skill and be on the top of today's fast-paced software scene. My Git usage was pretty basic: create branch, make changes, commit, push, open PR, but with jj, multiple cool tricks seem possible that I am yet to learn. 
+
+
+The biggest thing I like so far - I can commit changes to my main bookmark (think of main branch for now but the concept of bookmarks is very different) and when I'm ready for a PR, just run `jj git push -c @-` and let jujutsu handle the branch naming. Turns out I don't care what the temporary branch is called - I just want my code reviewed.
+
+
+[Steve Klabnik's tutorial helped me understand the concepts](https://steveklabnik.github.io/jujutsu-tutorial/), but honestly, what made it click was just using it on real projects and asking Claude when I got stuck. [The Discord community](https://discord.com/invite/dkmfj3aGQN) is pretty active too, which helped when I wanted to see how other people actually use this thing day-to-day. Claude helped fill in the gaps when I got stuck. "I want to do X but don't know the jj command" worked way better than trying to map git knowledge to jujutsu concepts myself - Claude got some commands wrong, but I don’t blame considering jj is only four years old.
+
+
+After 635 commands, here's what I actually use:
+
+
+```shell
+232 jj st          # my new git status
+ 53 jj log         # checking history constantly  
+ 23 jj git push    # getting changes out
+ 23 jj diff        # seeing what changed
+ 21 jj bookmark list # equivalent to checking list of branches but there is no concept of being on a specific branch
+ 10 jj git fetch   # staying current
+```
+
+
+Here's how I work now, based on what actually happens in practice:
+
+
+**Just start coding**. No branch creation, no naming decisions. I'm always working on `@` (the current change) in my main bookmark.
+
+
+**Making progress**:
+
+
+```shell
+jj st                    # see what changed
+jj diff                  # review specific changes  
+jj describe -m "message" # describe the current change
+```
+
+
+**Ready for review**
+
+
+The `jj git push -c @-` command is magic. It pushes the change I just finished (not the current working change) and automatically creates a GitHub PR. The branch name gets auto-generated and I don't care what it is.
+
+
+Multiple changes: If I want to work on something else before the first thing is done, `jj new` creates a new change on top. But, I am yet to figure out how I can properly branch a new revision out of an earlier commit instead of the latest commit that's considered incomplete. I suppose something as easy as `jj new -r change-id` would do?
+
+
+Most of my projects are existing Git repos, so I use colocated mode: `jj git init --colocate`
+
+
+This keeps the `.git` directory and adds jujutsu on top. I can still use git commands when needed, but mostly stick to jj. The git remotes just work, and I can push to GitHub normally.
+
+
+Had to set up a few config things in my first run:
+
+
+```shell
+jj config set --user user.name 'Arun'
+jj config set --user user.email 'arun@arun.blog'  
+jj config set --user ui.paginate never
+jj config set --user user.editor "code --wait"
+
+```
+
+
+The `ui.paginate never` is important - I want to see command output directly in my terminal, not in a pager.
+
+
+I am still figuring out a few things:
+
+
+**Commit signing**: I sign commits in git but haven't figured out how to do this in jujutsu yet. The docs mention it but I haven't tried it yet.
+
+
+**Workspaces vs git worktrees**: This is the big one. Claude Code recommends multiple worktrees so you can run multiple instances on the same project. Jujutsu has workspaces, which sound similar but work differently.
+
+
+From my experimenting with `jj workspace add --name try/public-fixes tree/try/public-fixes`, I can create workspaces, but they don't play nice with git colocation the way I expected. When you add a workspace in a colocated repo, it seems to become a pure jj repo in that workspace. Not ideal when other tools expect git.
+
+
+Might need to use git worktrees for the Claude Code use case and jujutsu for regular development. Still working this out.
+
+
+**Advanced rebasing**: I know jujutsu is supposed to be better at handling complex history operations, but I haven't needed that yet. My workflows are pretty linear.
+
