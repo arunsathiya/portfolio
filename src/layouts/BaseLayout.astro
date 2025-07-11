@@ -1,6 +1,5 @@
 ---
 import BaseHead from './components/BaseHead.astro';
-import Header from './components/Header.astro';
 import Footer from './components/Footer.astro';
 import GradientHeader from './components/GradientHeader.astro';
 import 'src/styles/global.css';
@@ -15,9 +14,8 @@ const { title, description, image } = Astro.props;
 	<head>
 		<BaseHead title={title} description={description} image={image} />
 	</head>
-	<body class='bg-white dark:bg-zinc-900 dark:text-zinc-300 text-zinc-900 pt-16 sm:pt-0'>
+	<body class='bg-white dark:bg-zinc-900 dark:text-zinc-300 text-zinc-900'>
 		<GradientHeader>
-			<Header />
 			<div class='py-8 min-h-[calc(100vh-160px)]'>
 				<slot />
 			</div>
