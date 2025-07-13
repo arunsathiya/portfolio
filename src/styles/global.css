@@ -25,9 +25,16 @@
 		@apply mx-auto max-w-2xl;
 	}
 
-	/* Only content embeds in individual posts get wider treatment */
-	.prose:not(.list-view-prose) :where(img, iframe, video, pre):not(.prose > div img):not(.prose > div:first-child *):not(.prose > div:nth-child(2) *) {
+	/* Images, videos, and iframes get full width treatment */
+	.prose:not(.list-view-prose) :where(img, iframe, video):not(.prose > div img):not(.prose > div:first-child *):not(.prose > div:nth-child(2) *) {
 		@apply w-full max-w-none mx-0;
+	}
+
+	/* Code blocks get wider than content but not full width */
+	.prose:not(.list-view-prose) pre {
+		@apply mx-auto;
+		width: 100% !important;
+		max-width: 48rem !important;
 	}
 
 	/* Ensure regular images still get proper spacing - both individual posts and list view */
