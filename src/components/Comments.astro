@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.SUPABASE_URL
 const supabaseAnonKey = import.meta.env.SUPABASE_ANON_KEY
 
-let comments = []
+let comments: any[] = []
 let error = null
 
 if (supabaseUrl && supabaseAnonKey) {
@@ -220,20 +220,20 @@ const formatDate = (dateString: string) => {
     
     // Character count
     commentInput?.addEventListener('input', (e) => {
-      const length = e.target.value.length
-      charCount.textContent = length
-      postCommentBtn.disabled = length === 0 || length > 1000
+      const length = (e.target as HTMLTextAreaElement).value.length
+      if (charCount) charCount.textContent = length.toString()
+      if (postCommentBtn) (postCommentBtn as HTMLButtonElement).disabled = length === 0 || length > 1000
     })
     
     // Post comment
     postCommentBtn?.addEventListener('click', async () => {
-      const content = commentInput.value.trim()
+      const content = (commentInput as HTMLTextAreaElement)?.value.trim()
       if (!content) return
       
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
       
-      postCommentBtn.disabled = true
+      if (postCommentBtn) (postCommentBtn as HTMLButtonElement).disabled = true
       postCommentBtn.textContent = 'Posting...'
       
       const { error } = await supabase
@@ -249,27 +249,29 @@ const formatDate = (dateString: string) => {
         console.error('Error posting comment:', error)
         alert('Error posting comment. Please try again.')
       } else {
-        commentInput.value = ''
-        charCount.textContent = '0'
+        if (commentInput) (commentInput as HTMLTextAreaElement).value = ''
+        if (charCount) charCount.textContent = '0'
         // Refresh the page to show new comment
         window.location.reload()
       }
       
-      postCommentBtn.disabled = false
+      if (postCommentBtn) (postCommentBtn as HTMLButtonElement).disabled = false
       postCommentBtn.textContent = 'Post Comment'
     })
     
-    function showCommentForm(user) {
-      document.getElementById('comment-form-container').querySelector('.flex').style.display = 'none'
-      commentForm.classList.remove('hidden')
+    function showCommentForm(user: any) {
+      const flexElement = document.getElementById('comment-form-container')?.querySelector('.flex') as HTMLElement
+      if (flexElement) flexElement.style.display = 'none'
+      commentForm?.classList.remove('hidden')
       
-      userAvatar.src = user.user_metadata.avatar_url || '/default-avatar.svg'
-      userName.textContent = user.user_metadata.full_name || user.user_metadata.name || user.user_metadata.user_name || 'Anonymous'
+      if (userAvatar) (userAvatar as HTMLImageElement).src = user.user_metadata.avatar_url || '/default-avatar.svg'
+      if (userName) userName.textContent = user.user_metadata.full_name || user.user_metadata.name || user.user_metadata.user_name || 'Anonymous'
     }
     
     function hideCommentForm() {
-      document.getElementById('comment-form-container').querySelector('.flex').style.display = 'flex'
-      commentForm.classList.add('hidden')
+      const flexElement = document.getElementById('comment-form-container')?.querySelector('.flex') as HTMLElement
+      if (flexElement) flexElement.style.display = 'flex'
+      commentForm?.classList.add('hidden')
     }
   }
 </script>
