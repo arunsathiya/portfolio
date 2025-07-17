@@ -9,7 +9,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Comments from '../components/Comments.astro';
 import { slugify } from '../utils';
 
-export const prerender = true;
+export const prerender = false;
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
