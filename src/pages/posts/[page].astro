@@ -57,7 +57,7 @@ type Props = {
     totalPosts: number;
 };
 
-const { posts, currentPage, totalPages, totalPosts } = Astro.props;
+const { posts, currentPage, totalPages } = Astro.props;
 
 // Validate current page
 if (currentPage < 1 || currentPage > totalPages) {
