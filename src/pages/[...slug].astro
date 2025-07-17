@@ -2,20 +2,15 @@
 import { Image } from 'astro:assets';
 import { type CollectionEntry, getCollection } from 'astro:content';
 import { getTagBackgroundColor } from '@src/utils/tagColors';
-import { loadEnv } from 'vite';
 import FormattedDate from '../components/FormattedDate.astro';
 import Prose from '../components/Prose.astro';
 import TableOfContent from '../components/widgets/TableOfContent.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Comments from '../components/Comments.astro';
 import { slugify } from '../utils';
 
 export const prerender = true;
 
-const { GISCUS_REPO, GISCUS_REPO_ID, GISCUS_CATEGORY, GISCUS_CATEGORY_ID } = loadEnv(
-	process.env.NODE_ENV || 'production',
-	process.cwd(),
-	'',
-);
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -133,28 +128,7 @@ const getTagClasses = (tag: string) => `
 				<div class='mx-auto max-w-2xl'>{headings.length > 0 && <TableOfContent headings={headings} />}</div>
 
 				<div class='mx-auto max-w-2xl'>
-					{
-						GISCUS_REPO && (
-							<script
-								id='giscus-script'
-								is:inline
-								src='https://giscus.app/client.js'
-								data-repo={GISCUS_REPO}
-								data-repo-id={GISCUS_REPO_ID}
-								data-category={GISCUS_CATEGORY}
-								data-category-id={GISCUS_CATEGORY_ID}
-								data-mapping='pathname'
-								data-strict='0'
-								data-reactions-enabled='0'
-								data-emit-metadata='0'
-								data-input-position='bottom'
-								data-theme='preferred_color_scheme'
-								data-lang='en'
-								crossorigin='anonymous'
-								async
-							/>
-						)
-					}
+					<Comments />
 				</div>
 			</div>
 		</main>

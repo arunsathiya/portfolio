@@ -35,6 +35,7 @@
     "@fontsource/ibm-plex-mono": "^5.1.1",
     "@fontsource/ibm-plex-sans": "^5.1.0",
     "@notionhq/client": "^2.2.15",
+    "@supabase/supabase-js": "^2.52.0",
     "@zachleat/snow-fall": "^1.0.3",
     "astro": "^4.15.10",
     "astro-embed": "^0.7.2",
