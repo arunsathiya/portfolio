@@ -61,7 +61,7 @@ const formatDate = (dateString: string) => {
   )}
   
   {!error && comments.length === 0 && (
-    <div class="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 text-center">
+    <div class="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 text-left">
       <p class="text-zinc-600 dark:text-zinc-400">
         No comments yet. Be the first to share your thoughts!
       </p>
@@ -100,7 +100,7 @@ const formatDate = (dateString: string) => {
   <!-- Comment Form -->
   <div class="mt-8">
     <div id="comment-form-container">
-      <div class="flex justify-center p-4 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-lg">
+      <div class="flex justify-start p-4 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-lg">
         <button
           id="github-login-btn"
           class="flex items-center justify-center gap-2 px-4 py-2 bg-zinc-900 dark:bg-zinc-600 text-white border border-zinc-800 dark:border-zinc-500 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-500 transition-colors font-medium"
