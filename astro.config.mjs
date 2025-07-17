@@ -6,12 +6,12 @@ import embeds from 'astro-embed/integration';
 import { defineConfig } from 'astro/config';
 import { autoNewTabExternalLinks } from './src/autoNewTabExternalLinks';
 
-import vercel from '@astrojs/vercel/serverless';
+import vercel from '@astrojs/vercel/static';
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://www.arun.blog',
-	output: 'hybrid',
+	output: 'static',
 	integrations: [embeds(), mdx(), sitemap(), tailwind(), partytown()],
 	markdown: {
 		extendDefaultPlugins: true,
