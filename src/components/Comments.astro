@@ -1,0 +1,120 @@
+---
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = import.meta.env.SUPABASE_URL
+const supabaseAnonKey = import.meta.env.SUPABASE_ANON_KEY
+
+let comments = []
+let error = null
+
+if (supabaseUrl && supabaseAnonKey) {
+  const supabase = createClient(supabaseUrl, supabaseAnonKey)
+  
+  try {
+    const { data, error: fetchError } = await supabase
+      .from('comments')
+      .select(`
+        id,
+        content,
+        created_at,
+        author_name,
+        author_avatar,
+        post_slug
+      `)
+      .eq('post_slug', Astro.params.slug)
+      .order('created_at', { ascending: true })
+    
+    if (fetchError) {
+      console.error('Error fetching comments:', fetchError)
+      error = fetchError.message
+    } else {
+      comments = data || []
+    }
+  } catch (err) {
+    console.error('Supabase connection error:', err)
+    error = 'Failed to load comments'
+  }
+}
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+---
+
+<div class="comments-section">
+  <h3 class="text-xl font-semibold mb-6 text-zinc-800 dark:text-zinc-200">
+    Comments ({comments.length})
+  </h3>
+  
+  {error && (
+    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
+      <p class="text-red-700 dark:text-red-300">
+        Unable to load comments: {error}
+      </p>
+    </div>
+  )}
+  
+  {!error && comments.length === 0 && (
+    <div class="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 text-center">
+      <p class="text-zinc-600 dark:text-zinc-400">
+        No comments yet. Be the first to share your thoughts!
+      </p>
+    </div>
+  )}
+  
+  {comments.length > 0 && (
+    <div class="space-y-4">
+      {comments.map((comment) => (
+        <div class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 hover:shadow-sm transition-shadow">
+          <div class="flex items-start space-x-3">
+            <img 
+              src={comment.author_avatar || '/default-avatar.svg'} 
+              alt={comment.author_name}
+              class="w-8 h-8 rounded-full flex-shrink-0"
+            />
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center space-x-2 mb-1">
+                <span class="font-medium text-zinc-800 dark:text-zinc-200">
+                  {comment.author_name}
+                </span>
+                <span class="text-sm text-zinc-500 dark:text-zinc-400">
+                  {formatDate(comment.created_at)}
+                </span>
+              </div>
+              <div class="text-zinc-700 dark:text-zinc-300 prose prose-sm max-w-none">
+                {comment.content}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+  
+  <!-- Comment Form (will be enhanced with auth later) -->
+  <div class="mt-8 p-4 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-lg">
+    <p class="text-zinc-600 dark:text-zinc-400 text-sm">
+      💡 Comment functionality will be added with GitHub authentication in the next step.
+    </p>
+  </div>
+</div>
+
+<style>
+  .comments-section {
+    font-family: inherit;
+  }
+  
+  .comments-section .prose {
+    color: inherit;
+  }
+  
+  .comments-section .prose p {
+    margin: 0.5rem 0;
+  }
+</style>
