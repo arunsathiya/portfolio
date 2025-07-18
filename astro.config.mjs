@@ -11,7 +11,7 @@ import vercel from '@astrojs/vercel/static';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://www.arun.blog',
-	output: 'static',
+	output: 'hybrid',
 	integrations: [embeds(), mdx(), sitemap(), tailwind(), partytown()],
 	markdown: {
 		extendDefaultPlugins: true,
