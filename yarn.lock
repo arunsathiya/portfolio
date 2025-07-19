@@ -2436,9 +2436,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-x64-gnu@npm:4.45.1":
+"@rollup/rollup-linux-x64-gnu@npm:4.45.1, @rollup/rollup-linux-x64-gnu@npm:^4.45.1":
   version: 4.45.1
   resolution: "@rollup/rollup-linux-x64-gnu@npm:4.45.1"
+  checksum: 10c0/baf9081b367a5f557cfcd17ae60b196c00a933e87c5b16045efa312cb142518c91706ae3e6a4be1d09f7fbf2b133d386fc4ff3f6dd2d5b7149ac139af4a63391
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
@@ -7443,6 +7444,7 @@ __metadata:
     "@fontsource/ibm-plex-mono": "npm:^5.1.1"
     "@fontsource/ibm-plex-sans": "npm:^5.1.0"
     "@notionhq/client": "npm:^2.2.15"
+    "@rollup/rollup-linux-x64-gnu": "npm:^4.45.1"
     "@supabase/supabase-js": "npm:^2.52.0"
     "@tailwindcss/typography": "npm:^0.5.15"
     "@zachleat/snow-fall": "npm:^1.0.3"
