@@ -282,28 +282,48 @@ const formatDate = (dateString: string) => {
       const commentElement = document.createElement('div')
       commentElement.className = 'bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 hover:shadow-sm transition-shadow'
       
-      commentElement.innerHTML = `
-        <div class="flex items-start space-x-3">
-          <img 
-            src="${comment.author_avatar || '/default-avatar.svg'}" 
-            alt="${comment.author_name}"
-            class="w-8 h-8 rounded-full flex-shrink-0"
-          />
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center space-x-2 mb-1">
-              <span class="font-medium text-zinc-800 dark:text-zinc-200">
-                ${comment.author_name}
-              </span>
-              <span class="text-sm text-zinc-500 dark:text-zinc-400">
-                ${formatDate(comment.created_at)}
-              </span>
-            </div>
-            <div class="text-zinc-700 dark:text-zinc-300 prose prose-sm max-w-none">
-              ${comment.content}
-            </div>
-          </div>
-        </div>
-      `
+      // Create structure with DOM methods for security
+      const flexDiv = document.createElement('div')
+      flexDiv.className = 'flex items-start space-x-3'
+      
+      // Avatar image
+      const avatarImg = document.createElement('img')
+      avatarImg.src = comment.author_avatar || '/default-avatar.svg'
+      avatarImg.alt = comment.author_name
+      avatarImg.className = 'w-8 h-8 rounded-full flex-shrink-0'
+      
+      // Content container
+      const contentContainer = document.createElement('div')
+      contentContainer.className = 'flex-1 min-w-0'
+      
+      // Header with name and date
+      const headerDiv = document.createElement('div')
+      headerDiv.className = 'flex items-center space-x-2 mb-1'
+      
+      const nameSpan = document.createElement('span')
+      nameSpan.className = 'font-medium text-zinc-800 dark:text-zinc-200'
+      nameSpan.textContent = comment.author_name
+      
+      const dateSpan = document.createElement('span')
+      dateSpan.className = 'text-sm text-zinc-500 dark:text-zinc-400'
+      dateSpan.textContent = formatDate(comment.created_at)
+      
+      headerDiv.appendChild(nameSpan)
+      headerDiv.appendChild(dateSpan)
+      
+      // Comment content (safely inserted as text)
+      const commentContentDiv = document.createElement('div')
+      commentContentDiv.className = 'text-zinc-700 dark:text-zinc-300 prose prose-sm max-w-none'
+      commentContentDiv.textContent = comment.content
+      
+      // Assemble the structure
+      contentContainer.appendChild(headerDiv)
+      contentContainer.appendChild(commentContentDiv)
+      
+      flexDiv.appendChild(avatarImg)
+      flexDiv.appendChild(contentContainer)
+      
+      commentElement.appendChild(flexDiv)
       
       if (container) {
         container.appendChild(commentElement)
