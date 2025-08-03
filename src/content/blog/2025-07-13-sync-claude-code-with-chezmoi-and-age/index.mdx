@@ -4,7 +4,7 @@ seoTitle: 'Sync Claude Code commands and hooks across machines with chezmoi and 
 slug: 'sync-claude-code-with-chezmoi-and-age'
 description: 'Using chezmoi and age to securely sync a mixture of private Claude Code configuration files on a dotfiles GitHub repository.'
 pubDate: 'Jul 13 2025 12:00 AM'
-updatedDate: 'Aug 03 2025 9:30 AM'
+updatedDate: 'Aug 03 2025 9:32 AM'
 tags: ["Development","DevOps"]
 coverImage: './image.webp'
 ---
@@ -18,7 +18,7 @@ I asked ChatGPT about it and it suggested chezmoi combined with [age encryption]
 Claude Code stores custom commands in `~/.claude/commands/` and configuration in `~/.claude/`. I'd built up a useful collection of commands like `blog-draft`, `generate-pr`, and `analysis` that I wanted available everywhere. But several of these commands include API keys, and my hook configurations contain personal automation scripts. A simple git repository wasn't enough.
 
 
-I started generating an Age key pair: `age-keygen -o ~/key.txt`
+I started by generating an Age key pair: `age-keygen -o ~/key.txt`
 
 
 Then configured chezmoi to use it in `~/.config/chezmoi/chezmoi.toml`. Receipt key here is my public key from the age keypair generated earlier.
@@ -44,7 +44,7 @@ chezmoi add --encrypt ~/.zshrc
 chezmoi automatically encrypts these files before storing them. In my repository, they appear as `encrypted_dot_claude/commands/encrypted_blog-draft.md.age` and similar.
 
 
-I decided to use [Jujutsu (jj) for version control instead of git, mostly because I’ve been switching to it recently](https://www.arun.blog/jujutsu-vcs). The workflow feels natural
+I decided to use [Jujutsu (jj) for version control instead of git, mostly because I’ve been switching to it recently](https://www.arun.blog/jujutsu-vcs). The workflow feels natural:
 
 
 ```shell
