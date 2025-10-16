@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title='Resume'
+	description='View and download my resume'
+>
+	<div class='container mx-auto px-4 max-w-6xl'>
+		<div class='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6'>
+			<h1 class='text-4xl font-bold'>Resume</h1>
+			<a
+				href='/documents/resume.pdf'
+				download='Resume.pdf'
+				class='inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-md hover:shadow-lg'
+			>
+				<svg
+					xmlns='http://www.w3.org/2000/svg'
+					class='h-5 w-5'
+					fill='none'
+					viewBox='0 0 24 24'
+					stroke='currentColor'
+				>
+					<path
+						stroke-linecap='round'
+						stroke-linejoin='round'
+						stroke-width='2'
+						d='M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+					></path>
+				</svg>
+				Download PDF
+			</a>
+		</div>
+
+		<div class='w-full border-2 border-zinc-200 dark:border-zinc-700 rounded-lg overflow-hidden shadow-xl'>
+			<embed
+				src='/documents/resume.pdf'
+				type='application/pdf'
+				class='w-full h-[calc(100vh-200px)] min-h-[600px]'
+			/>
+		</div>
+
+		<p class='text-sm text-zinc-500 dark:text-zinc-400 mt-4 text-center'>
+			If the PDF doesn't display, you can <a
+				href='/documents/resume.pdf'
+				class='text-blue-600 dark:text-blue-400 hover:underline'
+				>click here to open it directly</a
+			>.
+		</p>
+	</div>
+</BaseLayout>
