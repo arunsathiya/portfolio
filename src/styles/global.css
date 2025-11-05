@@ -111,12 +111,20 @@
 		padding: 1rem;
 		margin: 1.5rem 0;
 		border-radius: 0.5rem;
-		background-color: #1e1e1e;
-		color: #d4d4d4;
+		background-color: #f5f5f5;
+		color: #24292e;
 		white-space: pre-wrap !important;
 		word-wrap: break-word !important;
 		max-width: 100%;
 		overflow-x: hidden !important;
+	}
+
+	/* Dark mode code blocks */
+	@media (prefers-color-scheme: dark) {
+		pre {
+			background-color: #1e1e1e;
+			color: #d4d4d4;
+		}
 	}
 
 	/* Remove scrollbars */
@@ -144,22 +152,46 @@
 }
 
 /* Syntax highlighting - outside of @layer to ensure it takes precedence */
+/* Light mode syntax highlighting */
 pre .token.tag {
-	color: #569cd6;
+	color: #116329;
 }
 
 pre .token.attr-name {
-	color: #9cdcfe;
+	color: #0550ae;
 }
 
 pre .token.attr-value {
-	color: #ce9178;
+	color: #0a3069;
 }
 
 pre .token.string {
-	color: #ce9178;
+	color: #0a3069;
 }
 
 pre .token.punctuation {
-	color: #d4d4d4;
+	color: #24292e;
+}
+
+/* Dark mode syntax highlighting */
+@media (prefers-color-scheme: dark) {
+	pre .token.tag {
+		color: #569cd6;
+	}
+
+	pre .token.attr-name {
+		color: #9cdcfe;
+	}
+
+	pre .token.attr-value {
+		color: #ce9178;
+	}
+
+	pre .token.string {
+		color: #ce9178;
+	}
+
+	pre .token.punctuation {
+		color: #d4d4d4;
+	}
 }
