@@ -5,27 +5,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Primary Development
-- `yarn dev` - Start development server
-- `yarn build` - Type check and build for production  
-- `yarn preview` - Preview production build locally
+- `bun dev` - Start development server
+- `bun build` - Type check and build for production  
+- `bun preview` - Preview production build locally
 
 ### Content Management
-- `yarn notion-to-md` - Convert Notion database to MDX blog posts
-- `yarn changes-on-notion` - Process Notion content changes
-- `yarn notion` - Run both Notion scripts sequentially
-- `yarn notion-format` - Run Notion conversion and format code
+- `bun notion-to-md` - Convert Notion database to MDX blog posts
+- `bun changes-on-notion` - Process Notion content changes
+- `bun notion` - Run both Notion scripts sequentially
+- `bun notion-format` - Run Notion conversion and format code
 
 ### Code Quality
-- `yarn format:check` - Check code formatting
-- `yarn format:write` - Format code using Prettier
+- `bun format:check` - Check code formatting
+- `bun format:write` - Format code using Prettier
 
 ### AWS S3 Utilities
-- `yarn list-buckets` - List S3 buckets
-- `yarn list-objects` - List objects in S3 bucket
-- `yarn list-objects-signed` - List objects with signed URLs
+- `bun list-buckets` - List S3 buckets
+- `bun list-objects` - List objects in S3 bucket
+- `bun list-objects-signed` - List objects with signed URLs
 
 ### Maintenance
-- `yarn clean-and-dev` - Clean cache, reinstall dependencies, format, and start dev server
+- `bun clean-and-dev` - Clean cache, reinstall dependencies, format, and start dev server
 
 ## Architecture Overview
 
@@ -93,6 +93,6 @@ This is an Astro-based personal blog and portfolio website with the following ke
 ## Important Notes
 
 - Never modify blog post files in `src/content/blog/` directly - use Notion CMS instead
-- Run `yarn notion-format` after making content changes in Notion  
+- Run `bun notion-format` after making content changes in Notion  
 - Environment variables are required for Notion integration and S3 operations
 - The site uses hybrid output mode allowing both static and server-rendered pages

@@ -15,8 +15,8 @@
     "list-buckets": "tsx src/utils/s3/listBuckets.ts",
     "list-objects": "tsx src/utils/s3/listObjects.ts",
     "list-objects-signed": "tsx src/utils/s3/listObjectsSigned.ts",
-    "clean-and-dev": "yarn cache clean && rm -rf node_modules && yarn && yarn format:write && yarn run dev",
-    "notion-format": "yarn notion-to-md && yarn format:write"
+    "clean-and-dev": "rm -rf node_modules && bun install && bun run format:write && bun run dev",
+    "notion-format": "bun run notion-to-md && bun run format:write"
   },
   "dependencies": {
     "@11ty/is-land": "^4.0.0",
@@ -60,5 +60,5 @@
   "resolutions": {
     "cssesc": "./overrides/cssesc"
   },
-  "packageManager": "yarn@4.9.2"
+  "packageManager": "bun"
 }
