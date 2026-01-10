@@ -43,7 +43,7 @@
     "cssesc": "./overrides/cssesc",
     "dotenv": "^16.4.5",
     "notion-to-md": "^3.1.1",
-    "sharp": "^0.33.5",
+    "sharp": "^0.34.5",
     "sort-keys": "^5.1.0",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.6.2",
