@@ -27,3 +27,6 @@ pnpm-debug.log*
 
 # worktrees
 tree/
+
+# local notes
+*.local.md
