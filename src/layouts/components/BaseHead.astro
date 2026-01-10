@@ -15,6 +15,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const { title, description, image = '/syakir.webp' } = Astro.props;
 ---
 
+<!-- Resource Hints -->
+<link rel='preconnect' href='https://api.github.com' />
+
 <!-- Global Metadata -->
 <meta charset='utf-8' />
 <meta name='viewport' content='width=device-width,initial-scale=1' />

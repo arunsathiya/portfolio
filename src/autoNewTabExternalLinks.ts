@@ -24,7 +24,7 @@ export const autoNewTabExternalLinks: RehypePlugin = (options?: Options) => {
 
 			if (isExternal(url, siteDomain)) {
 				element.properties!['target'] = '_blank';
-				element.properties!['rel'] = 'noopener';
+				element.properties!['rel'] = 'noopener noreferrer';
 			}
 		});
 	};
