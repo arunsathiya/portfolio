@@ -90,9 +90,21 @@ This is an Astro-based personal blog and portfolio website with the following ke
 - Content-first architecture with performance optimization
 - RSS feed generation for blog subscribers
 
+## Workflow
+
+### Git Commits
+- Use conventional commit format (e.g., `fix:`, `feat:`, `chore:`, `docs:`)
+- Commit and push changes to main branch after completing tasks
+- Vercel automatically deploys on push to main
+
+### Deployment
+- Hosted on Vercel with automatic deployments from main branch
+- Preview deployments created for pull requests
+- No manual deployment steps required
+
 ## Important Notes
 
 - Never modify blog post files in `src/content/blog/` directly - use Notion CMS instead
-- Run `bun notion-format` after making content changes in Notion  
+- Run `bun notion-format` after making content changes in Notion
 - Environment variables are required for Notion integration and S3 operations
 - The site uses hybrid output mode allowing both static and server-rendered pages
