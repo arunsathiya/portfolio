@@ -8,8 +8,6 @@ node_modules/
 
 # logs
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
 
 
@@ -26,7 +24,6 @@ pnpm-debug.log*
 .idea/
 .aider*
 .vercel
-.yarn/install-state.gz
 
 # worktrees
 tree/
