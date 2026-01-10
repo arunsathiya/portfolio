@@ -94,7 +94,8 @@ This is an Astro-based personal blog and portfolio website with the following ke
 
 ### Git Commits
 - Use conventional commit format (e.g., `fix:`, `feat:`, `chore:`, `docs:`)
-- Commit and push changes to main branch after completing tasks
+- Commit incrementally as you make progress, not just at the end
+- Push immediately after each commit
 - Vercel automatically deploys on push to main
 
 ### Deployment
