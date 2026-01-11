@@ -22,7 +22,7 @@
 	.prose:not(.list-view-prose) h4,
 	.prose:not(.list-view-prose) h5,
 	.prose:not(.list-view-prose) h6 {
-		@apply mx-auto max-w-2xl;
+		@apply max-w-2xl;
 	}
 
 	/* Images, videos, and iframes get full width treatment */
@@ -32,7 +32,6 @@
 
 	/* Code blocks get wider than content but not full width */
 	.prose:not(.list-view-prose) pre {
-		@apply mx-auto;
 		width: 100% !important;
 		max-width: 48rem !important;
 	}
