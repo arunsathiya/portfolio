@@ -86,7 +86,7 @@
 
 	/* Inline code styling - Highlighter effect */
 	.prose :not(pre) > code {
-		background: linear-gradient(180deg, rgba(251, 191, 36, 0.15) 50%, rgba(251, 191, 36, 0.1) 50%);
+		background: linear-gradient(90deg, rgba(251, 191, 36, 0.2) 0%, rgba(251, 191, 36, 0.05) 100%);
 		color: #24292f;
 		padding: 0 0.125rem;
 		font-size: 0.9em;
@@ -102,7 +102,7 @@
 	/* Dark mode inline code */
 	@media (prefers-color-scheme: dark) {
 		.prose :not(pre) > code {
-			background: linear-gradient(180deg, rgba(251, 191, 36, 0.2) 50%, rgba(251, 191, 36, 0.15) 50%);
+			background: linear-gradient(90deg, rgba(251, 191, 36, 0.25) 0%, rgba(251, 191, 36, 0.08) 100%);
 			color: #f0f6fc;
 		}
 	}
