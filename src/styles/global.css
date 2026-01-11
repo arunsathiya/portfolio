@@ -85,7 +85,7 @@
 	}
 
 	/* Inline code styling - Highlighter effect */
-	:not(pre) > code {
+	.prose :not(pre) > code {
 		background: linear-gradient(180deg, rgba(251, 191, 36, 0.15) 50%, rgba(251, 191, 36, 0.1) 50%);
 		color: #24292f;
 		padding: 0 0.125rem;
@@ -93,9 +93,15 @@
 		font-weight: 500;
 	}
 
+	/* Ensure no pseudo-elements for inline code */
+	.prose :not(pre) > code::before,
+	.prose :not(pre) > code::after {
+		content: none !important;
+	}
+
 	/* Dark mode inline code */
 	@media (prefers-color-scheme: dark) {
-		:not(pre) > code {
+		.prose :not(pre) > code {
 			background: linear-gradient(180deg, rgba(251, 191, 36, 0.2) 50%, rgba(251, 191, 36, 0.15) 50%);
 			color: #f0f6fc;
 		}
