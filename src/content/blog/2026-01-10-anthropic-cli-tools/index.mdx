@@ -4,7 +4,7 @@ seoTitle: 'On Anthropic''s Third-Party CLI Restrictions'
 slug: 'anthropic-cli-tools'
 description: 'On Anthropic''s third-party CLI restrictions'
 pubDate: 'Jan 10 2026 12:00 AM'
-updatedDate: 'Jan 10 2026 6:21 PM'
+updatedDate: 'Jan 14 2026 1:23 PM'
 tags: ["Development","AI"]
 coverImage: './image.webp'
 ---
@@ -16,7 +16,7 @@ Anthropic recently updated their terms of service to block third-party CLI tools
 The core issue is straightforward: Anthropic offers Claude Code subscriptions at rates significantly lower than their API pricing. A heavy user might consume over $1,000 worth of API tokens in a month while only paying $200. 
 
 
-Third-party tools like OpenCode, Crush and Cline discovered they could authenticate via OAuth and access this discounted compute, effectively getting premium API access at subscription prices. 
+Third-party tools like OpenCode and Crush discovered they could spoof the Claude Code CLI - sending matching headers and client signatures to make Anthropic's servers believe requests came from the official tool - and access this discounted compute at subscription prices.
 
 
 I had been using a third-party CLI harness too for unique workflows, so I get the frustration of losing access.
