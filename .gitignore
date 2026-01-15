@@ -25,6 +25,9 @@ pnpm-debug.log*
 .aider*
 .vercel
 
+# local claude skills (symlinks to local paths)
+.claude/skills/
+
 # worktrees
 tree/
 
