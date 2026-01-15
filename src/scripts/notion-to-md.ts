@@ -182,12 +182,21 @@ async function processPage(page: PageObjectResponse) {
 		fs.mkdirSync(dir, { recursive: true });
 	}
 
-	const sourceImagePath = './src/scripts/image.webp';
-	const destinationImagePath = path.join(dir, 'image.webp');
-	if (fs.existsSync(sourceImagePath) && !fs.existsSync(destinationImagePath)) {
-		fs.copyFileSync(sourceImagePath, destinationImagePath);
-	} else {
-		console.warn(`Warning: image.webp not found in scripts folder`);
+	const supportedFormats = ['webp', 'jpeg', 'jpg', 'png'];
+	let imageFormat = 'webp';
+	for (const format of supportedFormats) {
+		const sourcePath = `./src/scripts/image.${format}`;
+		if (fs.existsSync(sourcePath)) {
+			imageFormat = format;
+			const destPath = path.join(dir, `image.${format}`);
+			if (!fs.existsSync(destPath)) {
+				fs.copyFileSync(sourcePath, destPath);
+			}
+			break;
+		}
+	}
+	if (!fs.existsSync(`./src/scripts/image.${imageFormat}`)) {
+		console.warn('Warning: no image found in scripts folder');
 	}
 
 	const filePath = path.join(dir, 'index.mdx');
@@ -200,7 +209,7 @@ description: "${description}"
 pubDate: '${pubDate}'
 updatedDate: '${updatedDate}'
 tags: ${JSON.stringify(tags)}
-coverImage: "./image.webp"
+coverImage: "./image.${imageFormat}"
 ---
 
 ${postContainsImages ? `import R2Image from 'src/components/R2Image.astro';` : ''}
