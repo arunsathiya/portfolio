@@ -28,8 +28,8 @@ pnpm-debug.log*
 # local claude skill symlinks (point to local paths)
 .claude/skills/symlinks/
 
-# worktrees
-tree/
+# worktrees (worktrunk)
+.worktrees/
 
 # local notes
 *.local.md
