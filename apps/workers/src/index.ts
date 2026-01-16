@@ -1884,28 +1884,40 @@ export default {
     ctx: ExecutionContext,
   ): Promise<void> {
     const s3 = createS3Client(env);
-    for (const message of batch.messages) {
-      try {
-        const payload = message.body;
-        if (payload.type === 'image-processing') {
-          await processImageMessage(payload.payload as ImageProcessingPayload, env);
-          message.ack();
-          continue;
-        }
 
-        // Handle page processing from queue (for "Ship all" functionality)
-        if (payload.type === 'page-processing') {
-          const { pageId } = payload as PageProcessingMessage;
+    // Separate page-processing messages for batched commits
+    const pageMessages: { message: typeof batch.messages[0]; payload: PageProcessingMessage }[] = [];
+    const otherMessages: typeof batch.messages[0][] = [];
+
+    for (const message of batch.messages) {
+      const payload = message.body;
+      if (payload.type === 'page-processing') {
+        pageMessages.push({ message, payload: payload as PageProcessingMessage });
+      } else {
+        otherMessages.push(message);
+      }
+    }
+
+    // Process page-processing messages in batch with single commit
+    if (pageMessages.length > 0) {
+      const batchFileChanges: FileChange[] = [];
+      const successfulMessages: typeof batch.messages[0][] = [];
+      const failedMessages: { message: typeof batch.messages[0]; error: Error }[] = [];
+
+      for (const { message, payload } of pageMessages) {
+        try {
+          const { pageId } = payload;
           console.log(`Processing page from queue: ${pageId}`);
           const { content, path } = await processPage(pageId, env, s3);
           const isPageNew = await isNewPage(path, env);
-          const fileChanges: FileChange[] = [{ path, content }];
+
+          batchFileChanges.push({ path, content });
 
           if (isPageNew) {
             try {
               const folderPath = path.substring(0, path.lastIndexOf('/'));
               const imageBuffer = await getDefaultImage(env, s3);
-              fileChanges.push({
+              batchFileChanges.push({
                 path: `${folderPath}/image.webp`,
                 content: imageBuffer,
               });
@@ -1915,8 +1927,71 @@ export default {
             }
           }
 
-          await commitToGitHub(fileChanges, `chore: ${isPageNew ? 'create' : 'update'} ${path}`, env);
-          console.log(`Successfully processed page: ${pageId}`);
+          successfulMessages.push(message);
+        } catch (error) {
+          console.error(`Error processing page ${payload.pageId}:`, error);
+          failedMessages.push({ message, error: error as Error });
+        }
+      }
+
+      // Batch commit all successfully processed pages
+      if (batchFileChanges.length > 0) {
+        try {
+          const committed = await commitToGitHub(
+            batchFileChanges,
+            `chore: update ${successfulMessages.length} pages from Notion`,
+            env,
+          );
+          console.log(
+            committed
+              ? `Successfully committed ${successfulMessages.length} pages in batch`
+              : 'No changes needed for batch',
+          );
+          // Ack all successful messages
+          for (const message of successfulMessages) {
+            message.ack();
+          }
+        } catch (commitError) {
+          console.error('Error committing batch:', commitError);
+          // Retry all messages if commit failed
+          for (const message of successfulMessages) {
+            if (message.attempts < 3) {
+              message.retry({ delaySeconds: 2 ** message.attempts });
+            } else {
+              message.ack(); // Give up after 3 attempts
+            }
+          }
+        }
+      }
+
+      // Handle failed page processing
+      for (const { message, error } of failedMessages) {
+        if (message.attempts < 3) {
+          message.retry({ delaySeconds: 2 ** message.attempts });
+        } else {
+          const failedMessageKey = `dead-letter:${Date.now()}`;
+          await env.BlogOthers.put(
+            failedMessageKey,
+            JSON.stringify({
+              timestamp: new Date().toISOString(),
+              attempts: message.attempts,
+              body: message.body,
+              error: error.message,
+            }),
+            { expirationTtl: 60 * 60 * 24 * 7 },
+          );
+          console.error(`Dead letter stored: ${failedMessageKey}`);
+          message.ack();
+        }
+      }
+    }
+
+    // Process other message types individually
+    for (const message of otherMessages) {
+      try {
+        const payload = message.body;
+        if (payload.type === 'image-processing') {
+          await processImageMessage(payload.payload as ImageProcessingPayload, env);
           message.ack();
           continue;
         }
