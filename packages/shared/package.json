@@ -16,8 +16,8 @@
     "notion-to-md": "3.1.1"
   },
   "peerDependencies": {
-    "@aws-sdk/client-s3": "^3.900.0",
-    "@aws-sdk/s3-request-presigner": "^3.900.0"
+    "@aws-sdk/client-s3": "^3.970.0",
+    "@aws-sdk/s3-request-presigner": "^3.970.0"
   },
   "devDependencies": {
     "typescript": "5.6.3"
