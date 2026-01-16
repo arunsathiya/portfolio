@@ -4,50 +4,40 @@ seoTitle: 'On Anthropic''s Third-Party CLI Restrictions'
 slug: 'anthropic-cli-tools'
 description: 'On Anthropic''s third-party CLI restrictions'
 pubDate: 'Jan 10 2026 12:00 AM'
-updatedDate: 'Jan 16 2026 9:31 AM'
+updatedDate: 'Jan 16 2026 9:41 AM'
 tags: ["Development","AI"]
 coverImage: './image.jpeg'
 ---
+
 import R2Image from 'src/components/R2Image.astro';
 
 Anthropic recently updated their terms of service to block third-party CLI tools from using Claude Code subscriptions for API access. [This has sparked quite a debate in the developer community](https://news.ycombinator.com/item?id=46549823), and I wanted to share my thoughts on it.
 
-
-The core issue is straightforward: Anthropic offers Claude Code subscriptions at rates significantly lower than their API pricing. A heavy user might consume over $1,000 worth of API tokens in a month while only paying $200. 
-
+The core issue is straightforward: Anthropic offers Claude Code subscriptions at rates significantly lower than their API pricing. A heavy user might consume over $1,000 worth of API tokens in a month while only paying $200.
 
 Third-party tools like OpenCode and Crush discovered they could spoof the Claude Code CLI - sending matching headers and client signatures to make Anthropic's servers believe requests came from the official tool - and access this discounted compute at subscription prices.
 
-
 I had been using a third-party CLI harness too for unique workflows, so I get the frustration of losing access.
 
+The way I see it, this falls on a fine line similar to security disclosure ethics. When security researchers discover vulnerabilities, the community has established clear norms: ethical disclosure is rewarded, while exploiting vulnerabilities for personal gain is condemned.
 
-The way I see it, this falls on a fine line similar to security disclosure ethics. When security researchers discover vulnerabilities, the community has established clear norms: ethical disclosure is rewarded, while exploiting vulnerabilities for personal gain is condemned. 
-
-
-The parallel here is notable.Everyone in the developer community knew these were deeply discounted tokens intended for Anthropic's official tooling. Using third-party workarounds to access this pricing wasn't discovering a hidden feature - it was knowingly exploiting a pricing structure that wasn't designed for that use case.
-
+The parallel here is notable. Everyone in the developer community knew these were deeply discounted tokens intended for Anthropic's official tooling. Using third-party workarounds to access this pricing wasn't discovering a hidden feature - it was knowingly exploiting a pricing structure that wasn't designed for that use case.
 
 Although it’s understandable that clarity from Anthropic came rather late, and the confusion still remains because [Agents SDK is quoted as allowed](https://twitter.com/trq212/status/2009721631401238840) while [docs claim it’s not](https://platform.claude.com/docs/en/agent-sdk/overview).
 
+<R2Image
+	imageKey='assets/anthropic-cli-tools-2e41638e-cd98-80dd-8869-cfd7cafea922.png'
+	alt='Anthropic documentation that mentions the Claude subscription not being eligible for Agent SDK usage'
+/>
 
-<R2Image imageKey="assets/anthropic-cli-tools-2e41638e-cd98-80dd-8869-cfd7cafea922.png" alt="Anthropic documentation that mentions the Claude subscription not being eligible for Agent SDK usage" />
-
-
-That said, I don't think Anthropic is being unreasonable here. Some argue they should have open-sourced Claude Code or offered API credits at a discount instead. While these might be preferable from a user perspective, they ignore the business reality. 
-
+That said, I don't think Anthropic is being unreasonable here. Some argue they should have open-sourced Claude Code or offered API credits at a discount instead. While these might be preferable from a user perspective, they ignore the business reality.
 
 Claude Code represents significant competitive advantage for Anthropic - it's arguably what makes them relevant in the coding assistant space, beyond just the models themselves.
 
-
 The situation highlights an interesting contrast with other players. GitHub's Copilot team appears to be taking the opposite approach, [actively working with the OpenCode team to support subscription authentication officially](https://x.com/jaredpalmer/status/2009844004221833625). This collaborative stance could set a different precedent for how AI companies handle third-party integrations.
 
+For developers who relied on these workarounds, the path forward is clear: use the official Claude Code CLI, pay for API access separately, or explore alternative providers like Groq, Together AI, [OpenCode Black](https://x.com/opencode/status/2009674476804575742), or [Factory Max Plan](https://x.com/FactoryAI/status/2009719232087335109).
 
-For developers who relied on these workarounds, the path forward is clear: use the official Claude Code CLI, pay for API access separately, or explore alternative providers like Groq, Together AI, [OpenCode Black](https://x.com/opencode/status/2009674476804575742), or [Factory Max Plan](https://x.com/FactoryAI/status/2009719232087335109). 
-
-
-It's frustrating, but not unreasonable. 
-
+It's frustrating, but not unreasonable.
 
 The broader lesson applies beyond just AI tooling - when companies offer favorable pricing for specific use cases, building dependencies on workarounds that exploit that pricing is inherently risky. The terms can change at any time.
-
