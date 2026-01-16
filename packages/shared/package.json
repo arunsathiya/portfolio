@@ -1,0 +1,25 @@
+{
+  "name": "@portfolio/shared",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./notion": "./src/notion/index.ts",
+    "./s3": "./src/s3/index.ts",
+    "./dates": "./src/dates/index.ts"
+  },
+  "dependencies": {
+    "@notionhq/client": "2.3.0",
+    "notion-to-md": "3.1.1"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-s3": "^3.900.0",
+    "@aws-sdk/s3-request-presigner": "^3.900.0"
+  },
+  "devDependencies": {
+    "typescript": "5.6.3"
+  }
+}
