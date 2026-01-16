@@ -14,10 +14,11 @@ import {
   createR2ClientConfig,
   formatDateWithTime,
   formatDateForFolder,
+  formatYamlString,
+  formatYamlTags,
   isTextRichTextItem,
   isParagraphBlock,
   normalizeUUID,
-  escapeYamlString,
   queryDatabase,
   retrieveDataSourceSchema,
   type ImageBlockObjectResponse,
@@ -874,13 +875,13 @@ const processPage = async (pageId: string, env: Env, s3: S3Client) => {
   const postContainsImages = mdblocks.some((block) => block.parent.includes('R2Image'));
 
   const content = `---
-title: '${escapeYamlString(title)}'
-seoTitle: '${escapeYamlString(title)}'
-slug: '${escapeYamlString(slug)}'
-description: '${escapeYamlString(description)}'
+title: ${formatYamlString(title)}
+seoTitle: ${formatYamlString(title)}
+slug: '${slug}'
+description: ${formatYamlString(description)}
 pubDate: '${pubDate}'
 updatedDate: '${updatedDate}'
-tags: ${JSON.stringify(tags)}
+tags: ${formatYamlTags(tags)}
 coverImage: './image.${coverImageExt}'
 ---${
     postContainsImages

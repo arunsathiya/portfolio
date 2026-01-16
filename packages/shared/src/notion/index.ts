@@ -169,11 +169,33 @@ export function normalizeUUID(id: string): string | null {
 }
 
 /**
+ * Format a string for YAML frontmatter, returning the quoted value.
+ * Uses double quotes for strings containing apostrophes (Prettier-compatible),
+ * otherwise uses single quotes with escaping.
+ */
+export function formatYamlString(str: string): string {
+  if (str.includes("'")) {
+    // Use double quotes for strings with apostrophes (Prettier-preferred)
+    return `"${str.replace(/"/g, '\\"')}"`;
+  }
+  return `'${str}'`;
+}
+
+/**
+ * @deprecated Use formatYamlString instead for Prettier-compatible output
  * Escape a string for use in YAML frontmatter.
  * Escapes single quotes by doubling them.
  */
 export function escapeYamlString(str: string): string {
   return str.replace(/'/g, "''");
+}
+
+/**
+ * Format an array of tags for YAML frontmatter (Prettier-compatible).
+ * Outputs: ['tag1', 'tag2'] with single quotes and spaces.
+ */
+export function formatYamlTags(tags: string[]): string {
+  return `[${tags.map((tag) => `'${tag}'`).join(', ')}]`;
 }
 
 // Re-export types from notion client for convenience

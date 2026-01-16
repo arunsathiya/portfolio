@@ -9,6 +9,8 @@ export {
   isParagraphBlock,
   normalizeUUID,
   escapeYamlString,
+  formatYamlString,
+  formatYamlTags,
   getDataSourceIdFromDatabaseId,
   clearDataSourceIdCache,
   queryDatabase,
