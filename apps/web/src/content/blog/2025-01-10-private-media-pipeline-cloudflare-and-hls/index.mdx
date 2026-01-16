@@ -14,7 +14,12 @@ I've been experimenting with HTTP Live Streaming (HLS) recently, and it's fascin
 The interesting part is how simple the implementation becomes with modern web components. Using `hls-video-element`, you can create a video player with just a few lines of code:
 
 ```html
-<hls-video controls src="https://example.com/videos/playlist.m3u8" crossorigin="use-credentials"> </hls-video>
+<hls-video
+  controls
+  src="https://example.com/videos/playlist.m3u8"
+  crossorigin="use-credentials"
+>
+</hls-video>
 ```
 
 While exploring this, I realized how this could be the foundation for a private media sharing platform. Combine HLS with Cloudflare R2 for storage, Cloudflare Access for authentication, Cloudflare Workers for HLS segment generation from the video file, and other scripting that might be needed, and you have all the pieces for a secure, private media pipeline.

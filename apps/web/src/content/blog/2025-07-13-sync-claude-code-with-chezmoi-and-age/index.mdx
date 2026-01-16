@@ -47,7 +47,7 @@ jj git push  # Push to remote
 
 The command history shows my actual workflow - I had to experiment a bit with getting the encryption right. There were a few [`chezmoi forget`](https://chezmoi.io/reference/commands/forget/) commands when I initially added files without encryption by mistake. The final sequence that worked was:
 
-```plain text
+```text
 chezmoi add --encrypt ~/.claude/commands
 jj st
 jj commit -m "feat: add personal claude commands"

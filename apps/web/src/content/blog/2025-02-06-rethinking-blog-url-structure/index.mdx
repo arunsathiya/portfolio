@@ -15,27 +15,27 @@ My initial approach involved fuzzy matching old URLs to current ones using a key
 
 ```typescript
 const findClosestSlug = (requestedSlug: string, currentSlugs: string[]): string | null => {
-	const requestedKeywords = extractKeywords(requestedSlug);
-	let bestMatch = {
-		slug: '',
-		score: 0,
-		matchedKeywords: 0,
-	};
+ const requestedKeywords = extractKeywords(requestedSlug);
+ let bestMatch = {
+   slug: '',
+   score: 0,
+   matchedKeywords: 0
+ };
 
-	for (const slug of currentSlugs) {
-		const slugKeywords = extractKeywords(slug);
-		const matchResult = evaluateMatch(requestedKeywords, slugKeywords);
+ for (const slug of currentSlugs) {
+   const slugKeywords = extractKeywords(slug);
+   const matchResult = evaluateMatch(requestedKeywords, slugKeywords);
 
-		if (matchResult.score > bestMatch.score) {
-			bestMatch = {
-				slug,
-				score: matchResult.score,
-				matchedKeywords: matchResult.matches,
-			};
-		}
-	}
+   if (matchResult.score > bestMatch.score) {
+     bestMatch = {
+       slug,
+       score: matchResult.score,
+       matchedKeywords: matchResult.matches
+     };
+   }
+ }
 
-	return bestMatch.score >= 0.4 ? bestMatch.slug : null;
+ return bestMatch.score >= 0.4 ? bestMatch.slug : null;
 };
 ```
 
