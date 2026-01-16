@@ -1,5 +1,4 @@
 import {
-  DataRedundancy,
   GetObjectCommand,
   HeadObjectCommand,
   PutObjectCommand,
@@ -8,18 +7,24 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import Replicate, { ApiError, validateWebhook } from 'replicate';
 import Anthropic from '@anthropic-ai/sdk';
-import { Client, isFullPage } from '@notionhq/client';
+import { isFullPage } from '@notionhq/client';
+import {
+  createNotionClient,
+  createNotionToMarkdown,
+  createR2ClientConfig,
+  formatDateWithTime,
+  formatDateForFolder,
+  isTextRichTextItem,
+  isParagraphBlock,
+  normalizeUUID,
+  escapeYamlString,
+  type ImageBlockObjectResponse,
+  type NotionClient,
+  type PageObjectResponse,
+  type UpdateBlockParameters,
+} from '@portfolio/shared';
 
 import { Buffer } from 'node:buffer';
-import {
-  BlockObjectResponse,
-  ImageBlockObjectResponse,
-  PageObjectResponse,
-  PartialBlockObjectResponse,
-  RichTextItemResponse,
-  TextRichTextItemResponse,
-} from '@notionhq/client/build/src/api-endpoints';
-import { NotionToMarkdown } from 'notion-to-md';
 import path from 'node:path';
 
 interface Env {
@@ -115,14 +120,13 @@ interface GitHubWorkflowDispatch {
 }
 
 const createS3Client = (env: Env) =>
-  new S3Client({
-    region: 'auto',
-    endpoint: `https://${env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-    credentials: {
+  new S3Client(
+    createR2ClientConfig({
+      accountId: env.CLOUDFLARE_ACCOUNT_ID,
       accessKeyId: env.CLOUDFLARE_R2_ACCESS_KEY_ID,
       secretAccessKey: env.CLOUDFLARE_R2_SECRET_ACCESS_KEY,
-    },
-  });
+    })
+  );
 
 // CORS headers for API responses
 const corsHeaders = {
@@ -137,13 +141,6 @@ const jsonResponse = (data: unknown, status = 200) =>
     status,
     headers: { 'Content-Type': 'application/json', ...corsHeaders },
   });
-
-// Normalize UUID to canonical format (8-4-4-4-12 with hyphens)
-const normalizeUUID = (id: string): string | null => {
-  const hex = id.replace(/[-\s]/g, '').toLowerCase();
-  if (!/^[0-9a-f]{32}$/.test(hex)) return null;
-  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
-};
 
 const handleAssets = async (request: Request, env: Env, s3Client: S3Client) => {
   const url = new URL(request.url);
@@ -310,9 +307,8 @@ const handleImageGeneration = async (payload: NotionWebhookPayload, env: Env) =>
     console.log('✅ Database ID validated');
 
     // Fetch the specific page data from Notion
-    const notion = new Client({
+    const notion = createNotionClient({
       auth: env.NOTION_TOKEN,
-      notionVersion: '2022-06-28',
       fetch: (input, init) => fetch(input, init),
     });
 
@@ -729,41 +725,6 @@ interface NotionWebhookPayload {
   };
 }
 
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  const month = date.toLocaleString('default', { month: 'short', timeZone: 'UTC' });
-  const day = date.getUTCDate().toString().padStart(2, '0');
-  const year = date.getUTCFullYear();
-  const time = date.toLocaleString('default', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true,
-    timeZone: 'UTC',
-  });
-  return `${month} ${day} ${year} ${time}`;
-}
-
-function formatDateForFolder(dateString: string): string {
-  return new Date(dateString).toISOString().split('T')[0];
-}
-
-type NotionClient = InstanceType<typeof Client>;
-type UpdateBlockParameters = Parameters<NotionClient['blocks']['update']>[0];
-
-function isTextRichTextItem(item: RichTextItemResponse): item is TextRichTextItemResponse {
-  return item.type === 'text';
-}
-
-function isParagraphBlock(
-  block: BlockObjectResponse | PartialBlockObjectResponse,
-): block is BlockObjectResponse & { type: 'paragraph' } {
-  return 'type' in block && block.type === 'paragraph';
-}
-
-const escapeYamlString = (str: string) => {
-  return str.replace(/'/g, "''");
-};
-
 // Detect which cover image extension exists in the GitHub folder
 const getCoverImageExtension = async (folderPath: string, env: Env): Promise<string> => {
   const extensions = ['webp', 'jpeg', 'jpg'];
@@ -778,17 +739,12 @@ const getCoverImageExtension = async (folderPath: string, env: Env): Promise<str
 };
 
 const processPage = async (pageId: string, env: Env, s3: S3Client) => {
-  const notion = new Client({
+  const notion = createNotionClient({
     auth: env.NOTION_TOKEN,
-    notionVersion: '2022-06-28',
     fetch: (input, init) => fetch(input, init),
   });
-  const n2m = new NotionToMarkdown({
+  const n2m = createNotionToMarkdown({
     notionClient: notion,
-    config: {
-      parseChildPages: false,
-      separateChildPage: false,
-    },
   });
 
   const [mdblocks, page] = await Promise.all([
@@ -822,10 +778,10 @@ const processPage = async (pageId: string, env: Env, s3: S3Client) => {
       : null;
 
   const pubDate = originallyPublishedDate
-    ? formatDate(originallyPublishedDate + 'T00:00:00.000Z')
-    : formatDate(page.created_time);
+    ? formatDateWithTime(originallyPublishedDate + 'T00:00:00.000Z')
+    : formatDateWithTime(page.created_time);
 
-  const updatedDate = formatDate(page.last_edited_time);
+  const updatedDate = formatDateWithTime(page.last_edited_time);
 
   // Get tags
   const tags =
@@ -900,9 +856,8 @@ ${convertedMdString}`;
 };
 
 const processImageMessage = async (message: ImageProcessingPayload, env: Env) => {
-  const notion = new Client({
+  const notion = createNotionClient({
     auth: env.NOTION_TOKEN,
-    notionVersion: '2022-06-28',
     fetch: (input, init) => fetch(input, init),
   });
 
@@ -1150,9 +1105,8 @@ const processNotionWebhook = async (
 
   if (processAllPages) {
     console.log('Processing all pages in database:', databaseId);
-    const notion = new Client({
+    const notion = createNotionClient({
       auth: env.NOTION_TOKEN,
-      notionVersion: '2022-06-28',
       fetch: (input, init) => fetch(input, init),
     });
 
@@ -1354,9 +1308,8 @@ interface NotionTag {
 }
 
 const fetchAndStoreNotionTags = async (env: Env) => {
-  const notion = new Client({
+  const notion = createNotionClient({
     auth: env.NOTION_TOKEN,
-    notionVersion: '2022-06-28',
     fetch: (input, init) => fetch(input, init),
   });
 
@@ -1426,9 +1379,8 @@ const getRandomCover = (): { type: 'external'; external: { url: string } } => {
 };
 
 const updateAllPageCoversAndIcons = async (env: Env): Promise<void> => {
-  const notion = new Client({
+  const notion = createNotionClient({
     auth: env.NOTION_TOKEN,
-    notionVersion: '2022-06-28',
     fetch: (input, init) => fetch(input, init),
   });
 
@@ -1495,7 +1447,7 @@ const updateAllPageCoversAndIcons = async (env: Env): Promise<void> => {
   }
 };
 
-const updatePageLinks = async (pageId: string, notion: Client): Promise<void> => {
+const updatePageLinks = async (pageId: string, notion: NotionClient): Promise<void> => {
   const blocks = await notion.blocks.children.list({
     block_id: pageId,
   });
@@ -1553,9 +1505,8 @@ const handleLinkUpdates = async (request: Request, env: Env): Promise<Response> 
     return new Response('Unauthorized', { status: 401 });
   }
 
-  const notion = new Client({
+  const notion = createNotionClient({
     auth: env.NOTION_TOKEN,
-    notionVersion: '2022-06-28',
     fetch: (input, init) => fetch(input, init),
   });
 
@@ -1612,9 +1563,8 @@ const handleLinkUpdates = async (request: Request, env: Env): Promise<Response> 
 };
 
 const fetchAndStoreCurrentSlugs = async (env: Env) => {
-  const notion = new Client({
+  const notion = createNotionClient({
     auth: env.NOTION_TOKEN,
-    notionVersion: '2022-06-28',
     fetch: (input, init) => fetch(input, init),
   });
 

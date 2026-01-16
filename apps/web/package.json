@@ -19,6 +19,7 @@
     "notion-format": "bun run notion-to-md && bun run format:write"
   },
   "dependencies": {
+    "@portfolio/shared": "workspace:*",
     "@11ty/is-land": "^5.0.1",
     "@astrojs/check": "^0.9.4",
     "@astrojs/cloudflare": "^12.6.0",

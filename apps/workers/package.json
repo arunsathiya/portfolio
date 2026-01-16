@@ -22,11 +22,12 @@
     "wrangler": "^4.23.0"
   },
   "dependencies": {
+    "@portfolio/shared": "workspace:*",
     "@anthropic-ai/sdk": "^0.71.2",
     "@aws-sdk/client-s3": "^3.966.0",
     "@aws-sdk/s3-request-presigner": "^3.966.0",
-    "@notionhq/client": "^2.2.15",
-    "notion-to-md": "^3.1.4",
+    "@notionhq/client": "2.3.0",
+    "notion-to-md": "3.1.1",
     "path": "^0.12.7",
     "replicate": "^1.4.0"
   }

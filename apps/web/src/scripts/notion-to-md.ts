@@ -1,55 +1,29 @@
-import { Client } from '@notionhq/client';
-import type {
-	BlockObjectResponse,
-	ImageBlockObjectResponse,
-	PageObjectResponse,
-	PartialBlockObjectResponse,
-	RichTextItemResponse,
-	TextRichTextItemResponse,
-} from '@notionhq/client/build/src/api-endpoints';
+import {
+	createNotionClient,
+	createNotionToMarkdown,
+	formatDate,
+	formatDateForFolder,
+	isTextRichTextItem,
+	isParagraphBlock,
+	type ImageBlockObjectResponse,
+	type PageObjectResponse,
+	type UpdateBlockParameters,
+} from '@portfolio/shared';
 import { uploadImage } from '@src/utils/s3/uploadImage';
 import dotenv from 'dotenv';
 import fs from 'fs';
-import { NotionToMarkdown } from 'notion-to-md';
 import path from 'path';
 import sortKeys from 'sort-keys';
 
 dotenv.config();
 
-const notion = new Client({
-	auth: process.env.NOTION_SECRET,
+const notion = createNotionClient({
+	auth: process.env.NOTION_SECRET!,
 });
 
-const n2m = new NotionToMarkdown({
+const n2m = createNotionToMarkdown({
 	notionClient: notion,
-	config: {
-		parseChildPages: false,
-		separateChildPage: false,
-	},
 });
-
-function formatDate(dateString: string): string {
-	const date = new Date(dateString);
-	const month = date.toLocaleString('default', { month: 'short', timeZone: 'UTC' });
-	const day = date.getUTCDate().toString().padStart(2, '0');
-	const year = date.getUTCFullYear();
-	return `${month} ${day} ${year}`;
-}
-
-function formatDateForFolder(dateString: string): string {
-	return new Date(dateString).toISOString().split('T')[0];
-}
-
-type NotionClient = InstanceType<typeof Client>;
-type UpdateBlockParameters = Parameters<NotionClient['blocks']['update']>[0];
-
-function isTextRichTextItem(item: RichTextItemResponse): item is TextRichTextItemResponse {
-	return item.type === 'text';
-}
-
-function isParagraphBlock(block: BlockObjectResponse | PartialBlockObjectResponse): block is BlockObjectResponse & { type: 'paragraph' } {
-	return 'type' in block && block.type === 'paragraph';
-}
 
 async function processPage(page: PageObjectResponse) {
 	const pageId = page.id;

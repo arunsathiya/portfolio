@@ -24,6 +24,7 @@
         "@fontsource/ibm-plex-mono": "^5.1.1",
         "@fontsource/ibm-plex-sans": "^5.1.0",
         "@notionhq/client": "2.3.0",
+        "@portfolio/shared": "workspace:*",
         "@rollup/rollup-linux-x64-gnu": "^4.45.1",
         "@supabase/supabase-js": "^2.52.0",
         "@zachleat/snow-fall": "^1.0.3",
@@ -52,8 +53,9 @@
         "@anthropic-ai/sdk": "^0.71.2",
         "@aws-sdk/client-s3": "^3.966.0",
         "@aws-sdk/s3-request-presigner": "^3.966.0",
-        "@notionhq/client": "^2.2.15",
-        "notion-to-md": "^3.1.4",
+        "@notionhq/client": "2.3.0",
+        "@portfolio/shared": "workspace:*",
+        "notion-to-md": "3.1.1",
         "path": "^0.12.7",
         "replicate": "^1.4.0",
       },
@@ -1800,8 +1802,6 @@
     "@portfolio/web/notion-to-md": ["notion-to-md@3.1.9", "", { "dependencies": { "markdown-table": "^2.0.0", "node-fetch": "2" } }, "sha512-SsYhhigh+jOv06QOiFynOQATPMl96CspWDIL3Q5klzp4eaZ1dYaPI3ELoly80G1K0jf730u3ItvfwskzPKK41g=="],
 
     "@portfolio/web/typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
-
-    "@portfolio/workers/notion-to-md": ["notion-to-md@3.1.9", "", { "dependencies": { "markdown-table": "^2.0.0", "node-fetch": "2" } }, "sha512-SsYhhigh+jOv06QOiFynOQATPMl96CspWDIL3Q5klzp4eaZ1dYaPI3ELoly80G1K0jf730u3ItvfwskzPKK41g=="],
 
     "@portfolio/workers/typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
