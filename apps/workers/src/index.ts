@@ -1938,26 +1938,22 @@ export default {
               { expirationTtl: 60 * 60 },
             );
 
-            // Atomically increment processed count using a simple approach
-            // Note: This isn't truly atomic but works reasonably well for this use case
+            // Check if all pages are processed by counting actual file keys
+            // This avoids race conditions with counter increments
             const metaKey = `ship-all:${batchId}:meta`;
-            const metaRaw = await env.BlogOthers.get(metaKey);
-            if (metaRaw) {
-              const meta = JSON.parse(metaRaw);
-              meta.processedCount = (meta.processedCount || 0) + 1;
-              await env.BlogOthers.put(metaKey, JSON.stringify(meta), { expirationTtl: 60 * 60 });
+            const fileKeys = await env.BlogOthers.list({ prefix: `ship-all:${batchId}:file:` });
+            const processedCount = fileKeys.keys.length;
 
-              console.log(`Batch ${batchId}: processed ${meta.processedCount}/${totalPages}`);
+            console.log(`Batch ${batchId}: processed ${processedCount}/${totalPages}`);
 
-              // If all pages are processed, trigger the final commit
-              if (meta.processedCount >= totalPages) {
+            // If all pages are processed, trigger the final commit
+            if (processedCount >= totalPages) {
                 console.log(`Batch ${batchId}: all pages processed, committing...`);
 
-                // Retrieve all file changes from KV
+                // Retrieve all file changes from KV (reuse fileKeys from above)
                 const allFileChanges: FileChange[] = [];
-                const keys = await env.BlogOthers.list({ prefix: `ship-all:${batchId}:file:` });
 
-                for (const key of keys.keys) {
+                for (const key of fileKeys.keys) {
                   const fileDataRaw = await env.BlogOthers.get(key.name);
                   if (fileDataRaw) {
                     const fileData = JSON.parse(fileDataRaw);
@@ -1994,12 +1990,11 @@ export default {
                 }
 
                 // Cleanup KV entries
-                for (const key of keys.keys) {
+                for (const key of fileKeys.keys) {
                   await env.BlogOthers.delete(key.name);
                 }
                 await env.BlogOthers.delete(metaKey);
                 console.log(`Batch ${batchId}: cleanup complete`);
-              }
             }
 
             message.ack();
