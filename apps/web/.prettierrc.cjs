@@ -15,7 +15,7 @@ module.exports = {
 	insertPragma: false,
 	proseWrap: 'preserve',
 	htmlWhitespaceSensitivity: 'css',
-	endOfLine: 'auto',
+	endOfLine: 'lf',
 	plugins: ['prettier-plugin-astro'],
 	overrides: [
 		{
