@@ -1,386 +1,389 @@
 ---
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
 
 interface Props {
-  slug: string;
+	slug: string;
 }
 
 const { slug } = Astro.props;
 
-const supabaseUrl = import.meta.env.SUPABASE_URL
-const supabaseAnonKey = import.meta.env.SUPABASE_ANON_KEY
+const supabaseUrl = import.meta.env.SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.SUPABASE_ANON_KEY;
 
-let comments: any[] = []
-let error = null
+let comments: any[] = [];
+let error = null;
 
 if (supabaseUrl && supabaseAnonKey) {
-  const supabase = createClient(supabaseUrl, supabaseAnonKey)
-  
-  try {
-    const { data, error: fetchError } = await supabase
-      .from('comments')
-      .select(`
+	const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+	try {
+		const { data, error: fetchError } = await supabase
+			.from('comments')
+			.select(
+				`
         id,
         content,
         created_at,
         author_name,
         author_avatar,
         post_slug
-      `)
-      .eq('post_slug', slug)
-      .order('created_at', { ascending: true })
-    
-    if (fetchError) {
-      console.error('Error fetching comments:', fetchError)
-      error = fetchError.message
-    } else {
-      comments = data || []
-    }
-  } catch (err) {
-    console.error('Supabase connection error:', err)
-    error = 'Failed to load comments'
-  }
+      `,
+			)
+			.eq('post_slug', slug)
+			.order('created_at', { ascending: true });
+
+		if (fetchError) {
+			console.error('Error fetching comments:', fetchError);
+			error = fetchError.message;
+		} else {
+			comments = data || [];
+		}
+	} catch (err) {
+		console.error('Supabase connection error:', err);
+		error = 'Failed to load comments';
+	}
 }
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
+	return new Date(dateString).toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit',
+	});
+};
 ---
 
-<div class="comments-section" data-post-slug={slug}>
-  <h3 id="comments-title" class="text-xl font-semibold mb-6 text-zinc-800 dark:text-zinc-200">
-    Comments ({comments.length})
-  </h3>
-  
-  {error && (
-    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
-      <p class="text-red-700 dark:text-red-300">
-        Unable to load comments: {error}
-      </p>
-    </div>
-  )}
-  
-  {!error && comments.length === 0 && (
-    <div id="comments-empty" class="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 text-left">
-      <p class="text-zinc-600 dark:text-zinc-400">
-        No comments yet. Be the first to share your thoughts!
-      </p>
-    </div>
-  )}
-  
-  {comments.length > 0 && (
-    <div id="comments-container" class="space-y-4">
-      {comments.map((comment) => (
-        <div class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 hover:shadow-sm transition-shadow">
-          <div class="flex items-start space-x-3">
-            <img 
-              src={comment.author_avatar || '/default-avatar.svg'} 
-              alt={comment.author_name}
-              class="w-8 h-8 rounded-full flex-shrink-0"
-            />
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center space-x-2 mb-1">
-                <span class="font-medium text-zinc-800 dark:text-zinc-200">
-                  {comment.author_name}
-                </span>
-                <span class="text-sm text-zinc-500 dark:text-zinc-400">
-                  {formatDate(comment.created_at)}
-                </span>
-              </div>
-              <div class="text-zinc-700 dark:text-zinc-300 prose prose-sm max-w-none">
-                {comment.content}
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  )}
-  
-  <!-- Comment Form -->
-  <div class="mt-8">
-    <div id="comment-form-container">
-      <div class="flex justify-start p-4 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-lg">
-        <button
-          id="github-login-btn"
-          class="flex items-center justify-center gap-2 px-4 py-2 bg-zinc-900 dark:bg-zinc-600 text-white border border-zinc-800 dark:border-zinc-500 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-500 transition-colors font-medium"
-        >
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-          Sign in with GitHub
-        </button>
-      </div>
-      
-      <!-- Comment Form (hidden by default) -->
-      <div id="comment-form" class="hidden mt-4 p-4 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg">
-        <div class="flex items-center gap-3 mb-4">
-          <img id="user-avatar" class="w-8 h-8 rounded-full" alt="User avatar" />
-          <div>
-            <div id="user-name" class="font-medium text-zinc-800 dark:text-zinc-200"></div>
-            <button id="logout-btn" class="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300">
-              Sign out
-            </button>
-          </div>
-        </div>
-        
-        <textarea
-          id="comment-input"
-          placeholder="Write your comment..."
-          class="w-full h-24 p-3 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 placeholder-zinc-500 dark:placeholder-zinc-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        ></textarea>
-        
-        <div class="flex justify-between items-center mt-3">
-          <div class="text-sm text-zinc-500 dark:text-zinc-400">
-            <span id="char-count">0</span>/1000
-          </div>
-          <button
-            id="post-comment-btn"
-            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled
-          >
-            Post Comment
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class='comments-section' data-post-slug={slug}>
+	<h3 id='comments-title' class='text-xl font-semibold mb-6 text-zinc-800 dark:text-zinc-200'>
+		Comments ({comments.length})
+	</h3>
+
+	{
+		error && (
+			<div class='bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6'>
+				<p class='text-red-700 dark:text-red-300'>Unable to load comments: {error}</p>
+			</div>
+		)
+	}
+
+	{
+		!error && comments.length === 0 && (
+			<div id='comments-empty' class='bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 text-left'>
+				<p class='text-zinc-600 dark:text-zinc-400'>No comments yet. Be the first to share your thoughts!</p>
+			</div>
+		)
+	}
+
+	{
+		comments.length > 0 && (
+			<div id='comments-container' class='space-y-4'>
+				{comments.map((comment) => (
+					<div class='bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 hover:shadow-sm transition-shadow'>
+						<div class='flex items-start space-x-3'>
+							<img
+								src={comment.author_avatar || '/default-avatar.svg'}
+								alt={comment.author_name}
+								class='w-8 h-8 rounded-full flex-shrink-0'
+							/>
+							<div class='flex-1 min-w-0'>
+								<div class='flex items-center space-x-2 mb-1'>
+									<span class='font-medium text-zinc-800 dark:text-zinc-200'>{comment.author_name}</span>
+									<span class='text-sm text-zinc-500 dark:text-zinc-400'>{formatDate(comment.created_at)}</span>
+								</div>
+								<div class='text-zinc-700 dark:text-zinc-300 prose prose-sm max-w-none'>{comment.content}</div>
+							</div>
+						</div>
+					</div>
+				))}
+			</div>
+		)
+	}
+
+	<!-- Comment Form -->
+	<div class='mt-8'>
+		<div id='comment-form-container'>
+			<div class='flex justify-start p-4 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 rounded-lg'>
+				<button
+					id='github-login-btn'
+					class='flex items-center justify-center gap-2 px-4 py-2 bg-zinc-900 dark:bg-zinc-600 text-white border border-zinc-800 dark:border-zinc-500 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-500 transition-colors font-medium'
+				>
+					<svg class='w-4 h-4' fill='currentColor' viewBox='0 0 24 24'>
+						<path
+							d='M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z'
+						></path>
+					</svg>
+					Sign in with GitHub
+				</button>
+			</div>
+
+			<!-- Comment Form (hidden by default) -->
+			<div id='comment-form' class='hidden mt-4 p-4 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg'>
+				<div class='flex items-center gap-3 mb-4'>
+					<img id='user-avatar' class='w-8 h-8 rounded-full' alt='User avatar' />
+					<div>
+						<div id='user-name' class='font-medium text-zinc-800 dark:text-zinc-200'></div>
+						<button id='logout-btn' class='text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300'>
+							Sign out
+						</button>
+					</div>
+				</div>
+
+				<textarea
+					id='comment-input'
+					placeholder='Write your comment...'
+					class='w-full h-24 p-3 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 placeholder-zinc-500 dark:placeholder-zinc-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+				></textarea>
+
+				<div class='flex justify-between items-center mt-3'>
+					<div class='text-sm text-zinc-500 dark:text-zinc-400'>
+						<span id='char-count'>0</span>/1000
+					</div>
+					<button
+						id='post-comment-btn'
+						class='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed'
+						disabled
+					>
+						Post Comment
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <style>
-  .comments-section {
-    font-family: inherit;
-  }
-  
-  .comments-section .prose {
-    color: inherit;
-  }
-  
-  .comments-section .prose p {
-    margin: 0.5rem 0;
-  }
+	.comments-section {
+		font-family: inherit;
+	}
+
+	.comments-section .prose {
+		color: inherit;
+	}
+
+	.comments-section .prose p {
+		margin: 0.5rem 0;
+	}
 </style>
 
 <script>
-  import { createClient } from '@supabase/supabase-js'
-  
-  const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.SUPABASE_URL
-  const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY
-  
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('Missing Supabase configuration')
-  } else {
-    const supabase = createClient(supabaseUrl, supabaseAnonKey)
-    
-    // Get current post slug from Astro props
-    const postSlug = document.querySelector('[data-post-slug]')?.getAttribute('data-post-slug') || ''
-    
-    // DOM elements
-    const githubLoginBtn = document.getElementById('github-login-btn')
-    const commentForm = document.getElementById('comment-form')
-    const commentInput = document.getElementById('comment-input')
-    const postCommentBtn = document.getElementById('post-comment-btn')
-    const logoutBtn = document.getElementById('logout-btn')
-    const userAvatar = document.getElementById('user-avatar')
-    const userName = document.getElementById('user-name')
-    const charCount = document.getElementById('char-count')
-    
-    // Check if user is already logged in
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        showCommentForm(session.user)
-      }
-    })
-    
-    // Listen for auth state changes
-    supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && session) {
-        showCommentForm(session.user)
-      } else if (event === 'SIGNED_OUT') {
-        hideCommentForm()
-      }
-    })
-    
-    // GitHub login
-    githubLoginBtn?.addEventListener('click', async () => {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-          redirectTo: window.location.href
-        }
-      })
-      if (error) console.error('GitHub login error:', error)
-    })
-    
-    // Logout
-    logoutBtn?.addEventListener('click', async () => {
-      const { error } = await supabase.auth.signOut()
-      if (error) console.error('Logout error:', error)
-    })
-    
-    // Character count
-    commentInput?.addEventListener('input', (e) => {
-      const length = (e.target as HTMLTextAreaElement).value.length
-      if (charCount) charCount.textContent = length.toString()
-      if (postCommentBtn) (postCommentBtn as HTMLButtonElement).disabled = length === 0 || length > 1000
-    })
-    
-    // Post comment
-    postCommentBtn?.addEventListener('click', async () => {
-      const content = (commentInput as HTMLTextAreaElement)?.value.trim()
-      if (!content) return
-      
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-      
-      if (postCommentBtn) (postCommentBtn as HTMLButtonElement).disabled = true
-      postCommentBtn.textContent = 'Posting...'
-      
-      const { data, error } = await supabase
-        .from('comments')
-        .insert({
-          content,
-          author_name: user.user_metadata.full_name || user.user_metadata.name || user.user_metadata.user_name || 'Anonymous',
-          author_avatar: user.user_metadata.avatar_url,
-          post_slug: postSlug
-        })
-        .select()
-      
-      if (error) {
-        console.error('Error posting comment:', error)
-        alert('Error posting comment. Please try again.')
-      } else {
-        if (commentInput) (commentInput as HTMLTextAreaElement).value = ''
-        if (charCount) charCount.textContent = '0'
-        // Add new comment to DOM instead of reloading
-        addCommentToDOM(data[0])
-        updateCommentCount()
-      }
-      
-      if (postCommentBtn) (postCommentBtn as HTMLButtonElement).disabled = false
-      postCommentBtn.textContent = 'Post Comment'
-    })
-    
-    
-    function formatDate(dateString: string) {
-      return new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      })
-    }
-    
-    function renderComment(comment: any, container?: HTMLElement) {
-      const commentElement = document.createElement('div')
-      commentElement.className = 'bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 hover:shadow-sm transition-shadow'
-      
-      // Create structure with DOM methods for security
-      const flexDiv = document.createElement('div')
-      flexDiv.className = 'flex items-start space-x-3'
-      
-      // Avatar image
-      const avatarImg = document.createElement('img')
-      avatarImg.src = comment.author_avatar || '/default-avatar.svg'
-      avatarImg.alt = comment.author_name
-      avatarImg.className = 'w-8 h-8 rounded-full flex-shrink-0'
-      
-      // Content container
-      const contentContainer = document.createElement('div')
-      contentContainer.className = 'flex-1 min-w-0'
-      
-      // Header with name and date
-      const headerDiv = document.createElement('div')
-      headerDiv.className = 'flex items-center space-x-2 mb-1'
-      
-      const nameSpan = document.createElement('span')
-      nameSpan.className = 'font-medium text-zinc-800 dark:text-zinc-200'
-      nameSpan.textContent = comment.author_name
-      
-      const dateSpan = document.createElement('span')
-      dateSpan.className = 'text-sm text-zinc-500 dark:text-zinc-400'
-      dateSpan.textContent = formatDate(comment.created_at)
-      
-      headerDiv.appendChild(nameSpan)
-      headerDiv.appendChild(dateSpan)
-      
-      // Comment content (safely inserted as text)
-      const commentContentDiv = document.createElement('div')
-      commentContentDiv.className = 'text-zinc-700 dark:text-zinc-300 prose prose-sm max-w-none'
-      commentContentDiv.textContent = comment.content
-      
-      // Assemble the structure
-      contentContainer.appendChild(headerDiv)
-      contentContainer.appendChild(commentContentDiv)
-      
-      flexDiv.appendChild(avatarImg)
-      flexDiv.appendChild(contentContainer)
-      
-      commentElement.appendChild(flexDiv)
-      
-      if (container) {
-        container.appendChild(commentElement)
-      }
-      
-      return commentElement
-    }
-    
-    function addCommentToDOM(comment: any) {
-      const emptyElement = document.getElementById('comments-empty')
-      let containerElement = document.getElementById('comments-container')
-      
-      // Hide "no comments" message if it exists
-      if (emptyElement && !emptyElement.classList.contains('hidden')) {
-        emptyElement.style.display = 'none'
-      }
-      
-      // If no container exists (no previous comments), create one
-      if (!containerElement) {
-        containerElement = document.createElement('div')
-        containerElement.id = 'comments-container'
-        containerElement.className = 'space-y-4'
-        
-        // Insert before the comment form
-        const commentForm = document.getElementById('comment-form-container')
-        if (commentForm) {
-          commentForm.parentNode?.insertBefore(containerElement, commentForm)
-        }
-      }
-      
-      // Show and use the container
-      containerElement.classList.remove('hidden')
-      containerElement.style.display = 'block'
-      renderComment(comment, containerElement)
-    }
-    
-    function updateCommentCount(count?: number) {
-      const countElement = document.getElementById('comments-title')
-      if (countElement) {
-        const currentCount = count ?? document.querySelectorAll('#comments-container > div').length
-        countElement.textContent = `Comments (${currentCount})`
-      }
-    }
-    
-    function showCommentForm(user: any) {
-      const flexElement = document.getElementById('comment-form-container')?.querySelector('.flex') as HTMLElement
-      if (flexElement) flexElement.style.display = 'none'
-      commentForm?.classList.remove('hidden')
-      
-      if (userAvatar) (userAvatar as HTMLImageElement).src = user.user_metadata.avatar_url || '/default-avatar.svg'
-      if (userName) userName.textContent = user.user_metadata.full_name || user.user_metadata.name || user.user_metadata.user_name || 'Anonymous'
-    }
-    
-    function hideCommentForm() {
-      const flexElement = document.getElementById('comment-form-container')?.querySelector('.flex') as HTMLElement
-      if (flexElement) flexElement.style.display = 'flex'
-      commentForm?.classList.add('hidden')
-    }
-  }
+	import { createClient } from '@supabase/supabase-js';
+
+	const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.SUPABASE_URL;
+	const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY;
+
+	if (!supabaseUrl || !supabaseAnonKey) {
+		console.error('Missing Supabase configuration');
+	} else {
+		const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+		// Get current post slug from Astro props
+		const postSlug = document.querySelector('[data-post-slug]')?.getAttribute('data-post-slug') || '';
+
+		// DOM elements
+		const githubLoginBtn = document.getElementById('github-login-btn');
+		const commentForm = document.getElementById('comment-form');
+		const commentInput = document.getElementById('comment-input');
+		const postCommentBtn = document.getElementById('post-comment-btn');
+		const logoutBtn = document.getElementById('logout-btn');
+		const userAvatar = document.getElementById('user-avatar');
+		const userName = document.getElementById('user-name');
+		const charCount = document.getElementById('char-count');
+
+		// Check if user is already logged in
+		supabase.auth.getSession().then(({ data: { session } }) => {
+			if (session) {
+				showCommentForm(session.user);
+			}
+		});
+
+		// Listen for auth state changes
+		supabase.auth.onAuthStateChange((event, session) => {
+			if (event === 'SIGNED_IN' && session) {
+				showCommentForm(session.user);
+			} else if (event === 'SIGNED_OUT') {
+				hideCommentForm();
+			}
+		});
+
+		// GitHub login
+		githubLoginBtn?.addEventListener('click', async () => {
+			const { error } = await supabase.auth.signInWithOAuth({
+				provider: 'github',
+				options: {
+					redirectTo: window.location.href,
+				},
+			});
+			if (error) console.error('GitHub login error:', error);
+		});
+
+		// Logout
+		logoutBtn?.addEventListener('click', async () => {
+			const { error } = await supabase.auth.signOut();
+			if (error) console.error('Logout error:', error);
+		});
+
+		// Character count
+		commentInput?.addEventListener('input', (e) => {
+			const length = (e.target as HTMLTextAreaElement).value.length;
+			if (charCount) charCount.textContent = length.toString();
+			if (postCommentBtn) (postCommentBtn as HTMLButtonElement).disabled = length === 0 || length > 1000;
+		});
+
+		// Post comment
+		postCommentBtn?.addEventListener('click', async () => {
+			const content = (commentInput as HTMLTextAreaElement)?.value.trim();
+			if (!content) return;
+
+			const {
+				data: { user },
+			} = await supabase.auth.getUser();
+			if (!user) return;
+
+			if (postCommentBtn) (postCommentBtn as HTMLButtonElement).disabled = true;
+			postCommentBtn.textContent = 'Posting...';
+
+			const { data, error } = await supabase
+				.from('comments')
+				.insert({
+					content,
+					author_name: user.user_metadata.full_name || user.user_metadata.name || user.user_metadata.user_name || 'Anonymous',
+					author_avatar: user.user_metadata.avatar_url,
+					post_slug: postSlug,
+				})
+				.select();
+
+			if (error) {
+				console.error('Error posting comment:', error);
+				alert('Error posting comment. Please try again.');
+			} else {
+				if (commentInput) (commentInput as HTMLTextAreaElement).value = '';
+				if (charCount) charCount.textContent = '0';
+				// Add new comment to DOM instead of reloading
+				addCommentToDOM(data[0]);
+				updateCommentCount();
+			}
+
+			if (postCommentBtn) (postCommentBtn as HTMLButtonElement).disabled = false;
+			postCommentBtn.textContent = 'Post Comment';
+		});
+
+		function formatDate(dateString: string) {
+			return new Date(dateString).toLocaleDateString('en-US', {
+				year: 'numeric',
+				month: 'short',
+				day: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit',
+			});
+		}
+
+		function renderComment(comment: any, container?: HTMLElement) {
+			const commentElement = document.createElement('div');
+			commentElement.className =
+				'bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 hover:shadow-sm transition-shadow';
+
+			// Create structure with DOM methods for security
+			const flexDiv = document.createElement('div');
+			flexDiv.className = 'flex items-start space-x-3';
+
+			// Avatar image
+			const avatarImg = document.createElement('img');
+			avatarImg.src = comment.author_avatar || '/default-avatar.svg';
+			avatarImg.alt = comment.author_name;
+			avatarImg.className = 'w-8 h-8 rounded-full flex-shrink-0';
+
+			// Content container
+			const contentContainer = document.createElement('div');
+			contentContainer.className = 'flex-1 min-w-0';
+
+			// Header with name and date
+			const headerDiv = document.createElement('div');
+			headerDiv.className = 'flex items-center space-x-2 mb-1';
+
+			const nameSpan = document.createElement('span');
+			nameSpan.className = 'font-medium text-zinc-800 dark:text-zinc-200';
+			nameSpan.textContent = comment.author_name;
+
+			const dateSpan = document.createElement('span');
+			dateSpan.className = 'text-sm text-zinc-500 dark:text-zinc-400';
+			dateSpan.textContent = formatDate(comment.created_at);
+
+			headerDiv.appendChild(nameSpan);
+			headerDiv.appendChild(dateSpan);
+
+			// Comment content (safely inserted as text)
+			const commentContentDiv = document.createElement('div');
+			commentContentDiv.className = 'text-zinc-700 dark:text-zinc-300 prose prose-sm max-w-none';
+			commentContentDiv.textContent = comment.content;
+
+			// Assemble the structure
+			contentContainer.appendChild(headerDiv);
+			contentContainer.appendChild(commentContentDiv);
+
+			flexDiv.appendChild(avatarImg);
+			flexDiv.appendChild(contentContainer);
+
+			commentElement.appendChild(flexDiv);
+
+			if (container) {
+				container.appendChild(commentElement);
+			}
+
+			return commentElement;
+		}
+
+		function addCommentToDOM(comment: any) {
+			const emptyElement = document.getElementById('comments-empty');
+			let containerElement = document.getElementById('comments-container');
+
+			// Hide "no comments" message if it exists
+			if (emptyElement && !emptyElement.classList.contains('hidden')) {
+				emptyElement.style.display = 'none';
+			}
+
+			// If no container exists (no previous comments), create one
+			if (!containerElement) {
+				containerElement = document.createElement('div');
+				containerElement.id = 'comments-container';
+				containerElement.className = 'space-y-4';
+
+				// Insert before the comment form
+				const commentForm = document.getElementById('comment-form-container');
+				if (commentForm) {
+					commentForm.parentNode?.insertBefore(containerElement, commentForm);
+				}
+			}
+
+			// Show and use the container
+			containerElement.classList.remove('hidden');
+			containerElement.style.display = 'block';
+			renderComment(comment, containerElement);
+		}
+
+		function updateCommentCount(count?: number) {
+			const countElement = document.getElementById('comments-title');
+			if (countElement) {
+				const currentCount = count ?? document.querySelectorAll('#comments-container > div').length;
+				countElement.textContent = `Comments (${currentCount})`;
+			}
+		}
+
+		function showCommentForm(user: any) {
+			const flexElement = document.getElementById('comment-form-container')?.querySelector('.flex') as HTMLElement;
+			if (flexElement) flexElement.style.display = 'none';
+			commentForm?.classList.remove('hidden');
+
+			if (userAvatar) (userAvatar as HTMLImageElement).src = user.user_metadata.avatar_url || '/default-avatar.svg';
+			if (userName)
+				userName.textContent = user.user_metadata.full_name || user.user_metadata.name || user.user_metadata.user_name || 'Anonymous';
+		}
+
+		function hideCommentForm() {
+			const flexElement = document.getElementById('comment-form-container')?.querySelector('.flex') as HTMLElement;
+			if (flexElement) flexElement.style.display = 'flex';
+			commentForm?.classList.add('hidden');
+		}
+	}
 </script>

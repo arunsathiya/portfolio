@@ -1,49 +1,45 @@
 ---
-title: 'Rethinking my blog''s URL structure'
-seoTitle: 'Rethinking my blog''s URL structure'
+title: "Rethinking my blog's URL structure"
+seoTitle: "Rethinking my blog's URL structure"
 slug: 'rethinking-blog-url-structure'
 description: 'How using a /blog/ prefix simplifies URL management and routing in static sites.'
 pubDate: 'Feb 06 2025 4:50 PM'
 updatedDate: 'Jul 06 2025 7:03 AM'
-tags: ["DevOps","Content Management"]
+tags: ['DevOps', 'Content Management']
 coverImage: './image.webp'
 ---
 
 Today’s goal was simple: redirect outdated URLs to their current versions (like `/what-11-hours-layover-in-suvarnabhumi-airport-bkk-bangkok-was-like` to `/11-hours-layover-in-suvarnabhumi-airport`). The implementation, however, raised some interesting architectural challenges.
 
-
 My initial approach involved fuzzy matching old URLs to current ones using a keyword-based similarity algorithm:
-
 
 ```typescript
 const findClosestSlug = (requestedSlug: string, currentSlugs: string[]): string | null => {
- const requestedKeywords = extractKeywords(requestedSlug);
- let bestMatch = {
-   slug: '',
-   score: 0,
-   matchedKeywords: 0
- };
+	const requestedKeywords = extractKeywords(requestedSlug);
+	let bestMatch = {
+		slug: '',
+		score: 0,
+		matchedKeywords: 0,
+	};
 
- for (const slug of currentSlugs) {
-   const slugKeywords = extractKeywords(slug);
-   const matchResult = evaluateMatch(requestedKeywords, slugKeywords);
+	for (const slug of currentSlugs) {
+		const slugKeywords = extractKeywords(slug);
+		const matchResult = evaluateMatch(requestedKeywords, slugKeywords);
 
-   if (matchResult.score > bestMatch.score) {
-     bestMatch = {
-       slug,
-       score: matchResult.score,
-       matchedKeywords: matchResult.matches
-     };
-   }
- }
+		if (matchResult.score > bestMatch.score) {
+			bestMatch = {
+				slug,
+				score: matchResult.score,
+				matchedKeywords: matchResult.matches,
+			};
+		}
+	}
 
- return bestMatch.score >= 0.4 ? bestMatch.slug : null;
+	return bestMatch.score >= 0.4 ? bestMatch.slug : null;
 };
 ```
 
-
 While this worked, it led to a bigger challenge: my domain uses a combination of [Cloudflare Workers (for specific paths)](https://github.com/arunsathiya/portfolio-workers/blob/db4c73c0bd84ca1fd5770b1ccaa48ae1503f5f18/wrangler.toml#L6-L23) and [Vercel (for everything else)](https://github.com/arunsathiya/portfolio). Workers need predefined route patterns, which means I’ll need to handle route handling at fetch time:
-
 
 ```typescript
 async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -51,8 +47,8 @@ async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response
   const path = url.pathname;
 
   // Only process non-existent paths
-  if (!url.pathname.startsWith('/assets/') && 
-      !url.pathname.startsWith('/api/') && 
+  if (!url.pathname.startsWith('/assets/') &&
+      !url.pathname.startsWith('/api/') &&
       !url.pathname.startsWith('/webhooks/')) {
     const slug = path.replace(/^\//, '');
     const redirectSlug = findClosestSlug(slug, currentSlugs);
@@ -63,7 +59,6 @@ async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response
 }
 ```
 
-
 I am not keen on that, so I thinking of moving back to `/blog` prefix for the routes configuration on the Workers script to be simplified:
 
 1. Clear separation between blog and non-blog content
@@ -71,4 +66,3 @@ I am not keen on that, so I thinking of moving back to `/blog` prefix for the ro
 3. Predictable URL structure for redirects
 
 I'm still on the fence about this change - while the `/blog/` prefix offers simplicity and better routing control, part of me wants to keep URLs as clean as possible. Guess I'll need to make a call on this soon, as having inconsistent URLs isn't helping anyone. For now, I'm leaning towards bringing back the `/blog/` prefix, but we'll see where I land.
-

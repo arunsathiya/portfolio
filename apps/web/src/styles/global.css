@@ -9,7 +9,6 @@
 @tailwind utilities;
 
 @layer components {
-
 	/* Blog post view prose styles - only for individual posts, not list view */
 	.prose:not(.list-view-prose) > *,
 	.prose:not(.list-view-prose) p,
@@ -26,7 +25,8 @@
 	}
 
 	/* Images, videos, and iframes get full width treatment */
-	.prose:not(.list-view-prose) :where(img, iframe, video):not(.prose > div img):not(.prose > div:first-child *):not(.prose > div:nth-child(2) *) {
+	.prose:not(.list-view-prose)
+		:where(img, iframe, video):not(.prose > div img):not(.prose > div:first-child *):not(.prose > div:nth-child(2) *) {
 		@apply w-full max-w-none mx-0;
 	}
 
@@ -45,11 +45,11 @@
 		@apply my-0;
 	}
 
-	.prose img+img {
+	.prose img + img {
 		@apply mt-8;
 	}
 
-	.prose p+p:not(:has(img)) {
+	.prose p + p:not(:has(img)) {
 		@apply mt-4;
 	}
 

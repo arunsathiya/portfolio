@@ -5,69 +5,66 @@ slug: 'multi-tenant-authentication-challenges'
 description: 'Exploring authentication options for Vercel deployments and the challenges of managing multiple GitHub OAuth apps.'
 pubDate: 'Jan 30 2025 10:41 AM'
 updatedDate: 'Jul 06 2025 7:03 AM'
-tags: ["Development","Security"]
+tags: ['Development', 'Security']
 coverImage: './image.jpeg'
 ---
+
 import R2Image from 'src/components/R2Image.astro';
 
 I recently ran into an interesting authentication challenge with my Vercel deployments. The core issue wasn't just about protecting the application - it was about managing GitHub OAuth authentication across multiple domains: my production domain, localhost for development, and those auto-generated Vercel deployment URLs.
 
-
 The challenge stems from a GitHub OAuth2 limitation: each OAuth app can only have one callback URL. This meant I needed separate GitHub OAuth apps for:
+
 - Production domain
 - Local development (localhost)
 - Vercel-generated deployment URLs
 
-
 Initially, I tried [Cloudflare Access](https://www.cloudflare.com/zero-trust/products/access/) for protection, but discovered a limitation: [Vercel automatically generates unique deployment URLs](https://vercel.com/docs/deployments/preview-deployments) not just for feature branches (which I expected), but also for the main branch. While [Vercel's built-in authentication can protect feature branch deployments](https://vercel.com/docs/security/deployment-protection#deployment-protection-on-vercel), it doesn't cover these auto-generated production URLs.
-
 
 My first attempt at a solution was NextAuth. The implementation focused on matching different GitHub OAuth credentials based on the domain:
 
-
 ```typescript
 const getGitHubCredentials = () => {
-  const vercelUrl = process.env.VERCEL_URL
-  const nextAuthUrl = process.env.NEXTAUTH_URL
-  const fullUrl = vercelUrl || nextAuthUrl || ''
-  
-  let host = ''
-  try {
-    if (fullUrl.startsWith('http')) {
-      const url = new URL(fullUrl)
-      host = url.hostname
-    } else {
-      host = fullUrl.trim().toLowerCase()
-    }
+	const vercelUrl = process.env.VERCEL_URL;
+	const nextAuthUrl = process.env.NEXTAUTH_URL;
+	const fullUrl = vercelUrl || nextAuthUrl || '';
 
-    // Domain-specific credentials
-    if (host.includes("git-main-arun-s")) {
-      return {
-        clientId: process.env.AUTH_GITHUB_ID_GIT_MAIN,
-        clientSecret: process.env.AUTH_GITHUB_SECRET_GIT_MAIN
-      }
-    }
-    
-    // More credential matching logic...
-  } catch (error) {
-    console.error('Error in getGitHubCredentials:', error)
-    return {
-      clientId: process.env.AUTH_GITHUB_ID,
-      clientSecret: process.env.AUTH_GITHUB_SECRET
-    }
-  }
-}
+	let host = '';
+	try {
+		if (fullUrl.startsWith('http')) {
+			const url = new URL(fullUrl);
+			host = url.hostname;
+		} else {
+			host = fullUrl.trim().toLowerCase();
+		}
+
+		// Domain-specific credentials
+		if (host.includes('git-main-arun-s')) {
+			return {
+				clientId: process.env.AUTH_GITHUB_ID_GIT_MAIN,
+				clientSecret: process.env.AUTH_GITHUB_SECRET_GIT_MAIN,
+			};
+		}
+
+		// More credential matching logic...
+	} catch (error) {
+		console.error('Error in getGitHubCredentials:', error);
+		return {
+			clientId: process.env.AUTH_GITHUB_ID,
+			clientSecret: process.env.AUTH_GITHUB_SECRET,
+		};
+	}
+};
 ```
-
 
 However, I ran into issues with host detection reliability since NextAuth initializes providers before having access to the request context. [This made the domain-based credential selection inconsistent](https://github.com/nextauthjs/next-auth/issues/600).
 
-
 That's when I moved to [Clerk](https://clerk.com/). While Clerk also has its limitations - it only supports one domain per application (production domain for production and localhost for development) - it provides a useful workaround through [its ](https://clerk.com/docs/components/protect)[`<Protect />`](https://clerk.com/docs/components/protect)[ component](https://clerk.com/docs/components/protect). This component can protect access to elements without requiring login, essentially acting as a gatekeeper.
 
-
-<R2Image imageKey="assets/multi-tenant-authentication-challenges-18b1638e-cd98-80fb-8ab9-cee670a4fe09.png" alt="A screenshot of Clerk’s <Protect /> component that prevents access to parts of a frontend application based on roles." />
-
+<R2Image
+	imageKey='assets/multi-tenant-authentication-challenges-18b1638e-cd98-80fb-8ab9-cee670a4fe09.png'
+	alt='A screenshot of Clerk’s <Protect /> component that prevents access to parts of a frontend application based on roles.'
+/>
 
 Here's what my current setup looks like:
 
@@ -77,9 +74,10 @@ Here's what my current setup looks like:
 
 Here’s how my final application looks on one of the Vercel deployment URLs, which cannot be disabled. “Sign in” doesn’t work because of Clerk’s lack of support for multiple domains per application.
 
-
-<R2Image imageKey="assets/multi-tenant-authentication-challenges-18b1638e-cd98-80a8-936c-c8f8bda288a2.png" alt="A screenshot of a frontend application on a Vercel deployment URL, which cannot be disabled, gated by Clerk login." />
-
+<R2Image
+	imageKey='assets/multi-tenant-authentication-challenges-18b1638e-cd98-80a8-936c-c8f8bda288a2.png'
+	alt='A screenshot of a frontend application on a Vercel deployment URL, which cannot be disabled, gated by Clerk login.'
+/>
 
 Is it ideal? Not quite. I'd prefer either of these:
 
@@ -88,4 +86,3 @@ Is it ideal? Not quite. I'd prefer either of these:
 3. Vercel providing more control over deployment URL generation
 
 But for now, this combination of Clerk's protection mechanisms offers a reasonable middle ground. The experience has taught me that sometimes in authentication architecture, we need to work creatively within the constraints of multiple services' limitations.
-

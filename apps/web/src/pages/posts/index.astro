@@ -14,26 +14,24 @@ const description = 'Articles, guides, tutorials about productivity, DevOps, dat
 export const POSTS_PER_PAGE = 10;
 
 // Get all posts and sort them
-const allPosts = (await getCollection('blog')).sort(
-	(a: BlogPost, b: BlogPost) => {
-		// First, sort by publication date (most recent first)
-		const pubDateDiff = b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
-		if (pubDateDiff !== 0) {
-			return pubDateDiff;
-		}
-		
-		// If same publication date, sort by updated date (most recent first)
-		const aUpdated = a.data.updatedDate || a.data.pubDate;
-		const bUpdated = b.data.updatedDate || b.data.pubDate;
-		const updatedDateDiff = bUpdated.valueOf() - aUpdated.valueOf();
-		if (updatedDateDiff !== 0) {
-			return updatedDateDiff;
-		}
-		
-		// If same publication and updated dates, sort by slug (alphabetically)
-		return a.slug.localeCompare(b.slug);
+const allPosts = (await getCollection('blog')).sort((a: BlogPost, b: BlogPost) => {
+	// First, sort by publication date (most recent first)
+	const pubDateDiff = b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+	if (pubDateDiff !== 0) {
+		return pubDateDiff;
 	}
-);
+
+	// If same publication date, sort by updated date (most recent first)
+	const aUpdated = a.data.updatedDate || a.data.pubDate;
+	const bUpdated = b.data.updatedDate || b.data.pubDate;
+	const updatedDateDiff = bUpdated.valueOf() - aUpdated.valueOf();
+	if (updatedDateDiff !== 0) {
+		return updatedDateDiff;
+	}
+
+	// If same publication and updated dates, sort by slug (alphabetically)
+	return a.slug.localeCompare(b.slug);
+});
 
 // Get first page of posts
 const posts = allPosts.slice(0, POSTS_PER_PAGE);
@@ -45,8 +43,21 @@ const currentPage = 1;
 	<div class='container'>
 		<div class='mb-10'>
 			<div class='mb-4'>
-				<a href='/' class='inline-flex items-center gap-2 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors'>
-					<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
+				<a
+					href='/'
+					class='inline-flex items-center gap-2 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors'
+				>
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						width='16'
+						height='16'
+						viewBox='0 0 24 24'
+						fill='none'
+						stroke='currentColor'
+						stroke-width='2'
+						stroke-linecap='round'
+						stroke-linejoin='round'
+					>
 						<path d='M19 12H5M12 19l-7-7 7-7'></path>
 					</svg>
 					Home
@@ -56,22 +67,24 @@ const currentPage = 1;
 			<p class='text-zinc-700 dark:text-zinc-300 text-lg'>{description}</p>
 		</div>
 		<PostsByYear posts={posts} />
-		
+
 		<!-- Pagination -->
-		{totalPages > 1 && (
-			<div class="flex items-center gap-4 mt-8 mb-4">
-				<span class="text-zinc-700 dark:text-zinc-300">
-					Page {currentPage} of {totalPages}
-				</span>
-				{currentPage < totalPages && (
-					<a 
-						href={`/posts/2`}
-						class="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
-					>
-						Next
-					</a>
-				)}
-			</div>
-		)}
+		{
+			totalPages > 1 && (
+				<div class='flex items-center gap-4 mt-8 mb-4'>
+					<span class='text-zinc-700 dark:text-zinc-300'>
+						Page {currentPage} of {totalPages}
+					</span>
+					{currentPage < totalPages && (
+						<a
+							href={`/posts/2`}
+							class='px-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors'
+						>
+							Next
+						</a>
+					)}
+				</div>
+			)
+		}
 	</div>
 </BaseLayout>

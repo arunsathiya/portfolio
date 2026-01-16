@@ -5,24 +5,19 @@ slug: 'sync-claude-code-with-chezmoi-and-age'
 description: 'Using chezmoi and age to securely sync a mixture of private Claude Code configuration files on a dotfiles GitHub repository.'
 pubDate: 'Jul 13 2025 12:00 AM'
 updatedDate: 'Jan 15 2026 6:39 PM'
-tags: ["Development","DevOps"]
+tags: ['Development', 'DevOps']
 coverImage: './image.jpeg'
 ---
 
 I wanted to share my Claude Code commands and hook configurations between my work laptop and home machine. The problem: some of these files contain API keys and other sensitive data that shouldn't live in a public git repository.
 
-
-I asked ChatGPT about it and it suggested chezmoi combined with [age encryption](https://github.com/FiloSottile/age). [chezmoi](https://www.chezmoi.io/) is a dotfiles manager that handles this exact scenario. It can selectively encrypt files using Age before storing them in version control. 
-
+I asked ChatGPT about it and it suggested chezmoi combined with [age encryption](https://github.com/FiloSottile/age). [chezmoi](https://www.chezmoi.io/) is a dotfiles manager that handles this exact scenario. It can selectively encrypt files using Age before storing them in version control.
 
 Claude Code stores custom commands in `~/.claude/commands/` and configuration in `~/.claude/`. I'd built up a useful collection of commands like `blog-draft`, `generate-pr`, and `analysis` that I wanted available everywhere. But several of these commands include API keys, and my hook configurations contain personal automation scripts. A simple git repository wasn't enough.
 
-
 I started by generating an Age key pair: `age-keygen -o ~/key.txt`
 
-
 Then configured chezmoi to use it in `~/.config/chezmoi/chezmoi.toml`. Receipt key here is my public key from the age keypair generated earlier.
-
 
 ```toml
 encryption = "age"
@@ -31,21 +26,16 @@ encryption = "age"
     recipient = "age1p07m5wxyx5rd08utd5ds02n57e8mzda3dd0pg863clwemrtmdq3qprp0x8"
 ```
 
-
 Adding encrypted files is straightforward:
-
 
 ```shell
 chezmoi add --encrypt ~/.claude/commands
 chezmoi add --encrypt ~/.zshrc
 ```
 
-
 chezmoi automatically encrypts these files before storing them. In my repository, they appear as `encrypted_dot_claude/commands/encrypted_blog-draft.md.age` and similar.
 
-
 I decided to use [Jujutsu (jj) for version control instead of git, mostly because I’ve been switching to it recently](https://www.arun.blog/jujutsu-vcs). The workflow feels natural:
-
 
 ```shell
 chezmoi cd  # Enter the chezmoi repository
@@ -55,9 +45,7 @@ jj bookmark set main -r @-  # Set main bookmark to the latest commit
 jj git push  # Push to remote
 ```
 
-
 The command history shows my actual workflow - I had to experiment a bit with getting the encryption right. There were a few [`chezmoi forget`](https://chezmoi.io/reference/commands/forget/) commands when I initially added files without encryption by mistake. The final sequence that worked was:
-
 
 ```plain text
 chezmoi add --encrypt ~/.claude/commands
@@ -67,15 +55,10 @@ jjb  # My alias for jj bookmark
 jjp  # My alias for jj git push
 ```
 
-
 The setup is transparent once configured. When I run `chezmoi apply` on a new machine, it automatically decrypts files using my private key. Regular files like shell aliases remain unencrypted and readable in the repository. The selective encryption is the key feature here - I can share most of my dotfiles publicly while keeping sensitive configuration files private.
 
-
-There are some limitations. You need to securely distribute the Age private key to each machine. I'm currently copying it manually, though there are more sophisticated approaches using password managers or key distribution systems. [age-op](https://github.com/stevelr/age-op) seems to be an option already, but I am yet to try. 
-
+There are some limitations. You need to securely distribute the Age private key to each machine. I'm currently copying it manually, though there are more sophisticated approaches using password managers or key distribution systems. [age-op](https://github.com/stevelr/age-op) seems to be an option already, but I am yet to try.
 
 The encrypted files aren't diffable in the repository, so tracking changes requires using `chezmoi diff` locally.
 
-
 This pattern works for any scenario where you want to version control configurations that mix public and private data. The Age encryption layer provides fine-grained control over what gets exposed. It's particularly useful for development tools like Claude Code that store a mixture of public and private commands.
-

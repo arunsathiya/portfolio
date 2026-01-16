@@ -5,51 +5,37 @@ slug: 'claude-code-so-far'
 description: 'Claude Code experience so far.'
 pubDate: 'Jun 28 2025 8:35 PM'
 updatedDate: 'Jul 06 2025 7:03 AM'
-tags: ["Automation","DevOps","Development","AI"]
+tags: ['Automation', 'DevOps', 'Development', 'AI']
 coverImage: './image.webp'
 ---
 
 I ran into [Philipp Spiess' blog post on Claude Code tips](https://spiess.dev/blog/how-i-use-claude-code), and honestly, it's been a game-changer for understanding what Claude Code can actually do. I’ve been playing with Claude Code already, but the tips they highlighted really elevate the experience - feels more than just "AI in the terminal for chats”, and feels like a personal DevOps assistant. With [remote SSH access](https://www.reddit.com/r/ClaudeAI/comments/1lmqayh/using_claude_code_on_my_phone_over_ssh_with_the/), or [devcontainers like Claudebox](https://www.reddit.com/r/ClaudeAI/comments/1l56jrs/i_made_claudebox_run_claude_code_without/), it’s all very exciting.
 
-
 I haven’t dived into all the features yet, so I’ll just highlight the ones I’ve tried from Philipp’s tips so far:
-
 
 ## **Quicker commits**
 
-
-The idea is brilliantly simple: stage your changes, run a script, and Claude Code analyzes your staged git changes to generate a commit message automatically. 
-
+The idea is brilliantly simple: stage your changes, run a script, and Claude Code analyzes your staged git changes to generate a commit message automatically.
 
 ```shell
 #!/bin/bash
 git commit -m "$(/Users/arun/.claude/local/claude -p "Look at the staged git changes and create a summarizing git commit title in conventional git commit format. Only respond with the title and no affirmation.")"
 ```
 
-
 It’s essentially modern [aider](https://github.com/Aider-AI/aider).
-
 
 ## **Yolo mode**
 
-
 The "yolo" approach (`--dangerously-skip-permissions` command) he mentions - just trusting Claude to handle the mundane stuff - initially felt wrong to my careful-engineer brain. But there's something liberating about letting AI handle the small decisions so you can focus on the bigger picture. I’ve only played around with smaller features like [adding images to projects](https://github.com/arunsathiya/portfolio/pull/108), and it’s great.
-
 
 ## **Git worktrees**
 
-
 I'd never heard of them before reading his post, but precisely solves the problem of wanting to run [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) on multiple branches of the same project.
-
 
 The setup was trickier than I expected. I kept running into "branch already checked out" errors until I learned that a branch can only be active in one location at a time. The cleanup process after merging PRs also has a specific order - remove the worktree first, then delete the branch.
 
-
 ## Next
 
-
-I'm still early in my Claude Code journey, but I'm genuinely impressed with how it's changing my development flow - [especially thinking of it as a pair programmer](https://www.linkedin.com/posts/dharmesh_currently-pair-coding-with-both-claude-code-activity-7344803271762489346-87p2?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD4VzzsBo89OgNIHWTRqDmwLVXMBMR1DT48), and not necessarily a vibe-coding agentic workflow. 
-
+I'm still early in my Claude Code journey, but I'm genuinely impressed with how it's changing my development flow - [especially thinking of it as a pair programmer](https://www.linkedin.com/posts/dharmesh_currently-pair-coding-with-both-claude-code-activity-7344803271762489346-87p2?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD4VzzsBo89OgNIHWTRqDmwLVXMBMR1DT48), and not necessarily a vibe-coding agentic workflow.
 
 The tooling ecosystem around AI development is evolving fast, and Claude Code feels like it's actually solving real workflow problems rather than just being clever for the sake of it. That's refreshing, and I’ll be diving into the rest of the tips from Philipp’s blog soon.
-
