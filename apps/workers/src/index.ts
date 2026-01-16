@@ -1636,6 +1636,91 @@ const fetchAndStoreCurrentSlugs = async (env: Env) => {
   }
 };
 
+// Check for pending Ship All batches and commit if all files are ready
+// This handles cases where KV eventual consistency prevented the queue from triggering the commit
+const checkAndCommitPendingBatches = async (env: Env) => {
+  try {
+    // Find all pending batch meta keys
+    const metaKeys = await env.BlogOthers.list({ prefix: 'ship-all:' });
+    const batchMetas = metaKeys.keys.filter((k) => k.name.endsWith(':meta'));
+
+    if (batchMetas.length === 0) {
+      return;
+    }
+
+    console.log(`Found ${batchMetas.length} pending Ship All batch(es)`);
+
+    for (const metaKeyInfo of batchMetas) {
+      const metaRaw = await env.BlogOthers.get(metaKeyInfo.name);
+      if (!metaRaw) continue;
+
+      const meta = JSON.parse(metaRaw);
+      const { batchId, totalPages } = meta;
+
+      // Count file keys for this batch
+      const fileKeys = await env.BlogOthers.list({ prefix: `ship-all:${batchId}:file:` });
+      const processedCount = fileKeys.keys.length;
+
+      console.log(`Batch ${batchId}: ${processedCount}/${totalPages} files ready`);
+
+      if (processedCount >= totalPages) {
+        console.log(`Batch ${batchId}: all pages ready, committing from scheduled task...`);
+
+        // Create S3 client for default images
+        const s3 = new S3Client(createR2ClientConfig(env));
+
+        // Retrieve all file changes from KV
+        const allFileChanges: FileChange[] = [];
+
+        for (const key of fileKeys.keys) {
+          const fileDataRaw = await env.BlogOthers.get(key.name);
+          if (fileDataRaw) {
+            const fileData = JSON.parse(fileDataRaw);
+            allFileChanges.push({ path: fileData.path, content: fileData.content });
+
+            // Add default image for new pages
+            if (fileData.isNew) {
+              try {
+                const folderPath = fileData.path.substring(0, fileData.path.lastIndexOf('/'));
+                const imageBuffer = await getDefaultImage(env, s3);
+                allFileChanges.push({
+                  path: `${folderPath}/image.webp`,
+                  content: imageBuffer,
+                });
+              } catch (imgError) {
+                console.error('Error adding default image:', imgError);
+              }
+            }
+          }
+        }
+
+        // Single commit for all pages
+        if (allFileChanges.length > 0) {
+          const committed = await commitToGitHub(
+            allFileChanges,
+            `chore: update ${totalPages} pages from Notion`,
+            env,
+          );
+          console.log(
+            committed
+              ? `Scheduled task: Successfully committed all ${totalPages} pages`
+              : 'Scheduled task: No changes needed',
+          );
+        }
+
+        // Cleanup KV entries
+        for (const key of fileKeys.keys) {
+          await env.BlogOthers.delete(key.name);
+        }
+        await env.BlogOthers.delete(metaKeyInfo.name);
+        console.log(`Batch ${batchId}: cleanup complete`);
+      }
+    }
+  } catch (error) {
+    console.error('Error checking pending batches:', error);
+  }
+};
+
 const findClosestSlug = (requestedSlug: string, currentSlugs: string[]): string | null => {
   const requestedKeywords = extractKeywords(requestedSlug);
   let bestMatch = {
@@ -2101,6 +2186,7 @@ export default {
       case '*/3 * * * *':
         await updateAllPageCoversAndIcons(env);
         await fetchAndStoreCurrentSlugs(env);
+        await checkAndCommitPendingBatches(env);
         break;
     }
     console.log('cron processed');
