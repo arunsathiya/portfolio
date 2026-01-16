@@ -4,6 +4,9 @@ import type {
   PartialBlockObjectResponse,
   RichTextItemResponse,
   TextRichTextItemResponse,
+  RichTextItemResponseCommon,
+  QueryDataSourceParameters,
+  QueryDataSourceResponse,
 } from '@notionhq/client/build/src/api-endpoints';
 import { NotionToMarkdown } from 'notion-to-md';
 
@@ -18,9 +21,16 @@ export type NotionClient = InstanceType<typeof Client>;
 export type UpdateBlockParameters = Parameters<NotionClient['blocks']['update']>[0];
 
 /**
+ * Full text rich text item type (intersection of common + text-specific)
+ */
+export type FullTextRichTextItemResponse = RichTextItemResponseCommon & TextRichTextItemResponse;
+
+/**
  * Type guard to check if a rich text item is a text item.
  */
-export function isTextRichTextItem(item: RichTextItemResponse): item is TextRichTextItemResponse {
+export function isTextRichTextItem(
+  item: RichTextItemResponse
+): item is RichTextItemResponseCommon & TextRichTextItemResponse {
   return item.type === 'text';
 }
 
@@ -48,9 +58,82 @@ export interface NotionClientConfig {
 export function createNotionClient(config: NotionClientConfig): Client {
   return new Client({
     auth: config.auth,
-    notionVersion: '2022-06-28',
+    notionVersion: '2025-09-03',
     ...(config.fetch && { fetch: config.fetch }),
   });
+}
+
+// In-memory cache for data source IDs
+const dataSourceIdCache = new Map<string, string>();
+
+/**
+ * Extract data_source_id from a database retrieve response.
+ * Handles the new API structure where databases contain data_sources array.
+ */
+function extractDataSourceIdFromDatabaseResponse(db: any): string | undefined {
+  // In 2025-09-03, databases.retrieve returns { data_sources: [{ id, name }, ...] }
+  if (Array.isArray(db?.data_sources) && db.data_sources.length > 0) {
+    return db.data_sources[0].id;
+  }
+  // Fallback for other possible shapes
+  return db?.data_source?.id;
+}
+
+/**
+ * Resolve data_source_id from a database_id (with in-memory caching).
+ * Required for SDK v5 / API version 2025-09-03.
+ */
+export async function getDataSourceIdFromDatabaseId(
+  notion: Client,
+  database_id: string
+): Promise<string> {
+  const cached = dataSourceIdCache.get(database_id);
+  if (cached) return cached;
+
+  const db = await notion.databases.retrieve({ database_id });
+  const data_source_id = extractDataSourceIdFromDatabaseResponse(db);
+
+  if (!data_source_id) {
+    throw new Error(
+      `Could not resolve data_source_id from database_id=${database_id}. ` +
+        `Check the Notion API response shape for databases.retrieve() on API version 2025-09-03.`
+    );
+  }
+
+  dataSourceIdCache.set(database_id, data_source_id);
+  return data_source_id;
+}
+
+/**
+ * Clear the data source ID cache (useful for testing or long-running processes).
+ */
+export function clearDataSourceIdCache(): void {
+  dataSourceIdCache.clear();
+}
+
+/**
+ * Query a database using the new data sources API.
+ * Automatically resolves data_source_id from database_id.
+ */
+export async function queryDatabase(
+  notion: Client,
+  args: Omit<QueryDataSourceParameters, 'data_source_id'> & { database_id: string }
+): Promise<QueryDataSourceResponse> {
+  const { database_id, ...rest } = args;
+  const data_source_id = await getDataSourceIdFromDatabaseId(notion, database_id);
+  return notion.dataSources.query({ data_source_id, ...rest });
+}
+
+/**
+ * Retrieve a data source schema (properties) using the new data sources API.
+ * Automatically resolves data_source_id from database_id.
+ */
+export async function retrieveDataSourceSchema(
+  notion: Client,
+  args: { database_id: string }
+): Promise<any> {
+  const data_source_id = await getDataSourceIdFromDatabaseId(notion, args.database_id);
+  return notion.dataSources.retrieve({ data_source_id });
 }
 
 /**
@@ -98,7 +181,11 @@ export type {
   BlockObjectResponse,
   PartialBlockObjectResponse,
   RichTextItemResponse,
+  RichTextItemResponseCommon,
   TextRichTextItemResponse,
   ImageBlockObjectResponse,
   PageObjectResponse,
+  QueryDataSourceParameters,
+  QueryDataSourceResponse,
+  DataSourceObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints';

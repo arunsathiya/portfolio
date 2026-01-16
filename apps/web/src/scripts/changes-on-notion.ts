@@ -1,18 +1,18 @@
-import { Client, isFullPageOrDatabase } from '@notionhq/client';
-import type {
-	BlockObjectResponse,
-	PageObjectResponse,
-	PartialBlockObjectResponse,
-	RichTextItemResponse,
-	TextRichTextItemResponse,
-	UpdateBlockParameters,
-} from '@notionhq/client/build/src/api-endpoints';
+import { isFullPage } from '@notionhq/client';
+import {
+	createNotionClient,
+	queryDatabase,
+	isTextRichTextItem,
+	isParagraphBlock,
+	type PageObjectResponse,
+	type UpdateBlockParameters,
+} from '@portfolio/shared';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const notion = new Client({
-	auth: process.env.NOTION_SECRET,
+const notion = createNotionClient({
+	auth: process.env.NOTION_SECRET!,
 });
 
 const MAX_RETRIES = 3;
@@ -24,11 +24,11 @@ async function main() {
 		throw new Error('NOTION_DATABASE_ID is not set in the environment variables');
 	}
 
-	const databaseQuery = await notion.databases.query({
+	const databaseQuery = await queryDatabase(notion, {
 		database_id: databaseId,
 	});
 
-	const processPromises = databaseQuery.results.map(async (page) => {
+	const processPromises = databaseQuery.results.map(async (page: any) => {
 		const pageObj = page as PageObjectResponse;
 		await retryUpdate(pageObj.id);
 	});
@@ -36,17 +36,9 @@ async function main() {
 	await Promise.all(processPromises);
 }
 
-function isTextRichTextItem(item: RichTextItemResponse): item is TextRichTextItemResponse {
-	return item.type === 'text';
-}
-
-function isParagraphBlock(block: BlockObjectResponse | PartialBlockObjectResponse): block is BlockObjectResponse & { type: 'paragraph' } {
-	return 'type' in block && block.type === 'paragraph';
-}
-
 async function onceOffUpdates(pageId: string): Promise<void> {
 	const page = await notion.pages.retrieve({ page_id: pageId });
-	if (!isFullPageOrDatabase(page)) {
+	if (!isFullPage(page)) {
 		throw new Error(`Page ${pageId} is not a page or database`);
 	}
 	const blocks = await notion.blocks.children.list({
@@ -133,7 +125,7 @@ async function addIconAndCover(pageId: string): Promise<void> {
 }
 
 async function addIcon(page: PageObjectResponse): Promise<any> {
-	if (isFullPageOrDatabase(page) && !page.icon) {
+	if (isFullPage(page) && !page.icon) {
 		return {
 			icon: {
 				type: 'emoji',
@@ -145,7 +137,7 @@ async function addIcon(page: PageObjectResponse): Promise<any> {
 }
 
 async function addCover(page: PageObjectResponse): Promise<any> {
-	if (isFullPageOrDatabase(page) && !page.cover) {
+	if (isFullPage(page) && !page.cover) {
 		const coverOptions = [
 			{ type: 'solid', color: 'red' },
 			{ type: 'solid', color: 'blue' },

@@ -18,6 +18,8 @@ import {
   isParagraphBlock,
   normalizeUUID,
   escapeYamlString,
+  queryDatabase,
+  retrieveDataSourceSchema,
   type ImageBlockObjectResponse,
   type NotionClient,
   type PageObjectResponse,
@@ -1110,7 +1112,7 @@ const processNotionWebhook = async (
       fetch: (input, init) => fetch(input, init),
     });
 
-    const pages = await notion.databases.query({
+    const pages = await queryDatabase(notion, {
       database_id: databaseId,
     });
 
@@ -1314,14 +1316,14 @@ const fetchAndStoreNotionTags = async (env: Env) => {
   });
 
   try {
-    // Fetch database metadata which includes tag options
-    const response = await notion.databases.retrieve({
+    // Fetch data source schema which includes tag options
+    const response = await retrieveDataSourceSchema(notion, {
       database_id: env.NOTION_DATABASE_ID,
     });
 
     // Extract tags from the multi-select property
     const tagsProperty = Object.values(response.properties).find(
-      (prop) => prop.type === 'multi_select',
+      (prop: any) => prop.type === 'multi_select',
     ) as { type: 'multi_select'; multi_select: { options: NotionTag[] } };
 
     if (!tagsProperty || !tagsProperty.multi_select?.options) {
@@ -1385,7 +1387,7 @@ const updateAllPageCoversAndIcons = async (env: Env): Promise<void> => {
   });
 
   try {
-    const databaseQuery = await notion.databases.query({
+    const databaseQuery = await queryDatabase(notion, {
       database_id: env.NOTION_DATABASE_ID,
       page_size: 100,
     });
@@ -1512,7 +1514,7 @@ const handleLinkUpdates = async (request: Request, env: Env): Promise<Response> 
 
   try {
     // Query all pages in the database
-    const databaseQuery = await notion.databases.query({
+    const databaseQuery = await queryDatabase(notion, {
       database_id: env.NOTION_DATABASE_ID,
       page_size: 100, // Adjust based on your needs
     });
@@ -1569,14 +1571,14 @@ const fetchAndStoreCurrentSlugs = async (env: Env) => {
   });
 
   try {
-    const response = await notion.databases.query({
+    const response = await queryDatabase(notion, {
       database_id: env.NOTION_DATABASE_ID,
       page_size: 100,
     });
 
     const slugs = response.results
-      .map((page) => page.properties['Slug frontmatter']?.formula?.string)
-      .filter((slug): slug is string => !!slug);
+      .map((page: any) => page.properties['Slug frontmatter']?.formula?.string)
+      .filter((slug: any): slug is string => !!slug);
 
     await env.BlogOthers.put('slugs', JSON.stringify(slugs), {
       expirationTtl: 3600,

@@ -5,6 +5,7 @@ import {
 	formatDateForFolder,
 	isTextRichTextItem,
 	isParagraphBlock,
+	queryDatabase,
 	type ImageBlockObjectResponse,
 	type PageObjectResponse,
 	type UpdateBlockParameters,
@@ -200,18 +201,18 @@ async function main() {
 		throw new Error('NOTION_DATABASE_ID is not set in the environment variables');
 	}
 
-	const databaseQuery = await notion.databases.query({
+	const databaseQuery = await queryDatabase(notion, {
 		database_id: databaseId,
 	});
 
 	const allTagColors: Record<string, string> = {};
 
-	const processPromises = databaseQuery.results.map(async (page) => {
+	const processPromises = databaseQuery.results.map(async (page: any) => {
 		const pageObj = page as PageObjectResponse;
 		await processPage(pageObj);
 
 		if (pageObj.properties.Tags && pageObj.properties.Tags.type === 'multi_select') {
-			pageObj.properties.Tags.multi_select.forEach((tag) => {
+			pageObj.properties.Tags.multi_select.forEach((tag: any) => {
 				allTagColors[tag.name] = tag.color;
 			});
 		}
