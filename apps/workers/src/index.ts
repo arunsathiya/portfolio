@@ -1083,6 +1083,8 @@ interface PageProcessingMessage {
   type: 'page-processing';
   pageId: string;
   databaseId: string;
+  batchId?: string; // For coordinating single commit across queue batches
+  totalPages?: number; // Total pages in this batch for commit coordination
 }
 
 // Updated type definitions
@@ -1163,14 +1165,28 @@ const processNotionWebhook = async (
       database_id: databaseId,
     });
 
-    // Send each page to the queue for individual processing
-    // Using sendBatch for efficiency (max 100 messages per batch)
+    // Generate a unique batch ID for coordinating single commit
+    const batchId = `batch-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const totalPages = pages.results.length;
+
+    // Store batch metadata in KV for coordination
+    await env.BlogOthers.put(
+      `ship-all:${batchId}:meta`,
+      JSON.stringify({ totalPages, processedCount: 0, startedAt: new Date().toISOString() }),
+      { expirationTtl: 60 * 60 }, // 1 hour TTL
+    );
+
+    console.log(`Created batch ${batchId} with ${totalPages} pages`);
+
+    // Send each page to the queue with batch coordination info
     const QUEUE_BATCH_SIZE = 100;
     const pageMessages: { body: PageProcessingMessage }[] = pages.results.map((page) => ({
       body: {
         type: 'page-processing' as const,
         pageId: page.id,
         databaseId: databaseId,
+        batchId,
+        totalPages,
       },
     }));
 
@@ -1180,7 +1196,7 @@ const processNotionWebhook = async (
       console.log(`Queued batch ${Math.floor(i / QUEUE_BATCH_SIZE) + 1}: ${batch.length} pages`);
     }
 
-    console.log(`Successfully queued ${pages.results.length} pages for processing`);
+    console.log(`Successfully queued ${totalPages} pages for processing (batch: ${batchId})`);
   } else {
     // Process single page as before
     const { content, path } = await processPage(pageId, env, s3);
@@ -1898,90 +1914,132 @@ export default {
       }
     }
 
-    // Process page-processing messages in batch with single commit
+    // Process page-processing messages with KV-based accumulation for single commit
     if (pageMessages.length > 0) {
-      const batchFileChanges: FileChange[] = [];
-      const successfulMessages: typeof batch.messages[0][] = [];
-      const failedMessages: { message: typeof batch.messages[0]; error: Error }[] = [];
-
       for (const { message, payload } of pageMessages) {
         try {
-          const { pageId } = payload;
-          console.log(`Processing page from queue: ${pageId}`);
+          const { pageId, batchId, totalPages } = payload;
+          console.log(`Processing page from queue: ${pageId}${batchId ? ` (batch: ${batchId})` : ''}`);
+
           const { content, path } = await processPage(pageId, env, s3);
           const isPageNew = await isNewPage(path, env);
 
-          batchFileChanges.push({ path, content });
+          // If this is part of a coordinated batch, store in KV for later commit
+          if (batchId && totalPages) {
+            // Store the file change in KV
+            const fileChangeData: { path: string; content: string; isNew: boolean } = {
+              path,
+              content: content as string,
+              isNew: isPageNew,
+            };
+            await env.BlogOthers.put(
+              `ship-all:${batchId}:file:${path}`,
+              JSON.stringify(fileChangeData),
+              { expirationTtl: 60 * 60 },
+            );
 
-          if (isPageNew) {
-            try {
-              const folderPath = path.substring(0, path.lastIndexOf('/'));
-              const imageBuffer = await getDefaultImage(env, s3);
-              batchFileChanges.push({
-                path: `${folderPath}/image.webp`,
-                content: imageBuffer,
-              });
-              console.log(`Add default index image for new page: ${folderPath}`);
-            } catch (error) {
-              console.error('Error adding default image:', error);
+            // Atomically increment processed count using a simple approach
+            // Note: This isn't truly atomic but works reasonably well for this use case
+            const metaKey = `ship-all:${batchId}:meta`;
+            const metaRaw = await env.BlogOthers.get(metaKey);
+            if (metaRaw) {
+              const meta = JSON.parse(metaRaw);
+              meta.processedCount = (meta.processedCount || 0) + 1;
+              await env.BlogOthers.put(metaKey, JSON.stringify(meta), { expirationTtl: 60 * 60 });
+
+              console.log(`Batch ${batchId}: processed ${meta.processedCount}/${totalPages}`);
+
+              // If all pages are processed, trigger the final commit
+              if (meta.processedCount >= totalPages) {
+                console.log(`Batch ${batchId}: all pages processed, committing...`);
+
+                // Retrieve all file changes from KV
+                const allFileChanges: FileChange[] = [];
+                const keys = await env.BlogOthers.list({ prefix: `ship-all:${batchId}:file:` });
+
+                for (const key of keys.keys) {
+                  const fileDataRaw = await env.BlogOthers.get(key.name);
+                  if (fileDataRaw) {
+                    const fileData = JSON.parse(fileDataRaw);
+                    allFileChanges.push({ path: fileData.path, content: fileData.content });
+
+                    // Add default image for new pages
+                    if (fileData.isNew) {
+                      try {
+                        const folderPath = fileData.path.substring(0, fileData.path.lastIndexOf('/'));
+                        const imageBuffer = await getDefaultImage(env, s3);
+                        allFileChanges.push({
+                          path: `${folderPath}/image.webp`,
+                          content: imageBuffer,
+                        });
+                      } catch (imgError) {
+                        console.error('Error adding default image:', imgError);
+                      }
+                    }
+                  }
+                }
+
+                // Single commit for all pages
+                if (allFileChanges.length > 0) {
+                  const committed = await commitToGitHub(
+                    allFileChanges,
+                    `chore: update ${totalPages} pages from Notion`,
+                    env,
+                  );
+                  console.log(
+                    committed
+                      ? `Successfully committed all ${totalPages} pages in single commit`
+                      : 'No changes needed',
+                  );
+                }
+
+                // Cleanup KV entries
+                for (const key of keys.keys) {
+                  await env.BlogOthers.delete(key.name);
+                }
+                await env.BlogOthers.delete(metaKey);
+                console.log(`Batch ${batchId}: cleanup complete`);
+              }
             }
-          }
 
-          successfulMessages.push(message);
-        } catch (error) {
-          console.error(`Error processing page ${payload.pageId}:`, error);
-          failedMessages.push({ message, error: error as Error });
-        }
-      }
+            message.ack();
+          } else {
+            // Non-batched single page processing (original behavior)
+            const fileChanges: FileChange[] = [{ path, content }];
 
-      // Batch commit all successfully processed pages
-      if (batchFileChanges.length > 0) {
-        try {
-          const committed = await commitToGitHub(
-            batchFileChanges,
-            `chore: update ${successfulMessages.length} pages from Notion`,
-            env,
-          );
-          console.log(
-            committed
-              ? `Successfully committed ${successfulMessages.length} pages in batch`
-              : 'No changes needed for batch',
-          );
-          // Ack all successful messages
-          for (const message of successfulMessages) {
+            if (isPageNew) {
+              try {
+                const folderPath = path.substring(0, path.lastIndexOf('/'));
+                const imageBuffer = await getDefaultImage(env, s3);
+                fileChanges.push({ path: `${folderPath}/image.webp`, content: imageBuffer });
+              } catch (error) {
+                console.error('Error adding default image:', error);
+              }
+            }
+
+            await commitToGitHub(fileChanges, `chore: ${isPageNew ? 'create' : 'update'} ${path}`, env);
+            console.log(`Successfully processed page: ${pageId}`);
             message.ack();
           }
-        } catch (commitError) {
-          console.error('Error committing batch:', commitError);
-          // Retry all messages if commit failed
-          for (const message of successfulMessages) {
-            if (message.attempts < 3) {
-              message.retry({ delaySeconds: 2 ** message.attempts });
-            } else {
-              message.ack(); // Give up after 3 attempts
-            }
+        } catch (error) {
+          console.error(`Error processing page ${payload.pageId}:`, error);
+          if (message.attempts < 3) {
+            message.retry({ delaySeconds: 2 ** message.attempts });
+          } else {
+            const failedMessageKey = `dead-letter:${Date.now()}`;
+            await env.BlogOthers.put(
+              failedMessageKey,
+              JSON.stringify({
+                timestamp: new Date().toISOString(),
+                attempts: message.attempts,
+                body: message.body,
+                error: error instanceof Error ? error.message : String(error),
+              }),
+              { expirationTtl: 60 * 60 * 24 * 7 },
+            );
+            console.error(`Dead letter stored: ${failedMessageKey}`);
+            message.ack();
           }
-        }
-      }
-
-      // Handle failed page processing
-      for (const { message, error } of failedMessages) {
-        if (message.attempts < 3) {
-          message.retry({ delaySeconds: 2 ** message.attempts });
-        } else {
-          const failedMessageKey = `dead-letter:${Date.now()}`;
-          await env.BlogOthers.put(
-            failedMessageKey,
-            JSON.stringify({
-              timestamp: new Date().toISOString(),
-              attempts: message.attempts,
-              body: message.body,
-              error: error.message,
-            }),
-            { expirationTtl: 60 * 60 * 24 * 7 },
-          );
-          console.error(`Dead letter stored: ${failedMessageKey}`);
-          message.ack();
         }
       }
     }
