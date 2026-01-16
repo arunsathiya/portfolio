@@ -28,6 +28,10 @@ import {
 
 import { Buffer } from 'node:buffer';
 import path from 'node:path';
+import * as prettier from 'prettier/standalone';
+import prettierPluginEstree from 'prettier/plugins/estree';
+import prettierPluginBabel from 'prettier/plugins/babel';
+import prettierPluginMarkdown from 'prettier/plugins/markdown';
 
 interface Env {
   CLOUDFLARE_ACCOUNT_ID: string;
@@ -590,6 +594,30 @@ interface FileChange {
   content: string | ArrayBuffer;
 }
 
+/**
+ * Format MDX content using Prettier with the same config as apps/web.
+ * This ensures MDX files committed by workers match the codebase formatting.
+ */
+const formatMdxContent = async (content: string): Promise<string> => {
+  return prettier.format(content, {
+    parser: 'mdx',
+    plugins: [prettierPluginMarkdown, prettierPluginBabel, prettierPluginEstree],
+    printWidth: 140,
+    tabWidth: 2,
+    useTabs: true,
+    semi: true,
+    singleQuote: true,
+    quoteProps: 'as-needed',
+    jsxSingleQuote: true,
+    trailingComma: 'all',
+    bracketSpacing: true,
+    arrowParens: 'always',
+    proseWrap: 'preserve',
+    htmlWhitespaceSensitivity: 'css',
+    endOfLine: 'lf',
+  });
+};
+
 const commitToGitHub = async (
   files: FileChange[],
   message: string,
@@ -598,14 +626,25 @@ const commitToGitHub = async (
 ): Promise<boolean> => {
   const contentChecks = await Promise.all(
     files.map(async (file) => {
+      // Format MDX files with Prettier before committing
+      let content = file.content;
+      if (file.path.endsWith('.mdx') && typeof content === 'string') {
+        try {
+          content = await formatMdxContent(content);
+        } catch (error) {
+          console.error(`Failed to format ${file.path}:`, error);
+          // Continue with unformatted content if formatting fails
+        }
+      }
+
       const currentContent = await getFileContent(file.path, env);
       return {
         path: file.path,
-        content: file.content,
-        hasChanged: currentContent !== file.content,
+        content,
+        hasChanged: currentContent !== content,
         addition: {
           path: file.path,
-          contents: Buffer.from(file.content).toString('base64'),
+          contents: Buffer.from(content).toString('base64'),
         },
       };
     }),

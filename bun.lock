@@ -57,6 +57,7 @@
         "@portfolio/shared": "workspace:*",
         "notion-to-md": "3.1.1",
         "path": "^0.12.7",
+        "prettier": "^3.3.3",
         "replicate": "^1.4.0",
       },
       "devDependencies": {
