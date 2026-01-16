@@ -1078,9 +1078,16 @@ interface ImageProcessingMessage {
   payload: ImageProcessingPayload;
 }
 
+// Message for processing a single Notion page
+interface PageProcessingMessage {
+  type: 'page-processing';
+  pageId: string;
+  databaseId: string;
+}
+
 // Updated type definitions
 interface QueueMessageBody {
-  type: 'notion' | 'r2' | 'image-processing';
+  type: 'notion' | 'r2' | 'image-processing' | 'page-processing';
   payload: NotionWebhookPayload | R2EventMessage | ImageProcessingPayload;
   headers?: Record<string, string>;
   processAllPages?: boolean;
@@ -1146,7 +1153,7 @@ const processNotionWebhook = async (
   }
 
   if (processAllPages) {
-    console.log('Processing all pages in database:', databaseId);
+    console.log('Queuing all pages in database for processing:', databaseId);
     const notion = createNotionClient({
       auth: env.NOTION_TOKEN,
       fetch: (input, init) => fetch(input, init),
@@ -1156,42 +1163,24 @@ const processNotionWebhook = async (
       database_id: databaseId,
     });
 
-    // Process pages in parallel with a concurrency limit
-    const BATCH_SIZE = 10;
-    const fileChanges: FileChange[] = [];
+    // Send each page to the queue for individual processing
+    // Using sendBatch for efficiency (max 100 messages per batch)
+    const QUEUE_BATCH_SIZE = 100;
+    const pageMessages: { body: PageProcessingMessage }[] = pages.results.map((page) => ({
+      body: {
+        type: 'page-processing' as const,
+        pageId: page.id,
+        databaseId: databaseId,
+      },
+    }));
 
-    // Process pages in batches to avoid overwhelming the system
-    for (let i = 0; i < pages.results.length; i += BATCH_SIZE) {
-      const batch = pages.results.slice(i, i + BATCH_SIZE);
-      const batchResults = await Promise.all(
-        batch.map((page) =>
-          processPage(page.id, env, s3)
-            .then((result) => ({ path: result.path, content: result.content }))
-            .catch((error) => {
-              console.error(`Error processing page ${page.id}:`, error);
-              return null;
-            }),
-        ),
-      );
-
-      fileChanges.push(...batchResults.filter((result): result is FileChange => result !== null));
-
-      // Remove the delay between batches
-      // Only add minimal delay if you're hitting rate limits
-      // await new Promise(resolve => setTimeout(resolve, 100));
+    for (let i = 0; i < pageMessages.length; i += QUEUE_BATCH_SIZE) {
+      const batch = pageMessages.slice(i, i + QUEUE_BATCH_SIZE);
+      await env.NOTION_QUEUE.sendBatch(batch);
+      console.log(`Queued batch ${Math.floor(i / QUEUE_BATCH_SIZE) + 1}: ${batch.length} pages`);
     }
 
-    if (fileChanges.length > 0) {
-      // Commit all changes in a single batch
-      const committed = await commitToGitHub(
-        fileChanges,
-        'chore: update multiple pages from Notion',
-        env,
-      );
-      console.log(committed ? 'Successfully committed all page changes' : 'No changes needed');
-    } else {
-      console.log('No changes to commit');
-    }
+    console.log(`Successfully queued ${pages.results.length} pages for processing`);
   } else {
     // Process single page as before
     const { content, path } = await processPage(pageId, env, s3);
@@ -1890,7 +1879,7 @@ export default {
   },
 
   async queue(
-    batch: MessageBatch<QueueMessageBody | ImageProcessingMessage>,
+    batch: MessageBatch<QueueMessageBody | ImageProcessingMessage | PageProcessingMessage>,
     env: Env,
     ctx: ExecutionContext,
   ): Promise<void> {
@@ -1903,6 +1892,35 @@ export default {
           message.ack();
           continue;
         }
+
+        // Handle page processing from queue (for "Ship all" functionality)
+        if (payload.type === 'page-processing') {
+          const { pageId } = payload as PageProcessingMessage;
+          console.log(`Processing page from queue: ${pageId}`);
+          const { content, path } = await processPage(pageId, env, s3);
+          const isPageNew = await isNewPage(path, env);
+          const fileChanges: FileChange[] = [{ path, content }];
+
+          if (isPageNew) {
+            try {
+              const folderPath = path.substring(0, path.lastIndexOf('/'));
+              const imageBuffer = await getDefaultImage(env, s3);
+              fileChanges.push({
+                path: `${folderPath}/image.webp`,
+                content: imageBuffer,
+              });
+              console.log(`Add default index image for new page: ${folderPath}`);
+            } catch (error) {
+              console.error('Error adding default image:', error);
+            }
+          }
+
+          await commitToGitHub(fileChanges, `chore: ${isPageNew ? 'create' : 'update'} ${path}`, env);
+          console.log(`Successfully processed page: ${pageId}`);
+          message.ack();
+          continue;
+        }
+
         // Handle R2 events for cover images (webp or jpeg)
         if (
           isR2Event(payload) &&
