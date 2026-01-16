@@ -1655,7 +1655,9 @@ const checkAndCommitPendingBatches = async (env: Env) => {
       if (!metaRaw) continue;
 
       const meta = JSON.parse(metaRaw);
-      const { batchId, totalPages } = meta;
+      const { totalPages } = meta;
+      // Extract batchId from key name: ship-all:{batchId}:meta
+      const batchId = metaKeyInfo.name.replace('ship-all:', '').replace(':meta', '');
 
       // Count file keys for this batch
       const fileKeys = await env.BlogOthers.list({ prefix: `ship-all:${batchId}:file:` });
