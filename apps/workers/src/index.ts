@@ -159,6 +159,16 @@ const handleAssets = async (request: Request, env: Env, s3Client: S3Client) => {
     let signedUrl: string;
 
     if (!cache || Date.now() > cache.refreshTime) {
+      // Check if object exists before generating and caching signed URL
+      // This prevents KV pollution from vulnerability scanners probing for .env, .php, etc.
+      try {
+        const headCommand = new HeadObjectCommand({ Bucket: env.R2_BUCKET_NAME, Key: key });
+        await s3Client.send(headCommand);
+      } catch {
+        // Object doesn't exist in R2, return 404 without caching
+        return new Response('Not found', { status: 404 });
+      }
+
       const command = new GetObjectCommand({ Bucket: env.R2_BUCKET_NAME, Key: key });
       signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
       await env.BlogAssets.put(
