@@ -1,81 +1,51 @@
-# CLAUDE.md
+# agents.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code when working with this repository.
 
 ## Repository Structure
-
-This is a monorepo containing two applications:
 
 ```
 portfolio/
 ├── apps/
-│   ├── web/        # Astro blog/portfolio site (deploys to Vercel)
-│   └── workers/    # Cloudflare Workers API (deploys to Cloudflare)
-├── packages/       # Shared packages (future)
-└── package.json    # Root workspace config
+│   ├── web/        # Astro blog/portfolio (Vercel)
+│   └── workers/    # Cloudflare Workers API
+├── packages/
+│   └── shared/     # Notion, S3, and date utilities
+└── package.json    # Bun workspace config
 ```
 
-## Development Commands
+## Commands
 
-### From Root (Recommended)
-- `bun dev` - Start Astro dev server
-- `bun dev:workers` - Start Workers dev server
-- `bun build` - Type check and build for production
-- `bun preview` - Preview production build locally
-- `bun deploy:workers` - Deploy workers to Cloudflare
+From root: `bun dev` (Astro), `bun dev:workers` (Workers), `bun build`, `bun deploy:workers`.
 
-### Content Management
-- `bun notion-to-md` - Convert Notion database to MDX blog posts
-- `bun notion` - Run Notion sync scripts
-- `bun notion-format` - Run Notion conversion and format code
+Content sync: `bun notion-to-md` converts Notion pages to MDX. `bun notion-format` syncs and formats.
 
-### Code Quality
-- `bun format:check` - Check code formatting
-- `bun format:write` - Format code using Prettier
+Formatting: `bun format:check` and `bun format:write` via Prettier.
 
-## Architecture Overview
+## Content Pipeline
 
-### apps/web (Astro Site)
+Notion serves as the CMS. When pages are published, Notion webhooks trigger Workers which convert pages to MDX, format with Prettier, and commit directly to GitHub via GraphQL. This triggers a Vercel rebuild automatically.
 
-An Astro-based personal blog and portfolio website:
+The "Ship All" feature queues multiple pages via Cloudflare Queues, coordinating them into a single commit. Cron jobs handle tag caching, slug synchronization, and pending batch cleanup.
 
-- **Deployment**: Vercel (set root directory to `apps/web`)
-- **CMS**: Notion database serves as the content management system
-- **Content**: MDX files in `apps/web/src/content/blog/`
-- **Images**: Cloudflare R2 bucket for optimized image delivery
+## Image Handling
 
-Key patterns:
-- Content collections with TypeScript schemas
-- File-based routing in `src/pages/`
-- Tailwind CSS (never use `@apply` directive)
-- Custom rehype plugin for external link handling
+Blog cover images are generated using Claude (for prompts) and Replicate (for generation), then stored in R2. The `/assets/*` route serves images via signed URLs cached in KV.
 
-### apps/workers (Cloudflare Workers)
+## Apps
 
-Backend services for the blog:
+**web**: Astro 5 with MDX, Tailwind, and content collections. Deploys to Vercel (root directory `apps/web`). Never use `@apply` in Tailwind. Blog posts live in `src/content/blog/` but should only be edited via Notion.
 
-- **Deployment**: Cloudflare Workers via `wrangler deploy`
-- **Functions**: Notion webhooks, AI image generation, asset serving
-- **Storage**: R2 for images, KV for caching
-- **Queues**: Async job processing for content updates
+**workers**: Handles webhooks, image generation, asset serving, and GitHub commits. Uses R2 for storage, KV for caching, and Queues for async processing. Deploy with `bun deploy:workers` or `wrangler deploy`.
 
-The workers commit MDX files directly to GitHub, triggering Vercel rebuilds.
+**shared**: Common utilities for Notion API, S3/R2 configuration, and date formatting. Used by both apps.
+
+## Environment Variables
+
+Workers (via `wrangler secret`): `NOTION_TOKEN`, `NOTION_DATABASE_ID`, `NOTION_SIGNATURE_SECRET`, `GITHUB_PAT`, `DISPATCH_SECRET`, `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_R2_ACCESS_KEY_ID`, `CLOUDFLARE_R2_SECRET_ACCESS_KEY`, `ANTHROPIC_API_KEY`, `REPLICATE_API_TOKEN`, `REPLICATE_WEBHOOK_SIGNING_KEY`, `IMAGE_GENERATION_SECRET`, `R2_BUCKET_NAME`.
+
+Web (Vercel dashboard): `NOTION_SECRET` for local scripts.
 
 ## Workflow
 
-### Git Commits
-- Use conventional commit format (e.g., `fix:`, `feat:`, `chore:`, `docs:`)
-- Commit incrementally as you make progress
-- Push immediately after each commit
-
-### Deployment
-- **Web**: Vercel auto-deploys on push to main (root directory: `apps/web`)
-- **Workers**: Run `bun deploy:workers` or deploy via Cloudflare dashboard
-
-## Important Notes
-
-- Never modify blog post files in `apps/web/src/content/blog/` directly - use Notion CMS
-- Run `bun notion-format` after making content changes in Notion
-- Environment variables are configured separately for each platform:
-  - Vercel: configured in Vercel dashboard
-  - Workers: configured via `wrangler secret`
+Use conventional commits (`fix:`, `feat:`, `chore:`, `docs:`). Commit incrementally and push immediately. Vercel auto-deploys web on push to main. Workers require manual deploy.
