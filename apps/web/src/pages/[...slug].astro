@@ -47,7 +47,7 @@ const { Content, headings } = await post.render();
 const getTagClasses = (tag: string) => `
   rounded-2xl
   text-sm no-underline px-2 py-0.5
-  transition-all duration-700
+  transition-opacity duration-300
   hover:opacity-80
   ${getTagBackgroundColor(tag)}
   ${getTagBackgroundColor(tag).includes('dark:bg-') ? 'text-zinc-800 dark:text-zinc-200' : 'text-zinc-700 dark:text-zinc-300'}

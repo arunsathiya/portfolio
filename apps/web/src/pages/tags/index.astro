@@ -70,7 +70,7 @@ const description = 'Post tags: concise keywords categorizing content for easy n
 							{(tags || [])?.map((tag: Tag) => (
 								<a
 									class={`rounded-2xl text-sm text-zinc-700 dark:text-zinc-300 no-underline px-3 py-1
-                                    transition-all duration-700 hover:opacity-80 ${getTagBackgroundColor(tag.label)}`}
+                                    transition-opacity duration-300 hover:opacity-80 ${getTagBackgroundColor(tag.label)}`}
 									href={`/tags/${slugify(tag.value)}/`}
 								>
 									{tag.label} ({tag.postCount})

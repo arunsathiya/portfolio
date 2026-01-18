@@ -34,7 +34,7 @@ Blog cover images are generated using Claude (for prompts) and Replicate (for ge
 
 ## Apps
 
-**web**: Astro 5 with MDX, Tailwind, and content collections. Deploys to Vercel (root directory `apps/web`). Never use `@apply` in Tailwind. Blog posts live in `src/content/blog/` but should only be edited via Notion.
+**web**: Astro 5 with MDX, Tailwind, and content collections. Deploys to Vercel (root directory `apps/web`). Avoid `@apply` in Tailwind except for styling rendered Markdown/MDX content where inline classes aren't possible. Blog posts live in `src/content/blog/` but should only be edited via Notion.
 
 **workers**: Handles webhooks, image generation, asset serving, and GitHub commits. Uses R2 for storage, KV for caching, and Queues for async processing. Deploy with `bun deploy:workers` or `wrangler deploy`.
 
