@@ -71,6 +71,16 @@
 }
 
 @layer base {
+	/* Support both light and dark color schemes for native UI elements */
+	:root {
+		color-scheme: light dark;
+	}
+
+	/* When explicitly in dark mode, tell browser to use dark native UI */
+	.dark {
+		color-scheme: dark;
+	}
+
 	body {
 		font-family: 'IBM Plex Sans', sans-serif;
 		font-size: 16px;
@@ -82,6 +92,16 @@
 		font-family: 'IBM Plex Mono', monospace;
 		font-size: 1rem;
 		width: fit-content;
+	}
+
+	/* Scroll margin for heading anchors (accounts for fixed header) */
+	h1[id],
+	h2[id],
+	h3[id],
+	h4[id],
+	h5[id],
+	h6[id] {
+		scroll-margin-top: 5rem;
 	}
 
 	/* Inline code styling - Highlighter effect */

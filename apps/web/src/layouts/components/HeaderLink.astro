@@ -14,6 +14,7 @@ const isActive = href === pathname || href === '/' + subpath?.[0];
 	href={href}
 	class:list={[
 		className,
+		'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900 rounded-sm',
 		{ 'border-b border-zinc-500 dark:border-zinc-300': isActive },
 		{ 'text-zinc-600 dark:text-zinc-200 hover:text-zinc-900 dark:hover:text-zinc-50': !isActive },
 		{ 'text-zinc-950 dark:text-zinc-50': isActive },

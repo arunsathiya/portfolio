@@ -2,9 +2,20 @@
 interface Props {
 	imageKey: string;
 	alt: string;
+	width?: number;
+	height?: number;
+	loading?: 'lazy' | 'eager';
+	class?: string;
 }
 
-const { imageKey, alt } = Astro.props;
+const { imageKey, alt, width, height, loading = 'lazy', class: className } = Astro.props;
 ---
 
-<img src={`https://www.arun.blog/${imageKey}`} alt={alt} />
+<img
+	src={`https://www.arun.blog/${imageKey}`}
+	alt={alt}
+	width={width}
+	height={height}
+	loading={loading}
+	class={className}
+/>
