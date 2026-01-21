@@ -17,6 +17,8 @@ const { projects } = Astro.props;
 						<img
 							src={project.image}
 							alt={`${project.name} preview`}
+							width={400}
+							height={225}
 							class='w-full h-full object-cover hover:scale-105 transition-transform duration-300'
 							loading='lazy'
 						/>
@@ -83,6 +85,7 @@ const { projects } = Astro.props;
 								stroke-linecap='round'
 								stroke-linejoin='round'
 								class='lucide lucide-external-link'
+								aria-hidden='true'
 							>
 								<path d='M15 3h6v6' />
 								<path d='M10 14 21 3' />

@@ -32,6 +32,9 @@ pnpm-debug.log*
 # local claude skill symlinks (point to local paths)
 .claude/skills/symlinks/
 
+# local claude plans/backlog
+.claude/plans/
+
 # worktrees (worktrunk)
 .worktrees/
 
