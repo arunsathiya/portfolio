@@ -244,7 +244,7 @@ const formatDate = (dateString: string) => {
 			if (!user) return;
 
 			if (postCommentBtn) (postCommentBtn as HTMLButtonElement).disabled = true;
-			postCommentBtn.textContent = 'Posting...';
+			postCommentBtn.textContent = 'Posting…';
 
 			const { data, error } = await supabase
 				.from('comments')

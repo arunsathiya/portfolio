@@ -63,7 +63,7 @@ const { projects } = Astro.props;
 							{project.name}
 						</a>
 					</h3>
-					<div class='line-clamp-2 text-zinc-600 dark:text-zinc-300 mb-4 min-h-[50px]'>
+					<div class='line-clamp-2 text-zinc-600 dark:text-zinc-300 mb-4 min-h-[50px]' title={project.description}>
 						<p>{project.description}</p>
 					</div>
 					<div class='flex justify-end gap-3'>
