@@ -56,95 +56,109 @@ const getTagClasses = (tag: string) => `
 
 <BaseLayout title={seoTitle || title} description={description} image={coverImage?.src || undefined}>
 	<div class='container'>
-		<main class='overflow-hidden max-w-4xl'>
-			<article>
-				<Prose>
-					<div class='mb-6'>
-						<a
-							href='/'
-							class='inline-flex items-center gap-2 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900'
-						>
-							<svg
-								xmlns='http://www.w3.org/2000/svg'
-								width='16'
-								height='16'
-								viewBox='0 0 24 24'
-								fill='none'
-								stroke='currentColor'
-								stroke-width='2'
-								stroke-linecap='round'
-								stroke-linejoin='round'
-								aria-hidden='true'
+		<div class='flex flex-col lg:flex-row lg:gap-12'>
+			<!-- Main content column -->
+			<main class='overflow-hidden flex-1 max-w-3xl'>
+				<article>
+					<Prose>
+						<div class='mb-6'>
+							<a
+								href='/'
+								class='inline-flex items-center gap-2 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900'
 							>
-								<path d='M19 12H5M12 19l-7-7 7-7'></path>
-							</svg>
-							Home
-						</a>
-					</div>
-					<div>
-						<h1 class='!my-1 leading-tight'>{title}</h1>
-						<div
-							class='text-sm font-[500] mt-2 sm:mt-0 py-1 md:text-right flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center'
-						>
-							{
-								(
-									<div class='flex gap-2'>
-										{(tags || [])?.map((tag: string) => (
-											<a class={getTagClasses(tag)} href={`/tags/${slugify(tag)}`}>
-												{tag}
-											</a>
-										))}
-									</div>
-								)
-							}
-							<div>
+								<svg
+									xmlns='http://www.w3.org/2000/svg'
+									width='16'
+									height='16'
+									viewBox='0 0 24 24'
+									fill='none'
+									stroke='currentColor'
+									stroke-width='2'
+									stroke-linecap='round'
+									stroke-linejoin='round'
+									aria-hidden='true'
+								>
+									<path d='M19 12H5M12 19l-7-7 7-7'></path>
+								</svg>
+								Home
+							</a>
+						</div>
+						<div>
+							<h1 class='!my-1 leading-tight !text-xl sm:!text-2xl'>{title}</h1>
+							<div
+								class='text-sm font-[500] mt-2 sm:mt-0 py-1 md:text-right flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center'
+							>
 								{
-									pubDate ? (
-										<>
-											Published on{' '}
-											<strong>
-												<FormattedDate date={pubDate} />
-											</strong>
-										</>
-									) : (
-										<>
-											Published on{' '}
-											<strong>
-												<FormattedDate date={pubDate} />
-											</strong>
-										</>
+									(
+										<div class='flex gap-2'>
+											{(tags || [])?.map((tag: string) => (
+												<a class={getTagClasses(tag)} href={`/tags/${slugify(tag)}`}>
+													{tag}
+												</a>
+											))}
+										</div>
 									)
 								}
+								<div>
+									{
+										pubDate ? (
+											<>
+												Published on{' '}
+												<strong>
+													<FormattedDate date={pubDate} />
+												</strong>
+											</>
+										) : (
+											<>
+												Published on{' '}
+												<strong>
+													<FormattedDate date={pubDate} />
+												</strong>
+											</>
+										)
+									}
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class='py-3 overflow-hidden'>
-						<script>
-							import('@zachleat/snow-fall');
-							import('@11ty/is-land/is-land.js');
-						</script>
-						{
-							coverImage && !tags?.includes('Asides') && (
-								<is-land on:media='(prefers-reduced-motion: no-preference)'>
-									<snow-fall count='20'>
-										<Image class='w-full m-0 lg:mb-2' src={coverImage} alt={title} loading='eager' />
-									</snow-fall>
-								</is-land>
-							)
-						}
-					</div>
-					<Content />
-				</Prose>
-			</article>
+						<div class='py-3 overflow-hidden'>
+							<script>
+								import('@zachleat/snow-fall');
+								import('@11ty/is-land/is-land.js');
+							</script>
+							{
+								coverImage && !tags?.includes('Asides') && (
+									<is-land on:media='(prefers-reduced-motion: no-preference)'>
+										<snow-fall count='20'>
+											<Image class='w-full m-0 lg:mb-2' src={coverImage} alt={title} loading='eager' />
+										</snow-fall>
+									</is-land>
+								)
+							}
+						</div>
+						<Content />
+					</Prose>
+				</article>
 
-			<div class='mt-8 space-y-8'>
-				<div class='max-w-2xl'>{headings.length > 0 && <TableOfContent headings={headings} />}</div>
+				<!-- TOC below content -->
+				{headings.length > 0 && (
+					<div class='mt-8 max-w-2xl'>
+						<TableOfContent headings={headings} />
+					</div>
+				)}
 
-				<div class='max-w-2xl'>
+				<!-- Comments below content on mobile -->
+				<div class='mt-8 max-w-2xl lg:hidden'>
 					<Comments slug={slug} />
 				</div>
-			</div>
-		</main>
+			</main>
+
+			<!-- Comments sidebar on desktop -->
+			<aside class='hidden lg:block w-72 xl:w-80 shrink-0'>
+				<div class='sticky top-24'>
+					<Comments slug={slug} />
+				</div>
+			</aside>
+		</div>
 	</div>
 </BaseLayout>
 
