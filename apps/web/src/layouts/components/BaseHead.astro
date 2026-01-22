@@ -23,9 +23,8 @@ const { title, description, image = '/syakir.webp' } = Astro.props;
 <meta charset='utf-8' />
 <meta name='viewport' content='width=device-width,initial-scale=1' />
 
-<!-- Theme color for mobile browser chrome -->
-<meta name='theme-color' content='#ffffff' media='(prefers-color-scheme: light)' />
-<meta name='theme-color' content='#18181b' media='(prefers-color-scheme: dark)' />
+<!-- Theme color for mobile browser chrome (synced with user theme preference via JS) -->
+<meta name='theme-color' content='#ffffff' />
 <link rel='icon' href={Favicon.src} />
 <meta name='generator' content={Astro.generator} />
 
