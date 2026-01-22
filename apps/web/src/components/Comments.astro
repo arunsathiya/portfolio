@@ -172,69 +172,69 @@ const formatDate = (dateString: string) => {
 <script>
 	import { createClient } from '@supabase/supabase-js';
 
-	const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || import.meta.env.SUPABASE_URL;
-	const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY;
+	const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+	const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
 	if (!supabaseUrl || !supabaseAnonKey) {
 		console.error('Missing Supabase configuration');
 	} else {
 		const supabase = createClient(supabaseUrl, supabaseAnonKey);
+		const allCommentsSections = document.querySelectorAll('.comments-section');
+		
+		// Attach listeners to all comment section instances (mobile + desktop)
+		allCommentsSections.forEach((section) => {
+			const githubLoginBtn = section.querySelector('#github-login-btn') as HTMLButtonElement;
+			const commentForm = section.querySelector('#comment-form') as HTMLElement;
+			const commentInput = section.querySelector('#comment-input') as HTMLTextAreaElement;
+			const postCommentBtn = section.querySelector('#post-comment-btn') as HTMLButtonElement;
+			const logoutBtn = section.querySelector('#logout-btn') as HTMLButtonElement;
+			const userAvatar = section.querySelector('#user-avatar') as HTMLImageElement;
+			const userName = section.querySelector('#user-name') as HTMLElement;
+			const charCount = section.querySelector('#char-count') as HTMLElement;
+			const postSlug = section.getAttribute('data-post-slug') || '';
 
-		// Get current post slug from Astro props
-		const postSlug = document.querySelector('[data-post-slug]')?.getAttribute('data-post-slug') || '';
-
-		// DOM elements
-		const githubLoginBtn = document.getElementById('github-login-btn');
-		const commentForm = document.getElementById('comment-form');
-		const commentInput = document.getElementById('comment-input');
-		const postCommentBtn = document.getElementById('post-comment-btn');
-		const logoutBtn = document.getElementById('logout-btn');
-		const userAvatar = document.getElementById('user-avatar');
-		const userName = document.getElementById('user-name');
-		const charCount = document.getElementById('char-count');
-
-		// Check if user is already logged in
-		supabase.auth.getSession().then(({ data: { session } }) => {
-			if (session) {
-				showCommentForm(session.user);
-			}
-		});
-
-		// Listen for auth state changes
-		supabase.auth.onAuthStateChange((event, session) => {
-			if (event === 'SIGNED_IN' && session) {
-				showCommentForm(session.user);
-			} else if (event === 'SIGNED_OUT') {
-				hideCommentForm();
-			}
-		});
-
-		// GitHub login
-		githubLoginBtn?.addEventListener('click', async () => {
-			const { error } = await supabase.auth.signInWithOAuth({
-				provider: 'github',
-				options: {
-					redirectTo: window.location.href,
-				},
+			// Check if user is already logged in
+			supabase.auth.getSession().then(({ data: { session } }) => {
+				if (session) {
+					showCommentForm(session.user);
+				}
 			});
-			if (error) console.error('GitHub login error:', error);
-		});
 
-		// Logout
-		logoutBtn?.addEventListener('click', async () => {
-			const { error } = await supabase.auth.signOut();
-			if (error) console.error('Logout error:', error);
-		});
+			// Listen for auth state changes
+			supabase.auth.onAuthStateChange((event, session) => {
+				if (event === 'SIGNED_IN' && session) {
+					showCommentForm(session.user);
+				} else if (event === 'SIGNED_OUT') {
+					hideCommentForm();
+				}
+			});
 
-		// Character count
-		commentInput?.addEventListener('input', (e) => {
-			const length = (e.target as HTMLTextAreaElement).value.length;
-			if (charCount) charCount.textContent = length.toString();
-			if (postCommentBtn) (postCommentBtn as HTMLButtonElement).disabled = length === 0 || length > 1000;
-		});
+			// GitHub login
+			githubLoginBtn?.addEventListener('click', async () => {
+				const { error } = await supabase.auth.signInWithOAuth({
+					provider: 'github',
+					options: {
+						redirectTo: window.location.href,
+					},
+				});
+				if (error) console.error('GitHub login error:', error);
+			});
 
-		// Post comment
-		postCommentBtn?.addEventListener('click', async () => {
+			// Logout
+			logoutBtn?.addEventListener('click', async () => {
+				const { error } = await supabase.auth.signOut();
+				if (error) console.error('Logout error:', error);
+			});
+
+			// Character count
+			commentInput?.addEventListener('input', (e) => {
+				const length = (e.target as HTMLTextAreaElement).value.length;
+				if (charCount) charCount.textContent = length.toString();
+				if (postCommentBtn) (postCommentBtn as HTMLButtonElement).disabled = length === 0 || length > 1000;
+			});
+
+			// Post comment
+			postCommentBtn?.addEventListener('click', async () => {
 			const content = (commentInput as HTMLTextAreaElement)?.value.trim();
 			if (!content) return;
 
@@ -337,8 +337,8 @@ const formatDate = (dateString: string) => {
 		}
 
 		function addCommentToDOM(comment: any) {
-			const emptyElement = document.getElementById('comments-empty');
-			let containerElement = document.getElementById('comments-container');
+			const emptyElement = section.querySelector('#comments-empty') as HTMLElement;
+			let containerElement = section.querySelector('#comments-container') as HTMLElement;
 
 			// Hide "no comments" message if it exists
 			if (emptyElement && !emptyElement.classList.contains('hidden')) {
@@ -352,9 +352,9 @@ const formatDate = (dateString: string) => {
 				containerElement.className = 'space-y-4';
 
 				// Insert before the comment form
-				const commentForm = document.getElementById('comment-form-container');
-				if (commentForm) {
-					commentForm.parentNode?.insertBefore(containerElement, commentForm);
+				const formContainer = section.querySelector('#comment-form-container');
+				if (formContainer) {
+					formContainer.parentNode?.insertBefore(containerElement, formContainer);
 				}
 			}
 
@@ -365,15 +365,15 @@ const formatDate = (dateString: string) => {
 		}
 
 		function updateCommentCount(count?: number) {
-			const countElement = document.getElementById('comments-title');
+			const countElement = section.querySelector('#comments-title');
 			if (countElement) {
-				const currentCount = count ?? document.querySelectorAll('#comments-container > div').length;
+				const currentCount = count ?? section.querySelectorAll('#comments-container > div').length;
 				countElement.textContent = `Comments (${currentCount})`;
 			}
 		}
 
 		function showCommentForm(user: any) {
-			const flexElement = document.getElementById('comment-form-container')?.querySelector('.flex') as HTMLElement;
+			const flexElement = section.querySelector('#comment-form-container')?.querySelector('.flex') as HTMLElement;
 			if (flexElement) flexElement.style.display = 'none';
 			commentForm?.classList.remove('hidden');
 
@@ -383,9 +383,10 @@ const formatDate = (dateString: string) => {
 		}
 
 		function hideCommentForm() {
-			const flexElement = document.getElementById('comment-form-container')?.querySelector('.flex') as HTMLElement;
+			const flexElement = section.querySelector('#comment-form-container')?.querySelector('.flex') as HTMLElement;
 			if (flexElement) flexElement.style.display = 'flex';
 			commentForm?.classList.add('hidden');
 		}
+		}); // end forEach
 	}
 </script>
