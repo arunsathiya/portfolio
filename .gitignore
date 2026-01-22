@@ -1,3 +1,4 @@
+.claude/plans/
 # build output
 dist/
 # generated types
@@ -34,11 +35,9 @@ pnpm-debug.log*
 .claude/skills/web-design-guidelines
 
 # local claude plans/backlog
-.claude/plans/
 
 # worktrees (worktrunk)
 .worktrees/
 
 # local notes
 *.local.md
-.claude/plans/

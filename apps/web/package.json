@@ -19,7 +19,6 @@
     "notion-format": "bun run notion-to-md && bun run format:write"
   },
   "dependencies": {
-    "@portfolio/shared": "workspace:*",
     "@11ty/is-land": "^5.0.1",
     "@astrojs/check": "^0.9.4",
     "@astrojs/cloudflare": "^12.6.0",
@@ -33,9 +32,11 @@
     "@aws-sdk/client-s3": "^3.970.0",
     "@aws-sdk/lib-storage": "^3.970.0",
     "@aws-sdk/s3-request-presigner": "^3.970.0",
+    "@fontsource-variable/instrument-sans": "^5.2.8",
     "@fontsource/ibm-plex-mono": "^5.1.1",
     "@fontsource/ibm-plex-sans": "^5.1.0",
     "@notionhq/client": "5.7.0",
+    "@portfolio/shared": "workspace:*",
     "@rollup/rollup-linux-x64-gnu": "^4.45.1",
     "@supabase/supabase-js": "^2.52.0",
     "@zachleat/snow-fall": "^1.0.3",
