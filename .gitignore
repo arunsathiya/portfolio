@@ -22,6 +22,9 @@ pnpm-debug.log*
 # cloudflare workers
 .wrangler/
 
+# supabase
+supabase/.temp/
+
 # macOS-specific files
 .DS_Store
 
