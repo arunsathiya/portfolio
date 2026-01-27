@@ -14,12 +14,12 @@
   "devDependencies": {
     "@biomejs/biome": "^2.3.11",
     "@cloudflare/vitest-pool-workers": "^0.12.1",
-    "@cloudflare/workers-types": "^4.20250109.0",
+    "@cloudflare/workers-types": "^4.20260103.0",
     "@vitest/runner": "~3.0.0",
     "@vitest/snapshot": "~3.0.0",
     "typescript": "^5.6.3",
     "vitest": "~3.0.0",
-    "wrangler": "^4.23.0"
+    "wrangler": "^4.54.0"
   },
   "dependencies": {
     "prettier": "^3.3.3",
