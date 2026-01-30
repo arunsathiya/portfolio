@@ -36,15 +36,27 @@
 
 	/* Ensure regular images still get proper spacing - both individual posts and list view */
 	.prose img {
-		@apply my-4;
+		@apply my-6;
 	}
 
 	.prose p:has(img) {
 		@apply my-0;
 	}
 
+	/* Better spacing between consecutive images */
 	.prose img + img {
 		@apply mt-8;
+	}
+
+	/* Spacing between paragraph and image */
+	.prose p + p:has(img),
+	.prose p:not(:has(img)) + p:has(img) {
+		@apply mt-6;
+	}
+
+	/* Spacing after image paragraph before regular paragraph */
+	.prose p:has(img) + p:not(:has(img)) {
+		@apply mt-6;
 	}
 
 	.prose p + p:not(:has(img)) {
@@ -209,7 +221,8 @@
 	}
 }
 
-.prose :where(img) {
+/* List view images should have no extra margin */
+.list-view-prose :where(img) {
 	margin-top: 0;
 	margin-bottom: 0;
 }
