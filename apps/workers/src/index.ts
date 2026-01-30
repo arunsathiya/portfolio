@@ -135,18 +135,18 @@ const createS3Client = (env: Env) =>
     })
   );
 
-// CORS headers for API responses
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+// CORS headers for /assets/* endpoint only
+const assetsCorsHeaders = {
+  'Access-Control-Allow-Origin': 'https://www.arun.blog',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
 };
 
-// Helper to create JSON response with CORS
+// Helper to create JSON response (no CORS for API endpoints)
 const jsonResponse = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
-    headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    headers: { 'Content-Type': 'application/json' },
   });
 
 const handleAssets = async (request: Request, env: Env, s3Client: S3Client) => {
@@ -184,9 +184,14 @@ const handleAssets = async (request: Request, env: Env, s3Client: S3Client) => {
     }
 
     const response = await fetch(signedUrl);
+    const headers = new Headers(response.headers);
+    // Add CORS headers for assets
+    for (const [key, value] of Object.entries(assetsCorsHeaders)) {
+      headers.set(key, value);
+    }
     return new Response(response.body as BodyInit, {
       status: response.status,
-      headers: response.headers,
+      headers,
     });
   } catch (error) {
     console.error('Error generating signed URL:', error);
@@ -1854,9 +1859,9 @@ export default {
     const url = new URL(request.url);
     const s3Client = createS3Client(env);
 
-    // Handle CORS preflight requests
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders });
+    // Handle CORS preflight requests only for /assets/*
+    if (request.method === 'OPTIONS' && url.pathname.startsWith('/assets/')) {
+      return new Response(null, { headers: assetsCorsHeaders });
     }
 
     if (
