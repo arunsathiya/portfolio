@@ -2,7 +2,6 @@
   "name": "@portfolio/workers",
   "private": true,
   "scripts": {
-    "build": "wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
     "start": "wrangler dev",
