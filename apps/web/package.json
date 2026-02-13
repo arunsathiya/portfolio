@@ -7,8 +7,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "format:check": "prettier --check src",
-    "format:write": "prettier --write src",
+    "format:check": "biome check src",
+    "format:write": "biome check --write src",
     "notion-to-md": "tsx src/scripts/notion-to-md.ts",
     "changes-on-notion": "tsx src/scripts/changes-on-notion.ts",
     "notion": "tsx src/scripts/notion-to-md.ts && tsx src/scripts/changes-on-notion.ts",
@@ -52,6 +52,7 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.3.15",
     "@tailwindcss/typography": "^0.5.15",
     "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.1",
