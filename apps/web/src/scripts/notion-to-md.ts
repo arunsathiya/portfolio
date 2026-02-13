@@ -125,7 +125,7 @@ async function processPage(page: PageObjectResponse) {
 	const updatedDate = formatDate(page.last_edited_time);
 
 	let tags: string[] = [];
-	let tagColors: Record<string, string> = {};
+	const tagColors: Record<string, string> = {};
 	if (page.properties.Tags && page.properties.Tags.type === 'multi_select') {
 		tags = page.properties.Tags.multi_select.map((tag) => tag.name);
 		page.properties.Tags.multi_select.forEach((tag) => {

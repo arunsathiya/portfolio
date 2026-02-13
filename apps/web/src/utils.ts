@@ -21,7 +21,7 @@ export const slugify = (input: string) => {
 };
 
 export const unslugify = (slug: string) =>
-	slug.replace(/\-/g, ' ').replace(/\w\S*/g, (text) => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase());
+	slug.replace(/-/g, ' ').replace(/\w\S*/g, (text) => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase());
 
 export const kFormatter = (num: number) => {
 	return Math.abs(num) > 999 ? (Math.sign(num) * (Math.abs(num) / 1000)).toFixed(1) + 'k' : Math.sign(num) * Math.abs(num);

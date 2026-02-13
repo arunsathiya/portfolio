@@ -56,7 +56,7 @@ async function onceOffUpdates(pageId: string): Promise<void> {
 							content: textBlock.text.content,
 							link: {
 								url: textBlock.text.link.url
-									.replace(new RegExp('arun.blog/blog/', 'g'), 'arun.blog/')
+									.replace(/arun.blog\/blog\//g, 'arun.blog/')
 									.replace(/\/\d{4}\/\d{2}\/\d{2}\//, '/post/')
 									.replace(/\/tag\//, '/tags/'),
 							},
