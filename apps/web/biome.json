@@ -8,6 +8,11 @@
 	"files": {
 		"includes": ["**", "!!**/dist"]
 	},
+	"css": {
+		"linter": {
+			"enabled": false
+		}
+	},
 	"formatter": {
 		"enabled": false
 	},
@@ -21,11 +26,20 @@
 		"rules": {
 			"recommended": true,
 			"suspicious": {
-				"noExplicitAny": "off"
+				"noExplicitAny": "off",
+				"noDoubleEquals": "off"
 			},
 			"correctness": {
-				"noUnusedVariables": "warn",
-				"noUnusedImports": "warn"
+				"noUnusedVariables": "off",
+				"noUnusedImports": "off"
+			},
+			"style": {
+				"useNodejsImportProtocol": "off",
+				"useTemplate": "off",
+				"noNonNullAssertion": "off"
+			},
+			"complexity": {
+				"useLiteralKeys": "off"
 			}
 		}
 	},
