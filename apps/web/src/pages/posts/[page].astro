@@ -7,7 +7,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 export const prerender = true;
 
 type BlogPost = CollectionEntry<'blog'>;
-const title = 'Posts';
 const description = 'Articles, guides, tutorials about productivity, DevOps, data-driven applications, life and everything in between.';
 
 // Define how many posts per page
@@ -56,6 +55,7 @@ type Props = {
 };
 
 const { posts, currentPage, totalPages } = Astro.props;
+const title = `Posts - Page ${currentPage} | Arun`;
 
 // Validate current page
 if (currentPage < 1 || currentPage > totalPages) {
