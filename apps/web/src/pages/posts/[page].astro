@@ -7,7 +7,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 export const prerender = true;
 
 type BlogPost = CollectionEntry<'blog'>;
-const description = 'Articles, guides, tutorials about productivity, DevOps, data-driven applications, life and everything in between.';
+const pageTitle = 'Posts';
 
 // Define how many posts per page
 export const POSTS_PER_PAGE = 10;
@@ -55,7 +55,8 @@ type Props = {
 };
 
 const { posts, currentPage, totalPages } = Astro.props;
-const title = `Posts - Page ${currentPage} | Arun`;
+const title = `${pageTitle} - Page ${currentPage} | Arun`;
+const description = `Browse page ${currentPage} of ${totalPages} from Arun's posts on productivity, DevOps, data-driven applications, tools, and life updates.`;
 
 // Validate current page
 if (currentPage < 1 || currentPage > totalPages) {
@@ -87,7 +88,7 @@ if (currentPage < 1 || currentPage > totalPages) {
 					Home
 				</a>
 			</div>
-			<h1 class='text-3xl font-bold mb-2'>{title}</h1>
+			<h1 class='text-3xl font-bold mb-2'>{pageTitle}</h1>
 			<p class='text-zinc-700 dark:text-zinc-300 text-lg'>{description}</p>
 		</div>
 		<PostsByYear posts={posts} />

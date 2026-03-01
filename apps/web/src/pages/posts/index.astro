@@ -7,8 +7,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 export const prerender = true;
 
 type BlogPost = CollectionEntry<'blog'>;
-const title = 'Posts | Arun';
-const description = 'Articles, guides, tutorials about productivity, DevOps, data-driven applications, life and everything in between.';
+const pageTitle = 'Posts';
+const seoTitle = `${pageTitle} | Arun`;
+const description =
+	"Browse Arun's latest posts on productivity, DevOps, data-driven applications, tools, and life updates.";
 
 // Define how many posts per page
 export const POSTS_PER_PAGE = 10;
@@ -39,7 +41,7 @@ const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
 const currentPage = 1;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={seoTitle} description={description}>
 	<div class='container'>
 		<div class='mb-10'>
 			<div class='mb-4'>
@@ -63,7 +65,7 @@ const currentPage = 1;
 					Home
 				</a>
 			</div>
-			<h1 class='text-3xl font-bold mb-2'>{title}</h1>
+			<h1 class='text-3xl font-bold mb-2'>{pageTitle}</h1>
 			<p class='text-zinc-700 dark:text-zinc-300 text-lg'>{description}</p>
 		</div>
 		<PostsByYear posts={posts} />
