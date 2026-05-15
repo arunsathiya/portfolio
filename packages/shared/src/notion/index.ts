@@ -58,7 +58,7 @@ export interface NotionClientConfig {
 export function createNotionClient(config: NotionClientConfig): Client {
   return new Client({
     auth: config.auth,
-    notionVersion: '2025-09-03',
+    notionVersion: '2026-03-11',
     ...(config.fetch && { fetch: config.fetch }),
   });
 }
@@ -71,7 +71,7 @@ const dataSourceIdCache = new Map<string, string>();
  * Handles the new API structure where databases contain data_sources array.
  */
 function extractDataSourceIdFromDatabaseResponse(db: any): string | undefined {
-  // In 2025-09-03, databases.retrieve returns { data_sources: [{ id, name }, ...] }
+  // In 2025-09-03 and later, databases.retrieve returns { data_sources: [{ id, name }, ...] }
   if (Array.isArray(db?.data_sources) && db.data_sources.length > 0) {
     return db.data_sources[0].id;
   }
@@ -81,7 +81,7 @@ function extractDataSourceIdFromDatabaseResponse(db: any): string | undefined {
 
 /**
  * Resolve data_source_id from a database_id (with in-memory caching).
- * Required for SDK v5 / API version 2025-09-03.
+ * Required for SDK v5 / modern Notion API versions.
  */
 export async function getDataSourceIdFromDatabaseId(
   notion: Client,
@@ -96,7 +96,7 @@ export async function getDataSourceIdFromDatabaseId(
   if (!data_source_id) {
     throw new Error(
       `Could not resolve data_source_id from database_id=${database_id}. ` +
-        `Check the Notion API response shape for databases.retrieve() on API version 2025-09-03.`
+        `Check the Notion API response shape for databases.retrieve() on API version 2026-03-11.`
     );
   }
 

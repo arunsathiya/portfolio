@@ -51,7 +51,7 @@ interface Env {
   NOTION_DATABASE_ID: string;
   GITHUB_PAT: string;
   DISPATCH_SECRET: string;
-  NOTION_QUEUE: Queue<NotionWebhookPayload>;
+  NOTION_QUEUE: Queue<QueueMessageBody | PageProcessingMessage>;
   NOTION_SIGNATURE_SECRET: string;
   IMAGE_UPLOAD_QUEUE: Queue<ImageProcessingMessage>;
 }
@@ -63,6 +63,69 @@ interface CachedSignedUrl {
 
 interface DispatchRequest {
   commit_message?: string;
+}
+
+const NOTION_WEBHOOK_VERIFICATION_TOKEN_KEY = 'notion-webhook:verification-token';
+const NOTION_WEBHOOK_LAST_VERIFICATION_KEY = 'notion-webhook:last-verification';
+const NOTION_WEBHOOK_EVENT_PREFIX = 'notion-webhook:event:';
+const NOTION_DIRTY_PAGE_PREFIX = 'notion-webhook:dirty-page:';
+const NOTION_WEBHOOK_TTL_SECONDS = 60 * 60 * 24 * 7;
+const NOTION_DIRTY_PAGE_QUIET_PERIOD_MS = 2 * 60 * 1000;
+
+interface NotionWebhookVerificationPayload {
+  verification_token: string;
+}
+
+interface NotionWebhookEntityRef {
+  id: string;
+  type: 'page' | 'block' | 'database' | 'data_source' | 'comment' | string;
+}
+
+interface NotionWebhookParentRef {
+  id?: string;
+  type?: string;
+  database_id?: string;
+  data_source_id?: string;
+}
+
+interface NotionWebhookEventPayload {
+  id: string;
+  timestamp: string;
+  workspace_id: string;
+  workspace_name?: string;
+  subscription_id: string;
+  integration_id: string;
+  authors?: NotionWebhookEntityRef[];
+  accessible_by?: NotionWebhookEntityRef[];
+  attempt_number: number;
+  api_version?: string;
+  entity: NotionWebhookEntityRef;
+  type: string;
+  data?: {
+    parent?: NotionWebhookParentRef;
+    page_id?: string;
+    updated_blocks?: NotionWebhookEntityRef[];
+    updated_properties?: unknown;
+    [key: string]: unknown;
+  };
+}
+
+interface DirtyNotionPage {
+  pageId: string;
+  firstSeenAt: string;
+  lastSeenAt: string;
+  eventCount: number;
+  eventTypes: string[];
+  lastEventId: string;
+  parentDatabaseId?: string;
+  dataSourceId?: string;
+}
+
+interface DirtyNotionFlushResult {
+  processed: number;
+  committed: boolean;
+  skipped: number;
+  errors: string[];
 }
 
 interface GitHubDispatch {
@@ -148,6 +211,317 @@ const jsonResponse = (data: unknown, status = 200) =>
     status,
     headers: { 'Content-Type': 'application/json' },
   });
+
+const parseJsonPayload = (rawBody: string): unknown => {
+  if (!rawBody) return null;
+  try {
+    return JSON.parse(rawBody);
+  } catch {
+    return undefined;
+  }
+};
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
+
+const isNotionWebhookVerificationPayload = (
+  payload: unknown,
+): payload is NotionWebhookVerificationPayload =>
+  isRecord(payload) && typeof payload.verification_token === 'string';
+
+const isOfficialNotionWebhookEvent = (payload: unknown): payload is NotionWebhookEventPayload =>
+  isRecord(payload) &&
+  typeof payload.id === 'string' &&
+  typeof payload.type === 'string' &&
+  isRecord(payload.entity) &&
+  typeof payload.entity.id === 'string' &&
+  typeof payload.entity.type === 'string';
+
+const bufferToHex = (buffer: ArrayBuffer): string =>
+  [...new Uint8Array(buffer)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+
+const computeNotionWebhookSignature = async (
+  rawBody: string,
+  verificationToken: string,
+): Promise<string> => {
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(verificationToken),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  );
+  const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(rawBody));
+  return `sha256=${bufferToHex(signature)}`;
+};
+
+const validateNotionWebhookSignature = async (
+  rawBody: string,
+  signature: string,
+  verificationToken: string,
+): Promise<boolean> => {
+  if (!signature.startsWith('sha256=')) return false;
+  const calculatedSignature = await computeNotionWebhookSignature(rawBody, verificationToken);
+  return compareTokens(calculatedSignature, signature);
+};
+
+const getNotionWebhookVerificationToken = async (env: Env): Promise<string | null> => {
+  const storedToken = await env.BlogOthers.get(NOTION_WEBHOOK_VERIFICATION_TOKEN_KEY);
+  return storedToken || env.NOTION_SIGNATURE_SECRET || null;
+};
+
+const normalizeNotionSignatureHeader = (request: Request): string =>
+  request.headers.get('x-notion-signature') || '';
+
+const handleNotionWebhookVerification = async (
+  rawBody: string,
+  payload: NotionWebhookVerificationPayload,
+  request: Request,
+  env: Env,
+): Promise<Response> => {
+  const notionSignature = normalizeNotionSignatureHeader(request);
+
+  if (
+    notionSignature &&
+    !(await validateNotionWebhookSignature(rawBody, notionSignature, payload.verification_token))
+  ) {
+    console.warn('Notion webhook verification request had an invalid signature');
+    return new Response('Unauthorized', { status: 401 });
+  }
+
+  await env.BlogOthers.put(NOTION_WEBHOOK_VERIFICATION_TOKEN_KEY, payload.verification_token);
+  await env.BlogOthers.put(
+    NOTION_WEBHOOK_LAST_VERIFICATION_KEY,
+    JSON.stringify({
+      receivedAt: new Date().toISOString(),
+      signaturePresent: Boolean(notionSignature),
+      signaturePrefix: notionSignature.slice(0, 12),
+    }),
+    { expirationTtl: NOTION_WEBHOOK_TTL_SECONDS },
+  );
+
+  console.log('Notion webhook verification token captured');
+
+  return jsonResponse({
+    status: 'received',
+    message: 'Notion webhook verification token captured',
+  });
+};
+
+const handleNotionWebhookVerificationToken = async (env: Env): Promise<Response> => {
+  const [verificationToken, lastVerificationRaw] = await Promise.all([
+    env.BlogOthers.get(NOTION_WEBHOOK_VERIFICATION_TOKEN_KEY),
+    env.BlogOthers.get(NOTION_WEBHOOK_LAST_VERIFICATION_KEY),
+  ]);
+
+  return jsonResponse({
+    status: verificationToken ? 'available' : 'missing',
+    verification_token: verificationToken,
+    last_verification: lastVerificationRaw ? JSON.parse(lastVerificationRaw) : null,
+  });
+};
+
+const shouldTrackNotionWebhookEvent = (event: NotionWebhookEventPayload): boolean =>
+  event.entity.type === 'page' &&
+  [
+    'page.created',
+    'page.content_updated',
+    'page.properties_updated',
+    'page.undeleted',
+    'page.moved',
+  ].includes(event.type);
+
+const getDatabaseIdFromWebhookParent = (parent: NotionWebhookParentRef | undefined) => {
+  if (!parent) return null;
+  if (parent.type === 'database' && parent.id) return parent.id;
+  if (parent.type === 'database_id' && parent.database_id) return parent.database_id;
+  if (parent.type === 'data_source_id' && parent.database_id) return parent.database_id;
+  return null;
+};
+
+const getDataSourceIdFromWebhookParent = (parent: NotionWebhookParentRef | undefined) => {
+  if (!parent) return null;
+  if (typeof parent.data_source_id === 'string') return parent.data_source_id;
+  return null;
+};
+
+const getDatabaseIdFromPage = async (pageId: string, env: Env): Promise<string | null> => {
+  const notion = createNotionClient({
+    auth: env.NOTION_TOKEN,
+    fetch: (input, init) => fetch(input, init),
+  });
+  const page = await notion.pages.retrieve({ page_id: pageId });
+  if (!isFullPage(page)) return null;
+  const parent = page.parent as any;
+  if (parent.type === 'database_id') return parent.database_id;
+  if (parent.type === 'data_source_id') return parent.database_id;
+  return null;
+};
+
+const officialNotionEventTargetsDatabase = async (
+  event: NotionWebhookEventPayload,
+  env: Env,
+): Promise<boolean> => {
+  const targetDatabaseId = env.NOTION_DATABASE_ID ? normalizeUUID(env.NOTION_DATABASE_ID) : null;
+  if (!targetDatabaseId) {
+    console.error('NOTION_DATABASE_ID is not configured; ignoring Notion webhook event');
+    return false;
+  }
+  const eventDatabaseId = getDatabaseIdFromWebhookParent(event.data?.parent);
+
+  if (eventDatabaseId) {
+    return normalizeUUID(eventDatabaseId) === targetDatabaseId;
+  }
+
+  const pageDatabaseId = await getDatabaseIdFromPage(event.entity.id, env);
+  return Boolean(pageDatabaseId && normalizeUUID(pageDatabaseId) === targetDatabaseId);
+};
+
+const markNotionPageDirty = async (
+  event: NotionWebhookEventPayload,
+  env: Env,
+): Promise<DirtyNotionPage> => {
+  const key = `${NOTION_DIRTY_PAGE_PREFIX}${event.entity.id}`;
+  const existingRaw = await env.BlogOthers.get(key);
+  const existing = existingRaw ? (JSON.parse(existingRaw) as DirtyNotionPage) : null;
+  const now = new Date().toISOString();
+  const eventTypes = new Set(existing?.eventTypes ?? []);
+  eventTypes.add(event.type);
+
+  const dirtyPage: DirtyNotionPage = {
+    pageId: event.entity.id,
+    firstSeenAt: existing?.firstSeenAt ?? now,
+    lastSeenAt: now,
+    eventCount: (existing?.eventCount ?? 0) + 1,
+    eventTypes: [...eventTypes],
+    lastEventId: event.id,
+    parentDatabaseId:
+      getDatabaseIdFromWebhookParent(event.data?.parent) ?? existing?.parentDatabaseId,
+    dataSourceId: getDataSourceIdFromWebhookParent(event.data?.parent) ?? existing?.dataSourceId,
+  };
+
+  await env.BlogOthers.put(key, JSON.stringify(dirtyPage), {
+    expirationTtl: NOTION_WEBHOOK_TTL_SECONDS,
+  });
+
+  return dirtyPage;
+};
+
+const handleOfficialNotionWebhookEvent = async (
+  event: NotionWebhookEventPayload,
+  env: Env,
+): Promise<void> => {
+  if (!shouldTrackNotionWebhookEvent(event)) {
+    console.log(`Ignoring unsupported Notion webhook event type: ${event.type}`);
+    return;
+  }
+
+  if (!(await officialNotionEventTargetsDatabase(event, env))) {
+    console.log('Ignoring Notion webhook event outside target database:', {
+      eventId: event.id,
+      eventType: event.type,
+      pageId: event.entity.id,
+      parent: event.data?.parent,
+    });
+    return;
+  }
+
+  const dirtyPage = await markNotionPageDirty(event, env);
+  await env.BlogOthers.put(`${NOTION_WEBHOOK_EVENT_PREFIX}${event.id}`, 'processed', {
+    expirationTtl: NOTION_WEBHOOK_TTL_SECONDS,
+  });
+
+  console.log('Marked Notion page dirty from webhook:', JSON.stringify(dirtyPage));
+};
+
+const handleNotionWebhook = async (
+  request: Request,
+  env: Env,
+  ctx: ExecutionContext,
+): Promise<Response> => {
+  const rawBody = await request.text();
+  const payload = parseJsonPayload(rawBody);
+
+  if (payload === undefined) {
+    return jsonResponse({ error: 'Invalid JSON payload' }, 400);
+  }
+
+  if (isNotionWebhookVerificationPayload(payload)) {
+    return handleNotionWebhookVerification(rawBody, payload, request, env);
+  }
+
+  const notionSignature = normalizeNotionSignatureHeader(request);
+
+  if (notionSignature.startsWith('sha256=')) {
+    const verificationToken = await getNotionWebhookVerificationToken(env);
+    if (
+      !verificationToken ||
+      !(await validateNotionWebhookSignature(rawBody, notionSignature, verificationToken))
+    ) {
+      return new Response('Unauthorized', { status: 401 });
+    }
+
+    if (!isOfficialNotionWebhookEvent(payload)) {
+      return jsonResponse({ error: 'Unsupported Notion webhook payload' }, 400);
+    }
+
+    if (await env.BlogOthers.get(`${NOTION_WEBHOOK_EVENT_PREFIX}${payload.id}`)) {
+      return jsonResponse({
+        status: 'accepted',
+        message: 'Duplicate webhook event ignored',
+      });
+    }
+
+    ctx.waitUntil(
+      handleOfficialNotionWebhookEvent(payload, env).catch((error) => {
+        console.error('Error processing official Notion webhook:', error);
+      }),
+    );
+
+    return jsonResponse(
+      {
+        status: 'accepted',
+        message: 'Notion webhook event queued for batched sync',
+      },
+      202,
+    );
+  }
+
+  const legacySignature = notionSignature.replace('Bearer ', '');
+  if (
+    !env.NOTION_SIGNATURE_SECRET ||
+    !(await compareTokens(env.NOTION_SIGNATURE_SECRET, legacySignature))
+  ) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+
+  if (!isNotionWebhookPayload(payload)) {
+    return jsonResponse({ error: 'Unsupported Notion webhook payload' }, 400);
+  }
+
+  const processAllPages = request.headers.has('x-process-all-pages');
+  ctx.waitUntil(
+    processNotionWebhook(
+      payload,
+      {
+        headers: { 'x-notion-signature': legacySignature },
+        processAllPages,
+      },
+      env,
+    ).catch((error) => {
+      console.error('Error processing legacy Notion webhook:', error);
+    }),
+  );
+
+  return jsonResponse(
+    {
+      status: 'accepted',
+      message: 'Legacy Notion webhook received and will be processed asynchronously',
+    },
+    202,
+  );
+};
 
 const handleAssets = async (request: Request, env: Env, s3Client: S3Client) => {
   const url = new URL(request.url);
@@ -336,7 +710,7 @@ const handleImageGeneration = async (payload: NotionWebhookPayload, env: Env) =>
 
     console.log('🔍 Fetching page data from Notion...');
     const pageResponse = await notion.pages.retrieve({ page_id: pageId });
-    const page = pageResponse as NotionPage;
+    const page = pageResponse as any;
 
     // Extract date and slug
     const date = page.properties['Date frontmatter'].formula.string;
@@ -571,7 +945,7 @@ const getFileContent = async (path: string, env: Env): Promise<string | null> =>
     throw new Error(`GitHub API error: ${await response.text()}`);
   }
 
-  const result = await response.json();
+  const result = (await response.json()) as any;
   return result.data.repository.object?.text ?? null;
 };
 
@@ -601,7 +975,7 @@ const fileExistsInRepo = async (path: string, env: Env): Promise<boolean> => {
     return false;
   }
 
-  const result = await response.json();
+  const result = (await response.json()) as any;
   return result.data.repository.object !== null;
 };
 
@@ -660,7 +1034,9 @@ const commitToGitHub = async (
         hasChanged: currentContent !== content,
         addition: {
           path: file.path,
-          contents: Buffer.from(content).toString('base64'),
+          contents: Buffer.from(
+            typeof content === 'string' ? content : new Uint8Array(content),
+          ).toString('base64'),
         },
       };
     }),
@@ -725,7 +1101,7 @@ const commitToGitHub = async (
     throw new Error(`GitHub API error: ${await response.text()}`);
   }
 
-  const result = await response.json();
+  const result = (await response.json()) as any;
   if (result.errors) {
     throw new Error(`GraphQL Error: ${JSON.stringify(result.errors)}`);
   }
@@ -755,7 +1131,7 @@ const getLatestCommitOid = async (env: Env): Promise<string> => {
     body: JSON.stringify({ query }),
   });
 
-  const result = await response.json();
+  const result = (await response.json()) as any;
   return result.data.repository.defaultBranchRef.target.oid;
 };
 
@@ -1033,29 +1409,6 @@ const uploadImage = async (
   }
 };
 
-interface NotionWebhookPayload {
-  source: {
-    type: 'automation';
-    automation_id: string;
-    action_id: string;
-    event_id: string;
-    attempt: number;
-  };
-  data: {
-    object: 'page';
-    id: string;
-    created_time: string;
-    last_edited_time: string;
-    parent: {
-      type: 'database_id';
-      database_id: string;
-    };
-    properties: Record<string, any>;
-    url: string;
-    request_id: string;
-  };
-}
-
 // Type guard to check if a message is a Notion webhook payload
 function isNotionWebhookPayload(payload: any): payload is NotionWebhookPayload {
   return (
@@ -1102,6 +1455,15 @@ interface PageProcessingMessage {
   totalPages?: number; // Total pages in this batch for commit coordination
 }
 
+function isPageProcessingMessage(payload: any): payload is PageProcessingMessage {
+  return (
+    payload &&
+    payload.type === 'page-processing' &&
+    typeof payload.pageId === 'string' &&
+    typeof payload.databaseId === 'string'
+  );
+}
+
 // Updated type definitions
 interface QueueMessageBody {
   type: 'notion' | 'r2' | 'image-processing' | 'page-processing';
@@ -1143,7 +1505,11 @@ const getDefaultImage = async (env: Env, s3Client: S3Client): Promise<ArrayBuffe
     for await (const chunk of response.Body as any) {
       chunks.push(chunk);
     }
-    return Buffer.concat(chunks).buffer;
+    const buffer = Buffer.concat(chunks);
+    return buffer.buffer.slice(
+      buffer.byteOffset,
+      buffer.byteOffset + buffer.byteLength,
+    ) as ArrayBuffer;
   } catch (error) {
     console.error('Error getting default image:', error);
     throw error;
@@ -1323,19 +1689,18 @@ async function processR2Event(event: R2EventMessage, env: Env) {
   }
 }
 
-// Double HMAC implementation for timing-safe comparison
-async function timingSafeEqual(
-  bufferSource1: ArrayBuffer,
-  bufferSource2: ArrayBuffer,
-): Promise<boolean> {
-  if (bufferSource1.byteLength !== bufferSource2.byteLength) {
+const timingSafeEqual = (valueA: string, valueB: string): boolean => {
+  if (valueA.length !== valueB.length) {
     return false;
   }
-  const algorithm = { name: 'HMAC', hash: 'SHA-256' };
-  const key = await crypto.subtle.generateKey(algorithm, false, ['sign', 'verify']);
-  const hmac = await crypto.subtle.sign(algorithm, key, bufferSource1);
-  return await crypto.subtle.verify(algorithm, key, hmac, bufferSource2);
-}
+
+  let result = 0;
+  for (let i = 0; i < valueA.length; i++) {
+    result |= valueA.charCodeAt(i) ^ valueB.charCodeAt(i);
+  }
+
+  return result === 0;
+};
 
 // Helper function for secure token comparison
 const compareTokens = async (secret: string, token: string): Promise<boolean> => {
@@ -1343,10 +1708,7 @@ const compareTokens = async (secret: string, token: string): Promise<boolean> =>
     return false;
   }
   try {
-    const encoder = new TextEncoder();
-    const secretBuffer = encoder.encode(secret);
-    const tokenBuffer = encoder.encode(token);
-    return await timingSafeEqual(secretBuffer, tokenBuffer);
+    return timingSafeEqual(secret, token);
   } catch (e) {
     console.error('Error in token comparison:', e);
     return false;
@@ -1684,7 +2046,7 @@ const checkAndCommitPendingBatches = async (env: Env) => {
         console.log(`Batch ${batchId}: all pages ready, committing from scheduled task...`);
 
         // Create S3 client for default images
-        const s3 = new S3Client(createR2ClientConfig(env));
+        const s3 = createS3Client(env);
 
         // Retrieve all file changes from KV
         const allFileChanges: FileChange[] = [];
@@ -1736,6 +2098,114 @@ const checkAndCommitPendingBatches = async (env: Env) => {
   } catch (error) {
     console.error('Error checking pending batches:', error);
   }
+};
+
+const listAllKvKeys = async (namespace: KVNamespace, prefix: string) => {
+  const keys: KVNamespaceListKey<unknown>[] = [];
+  let cursor: string | undefined;
+
+  do {
+    const result = await namespace.list({ prefix, cursor });
+    keys.push(...result.keys);
+    cursor = result.list_complete ? undefined : result.cursor;
+  } while (cursor);
+
+  return keys;
+};
+
+const flushDirtyNotionPages = async (
+  env: Env,
+  options: { force?: boolean } = {},
+): Promise<DirtyNotionFlushResult> => {
+  const dirtyKeys = await listAllKvKeys(env.BlogOthers, NOTION_DIRTY_PAGE_PREFIX);
+  const now = Date.now();
+  const readyPages: DirtyNotionPage[] = [];
+  let skipped = 0;
+
+  for (const key of dirtyKeys) {
+    const raw = await env.BlogOthers.get(key.name);
+    if (!raw) continue;
+
+    const dirtyPage = JSON.parse(raw) as DirtyNotionPage;
+    const lastSeenAt = new Date(dirtyPage.lastSeenAt).getTime();
+    if (!options.force && now - lastSeenAt < NOTION_DIRTY_PAGE_QUIET_PERIOD_MS) {
+      skipped++;
+      continue;
+    }
+
+    readyPages.push(dirtyPage);
+  }
+
+  if (readyPages.length === 0) {
+    return {
+      processed: 0,
+      committed: false,
+      skipped,
+      errors: [],
+    };
+  }
+
+  const s3 = createS3Client(env);
+  const fileChanges: FileChange[] = [];
+  const processedPages: DirtyNotionPage[] = [];
+  const errors: string[] = [];
+
+  for (const dirtyPage of readyPages) {
+    try {
+      const { content, path } = await processPage(dirtyPage.pageId, env, s3);
+      const isPageNew = await isNewPage(path, env);
+
+      fileChanges.push({ path, content });
+
+      if (isPageNew) {
+        try {
+          const folderPath = path.substring(0, path.lastIndexOf('/'));
+          const imageBuffer = await getDefaultImage(env, s3);
+          fileChanges.push({
+            path: `${folderPath}/image.webp`,
+            content: imageBuffer,
+          });
+        } catch (imageError) {
+          console.error('Error adding default image for dirty Notion page:', imageError);
+        }
+      }
+
+      processedPages.push(dirtyPage);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      errors.push(`${dirtyPage.pageId}: ${message}`);
+      console.error(`Error processing dirty Notion page ${dirtyPage.pageId}:`, error);
+    }
+  }
+
+  let committed = false;
+  if (fileChanges.length > 0) {
+    committed = await commitToGitHub(
+      fileChanges,
+      `chore: sync ${processedPages.length} Notion page${processedPages.length === 1 ? '' : 's'}`,
+      env,
+    );
+  }
+
+  for (const dirtyPage of processedPages) {
+    const key = `${NOTION_DIRTY_PAGE_PREFIX}${dirtyPage.pageId}`;
+    const currentRaw = await env.BlogOthers.get(key);
+    if (!currentRaw) continue;
+
+    const current = JSON.parse(currentRaw) as DirtyNotionPage;
+    if (current.lastSeenAt === dirtyPage.lastSeenAt) {
+      await env.BlogOthers.delete(key);
+    } else {
+      console.log(`Keeping dirty Notion page ${dirtyPage.pageId}; newer event arrived`);
+    }
+  }
+
+  return {
+    processed: processedPages.length,
+    committed,
+    skipped,
+    errors,
+  };
 };
 
 const findClosestSlug = (requestedSlug: string, currentSlugs: string[]): string | null => {
@@ -1949,68 +2419,54 @@ export default {
           return new Response('Method not allowed', { status: 405 });
         }
         return handleGitHubDispatch(request, env);
+      case '/api/flush-notion-webhooks': {
+        if (request.method !== 'POST') {
+          return new Response('Method not allowed', { status: 405 });
+        }
+        if (!env.DISPATCH_SECRET || !(await validateAuthToken(request, env.DISPATCH_SECRET))) {
+          return new Response('Unauthorized', { status: 401 });
+        }
+        const result = await flushDirtyNotionPages(env, { force: true });
+        return jsonResponse({
+          status: 'success',
+          ...result,
+        });
+      }
+      case '/api/notion-webhook-verification-token': {
+        if (request.method !== 'GET') {
+          return new Response('Method not allowed', { status: 405 });
+        }
+        if (!env.DISPATCH_SECRET || !(await validateAuthToken(request, env.DISPATCH_SECRET))) {
+          return new Response('Unauthorized', { status: 401 });
+        }
+        return handleNotionWebhookVerificationToken(env);
+      }
       case '/webhooks/replicate':
         if (request.method !== 'POST') {
           return new Response('Method not allowed', { status: 405 });
         }
         return handleReplicateWebhook(request, env);
-      case '/webhooks/notion': {
+      case '/webhooks/notion':
         if (request.method !== 'POST') {
           return new Response('Method not allowed', { status: 405 });
         }
-        const notionSignature =
-          request.headers.get('x-notion-signature')?.replace('Bearer ', '') || '';
-        if (
-          !env.NOTION_SIGNATURE_SECRET ||
-          !(await compareTokens(env.NOTION_SIGNATURE_SECRET, notionSignature))
-        ) {
-          return new Response('Unauthorized', { status: 401 });
-        }
-        const payload = (await request.json()) as NotionWebhookPayload;
-        const relevantHeaders = {
-          'x-notion-signature': notionSignature,
-        };
-        const processAllPages = request.headers.has('x-process-all-pages');
-        ctx.waitUntil(
-          processNotionWebhook(
-            payload,
-            {
-              headers: relevantHeaders || {},
-              processAllPages: processAllPages || false,
-            },
-            env,
-          ).catch((error) => {
-            console.error('Error processing Notion webhook:', error);
-          }),
-        );
-        return jsonResponse(
-          {
-            status: 'accepted',
-            message: 'Webhook received and will be processed asynchronously',
-          },
-          202,
-        );
-      }
+        return handleNotionWebhook(request, env, ctx);
       default:
         return new Response('Not Found', { status: 404 });
     }
   },
 
-  async queue(
-    batch: MessageBatch<QueueMessageBody | ImageProcessingMessage | PageProcessingMessage>,
-    env: Env,
-    ctx: ExecutionContext,
-  ): Promise<void> {
+  async queue(batch, env, ctx): Promise<void> {
     const s3 = createS3Client(env);
 
     // Separate page-processing messages for batched commits
-    const pageMessages: { message: typeof batch.messages[0]; payload: PageProcessingMessage }[] = [];
-    const otherMessages: typeof batch.messages[0][] = [];
+    const pageMessages: { message: any; payload: PageProcessingMessage }[] = [];
+    const otherMessages: any[] = [];
 
     for (const message of batch.messages) {
       const payload = message.body;
-      if (payload.type === 'page-processing') {
-        pageMessages.push({ message, payload: payload as PageProcessingMessage });
+      if (isPageProcessingMessage(payload)) {
+        pageMessages.push({ message, payload });
       } else {
         otherMessages.push(message);
       }
@@ -2144,7 +2600,7 @@ export default {
     // Process other message types individually
     for (const message of otherMessages) {
       try {
-        const payload = message.body;
+        const payload = message.body as QueueMessageBody | ImageProcessingMessage;
         if (payload.type === 'image-processing') {
           await processImageMessage(payload.payload as ImageProcessingPayload, env);
           message.ack();
@@ -2195,7 +2651,7 @@ export default {
     }
   },
 
-  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+  async scheduled(event: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
     switch (event.cron) {
       case '0 */1 * * *':
         await fetchAndStoreNotionTags(env);
@@ -2204,6 +2660,9 @@ export default {
         await updateAllPageCoversAndIcons(env);
         await fetchAndStoreCurrentSlugs(env);
         await checkAndCommitPendingBatches(env);
+        break;
+      case '*/30 * * * *':
+        await flushDirtyNotionPages(env);
         break;
     }
     console.log('cron processed');
