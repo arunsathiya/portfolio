@@ -44,7 +44,7 @@ Blog cover images are generated using Claude (for prompts) and Replicate (for ge
 
 Workers (via `wrangler secret`): `NOTION_TOKEN`, `NOTION_DATABASE_ID`, `NOTION_SIGNATURE_SECRET`, `GITHUB_PAT`, `DISPATCH_SECRET`, `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_R2_ACCESS_KEY_ID`, `CLOUDFLARE_R2_SECRET_ACCESS_KEY`, `ANTHROPIC_API_KEY`, `REPLICATE_API_TOKEN`, `REPLICATE_WEBHOOK_SIGNING_KEY`, `IMAGE_GENERATION_SECRET`, `R2_BUCKET_NAME`.
 
-Web (Vercel dashboard): `NOTION_SECRET` for local scripts.
+Web (Vercel dashboard): `NOTION_TOKEN` for local scripts.
 
 ## Workflow
 

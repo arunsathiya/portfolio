@@ -12,7 +12,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const notion = createNotionClient({
-	auth: process.env.NOTION_SECRET!,
+	auth: process.env.NOTION_TOKEN!,
 });
 
 const MAX_RETRIES = 3;
