@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# This repository has no wake-time authentication or backing services to repair.
+printf '[orb resume] Ready\n'

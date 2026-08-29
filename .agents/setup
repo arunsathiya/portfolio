@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+BUN_VERSION="1.3.10"
+export BUN_INSTALL="$HOME/.bun"
+if [[ -x "$BUN_INSTALL/bin/bun" ]]; then
+	export PATH="$BUN_INSTALL/bin:$PATH"
+fi
+
+started_at=$SECONDS
+printf '[orb setup] Ensuring Bun %s\n' "$BUN_VERSION"
+
+if ! command -v bun >/dev/null 2>&1 || [[ "$(bun --version)" != "$BUN_VERSION" ]]; then
+	missing_packages=()
+	command -v curl >/dev/null 2>&1 || missing_packages+=(curl)
+	command -v unzip >/dev/null 2>&1 || missing_packages+=(unzip)
+	if ((${#missing_packages[@]})); then
+		sudo apt-get update
+		sudo apt-get install -y "${missing_packages[@]}"
+	fi
+
+	curl -fsSL https://bun.sh/install | SHELL=/bin/false bash -s -- "bun-v$BUN_VERSION"
+	export PATH="$BUN_INSTALL/bin:$PATH"
+
+	profile_marker="# portfolio Bun toolchain"
+	if ! grep -Fqx "$profile_marker" "$HOME/.bash_profile" 2>/dev/null; then
+		cat >> "$HOME/.bash_profile" <<'EOF'
+
+# portfolio Bun toolchain
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+EOF
+	fi
+fi
+
+printf '[orb setup] Installing workspace dependencies\n'
+bun install --frozen-lockfile
+
+if [[ ! -f apps/web/.env.local ]]; then
+	cp -- apps/web/.env.example apps/web/.env.local
+fi
+
+printf '[orb setup] Complete in %ss\n' "$((SECONDS - started_at))"

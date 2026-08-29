@@ -35,5 +35,8 @@ supabase/.temp/
 # worktrees (worktrunk)
 .worktrees/
 
+# Amp orb portals
+.amp/portals/*
+
 # local notes
 *.local.md
