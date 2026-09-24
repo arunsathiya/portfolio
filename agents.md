@@ -46,6 +46,15 @@ Workers (via `wrangler secret`): `NOTION_TOKEN`, `NOTION_DATABASE_ID`, `NOTION_S
 
 Web (Vercel dashboard): `NOTION_TOKEN` for local scripts.
 
+## Work log
+
+Keep a compact worklog in `WORKLOG.local.md` (gitignored): the goals, and how the direction has shifted. The user steers a lot mid-task; the worklog, not the latest message, is the source of truth for what you're working on.
+
+- Read it at the start of every session.
+- On each steer, first log it: add or update a goal, or note what it changes or replaces. Then work from the whole log. A steer doesn't cancel earlier goals unless it says so.
+- Keep it short: one line per item, naming the commit, stash or branch that holds the work. Move finished goals to Done and trim old entries.
+- Before ending a turn, check open goals and say which ones are still open.
+
 ## Workflow
 
 Use conventional commits (`fix:`, `feat:`, `chore:`, `docs:`). Commit incrementally and push immediately. Vercel auto-deploys web on push to main. Workers require manual deploy.
