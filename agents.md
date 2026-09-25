@@ -2,6 +2,10 @@
 
 Guidance for Claude Code when working with this repository.
 
+## Communication
+
+I am a bad reader. Be precise in your suggestions and discussions. Avoid long explanations unless I explicitly ask for them.
+
 ## Repository Structure
 
 ```
