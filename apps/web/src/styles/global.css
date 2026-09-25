@@ -1,8 +1,6 @@
-@import '@fontsource/spectral/400.css';
-@import '@fontsource/spectral/400-italic.css';
-@import '@fontsource/spectral/600.css';
-@import '@fontsource/spectral/700.css';
+@import '@fontsource-variable/ibm-plex-sans';
 @import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource-variable/instrument-sans';
 
 @tailwind base;
 @tailwind components;
@@ -106,7 +104,7 @@
 	}
 
 	body {
-		font-family: 'Spectral', Georgia, serif;
+		font-family: 'IBM Plex Sans', sans-serif;
 		font-size: 16px;
 		line-height: 1.75;
 	}
