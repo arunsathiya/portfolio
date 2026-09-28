@@ -1,0 +1,23 @@
+{
+	"model": "opus",
+	"triggers": [
+		{
+			"tool": "edit",
+			"inputMatch": "\"path\":\"[^\"]*\\.(?:ts|tsx|mts|astro|mjs|js|css|json|toml|sql)\""
+		},
+		{
+			"tool": "write",
+			"inputMatch": "\"path\":\"[^\"]*\\.(?:ts|tsx|mts|astro|mjs|js|css|json|toml|sql)\""
+		},
+		{
+			"tool": "bash",
+			"inputMatch": "\\b(?:bun|npm|pnpm) (?:add|remove|install|update)\\b|wrangler|supabase|vercel"
+		}
+	],
+	"gates": [
+		{
+			"tool": "bash",
+			"inputMatch": "\\bwrangler (?:deploy|publish)\\b|deploy:workers|\\bsupabase (?:db push|migration up)\\b|\\bvercel (?:deploy|--prod)\\b"
+		}
+	]
+}
