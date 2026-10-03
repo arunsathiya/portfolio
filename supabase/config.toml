@@ -1,0 +1,10 @@
+# Hosted auth settings managed as code. Only declared keys are pushed;
+# everything else stays as set in the dashboard. Apply with:
+#   supabase config diff && supabase config push
+project_id = "portfolio-comments"
+
+[auth.email]
+# Comments sign in with OAuth only; email sign-in stays off.
+enable_signup = false
+# Advisor "auth_otp_long_expiry" wants < 1 hour.
+otp_expiry = 3600
