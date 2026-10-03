@@ -4,8 +4,7 @@ main = "src/index.ts"
 compatibility_date = "2025-11-11"
 compatibility_flags = ["nodejs_compat_v2"]
 
-[placement]
-mode = "smart"
+upload_source_maps = true
 
 routes = [
     { pattern = "arun.blog/assets/*", zone_name = "arun.blog" },
@@ -22,12 +21,22 @@ routes = [
     { pattern = "www.arun.blog/webhooks/notion", zone_name = "arun.blog" },
 ]
 
-# Automatically place your workloads in an optimal location to minimize latency.
-# If you are running back-end logic in a Worker, running it closer to your back-end infrastructure
-# rather than the end user may result in better performance.
-# Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
-# [placement]
-# mode = "smart"
+[placement]
+mode = "smart"
+
+# Logs, traces and Issues (grouped errors). Caught errors show up in Issues
+# when passed to console.error(). Docs: https://developers.cloudflare.com/workers/observability/
+[observability]
+enabled = true
+
+[observability.logs]
+invocation_logs = true
+
+[observability.traces]
+enabled = true
+
+[observability.issues]
+enabled = true
 
 # Variable bindings. These are arbitrary, plaintext strings (similar to environment variables)
 # Docs:

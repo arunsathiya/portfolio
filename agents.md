@@ -44,6 +44,16 @@ Blog cover images are generated using Claude (for prompts) and Replicate (for ge
 
 **shared**: Common utilities for Notion API, S3/R2 configuration, and date formatting. Used by both apps.
 
+## Observability
+
+Workers Logs, Traces and Issues are on in `apps/workers/wrangler.toml`, with source maps uploaded on deploy. Errors that are caught still reach Issues if you pass the error to `console.error()`. Check them in the dashboard (Workers → portfolio-workers → Issues), or with `cf observability issues list`.
+
+## Cloudflare CLIs
+
+- `wrangler` (project dev dependency in `apps/workers`): dev, deploy, types. `wrangler.toml` is the source of truth for routes and bindings.
+- `cf` (global, `bun add -g cf`): the full Cloudflare API, for things wrangler doesn't cover (zones, DNS, R2 objects, observability). Find commands with `cf cli search "<task>"`.
+- Bun enforces a 7-day `minimum-release-age`, so the newest versions may not install yet.
+
 ## Environment Variables
 
 Workers (via `wrangler secret`): `NOTION_TOKEN`, `NOTION_DATABASE_ID`, `NOTION_SIGNATURE_SECRET`, `GITHUB_PAT`, `DISPATCH_SECRET`, `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_R2_ACCESS_KEY_ID`, `CLOUDFLARE_R2_SECRET_ACCESS_KEY`, `ANTHROPIC_API_KEY`, `REPLICATE_API_TOKEN`, `REPLICATE_WEBHOOK_SIGNING_KEY`, `IMAGE_GENERATION_SECRET`, `R2_BUCKET_NAME`.
