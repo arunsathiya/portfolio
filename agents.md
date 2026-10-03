@@ -34,7 +34,7 @@ The "Ship All" feature queues multiple pages via Cloudflare Queues, coordinating
 
 ## Image Handling
 
-Blog cover images are generated using Claude (for prompts) and Replicate (for generation), then stored in R2. The `/assets/*` route serves images via signed URLs cached in KV.
+Blog cover images are generated using Claude (for prompts) and Replicate (for generation), then stored in R2. The `/assets/*` route streams images from the `PORTFOLIO_BUCKET` R2 binding, with ETag (304) and range (206) support.
 
 ## Apps
 

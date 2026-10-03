@@ -24,4 +24,42 @@ describe('Portfolio worker', () => {
     expect(response.status).toBe(404);
     expect(await response.text()).toMatchInlineSnapshot(`"Not Found"`);
   });
+
+  describe('/assets/*', () => {
+    const key = 'assets/test.txt';
+
+    it('streams the object from R2 with CORS and metadata', async () => {
+      await env.PORTFOLIO_BUCKET.put(key, 'hello world', {
+        httpMetadata: { contentType: 'text/plain' },
+      });
+      const response = await SELF.fetch(`https://example.com/${key}`);
+      expect(response.status).toBe(200);
+      expect(response.headers.get('content-type')).toBe('text/plain');
+      expect(response.headers.get('access-control-allow-origin')).toBe('https://www.arun.blog');
+      expect(await response.text()).toBe('hello world');
+    });
+
+    it('returns 304 when the etag matches', async () => {
+      const object = await env.PORTFOLIO_BUCKET.put(key, 'hello world');
+      const response = await SELF.fetch(`https://example.com/${key}`, {
+        headers: { 'If-None-Match': object!.httpEtag },
+      });
+      expect(response.status).toBe(304);
+    });
+
+    it('serves byte ranges', async () => {
+      await env.PORTFOLIO_BUCKET.put(key, 'hello world');
+      const response = await SELF.fetch(`https://example.com/${key}`, {
+        headers: { Range: 'bytes=0-4' },
+      });
+      expect(response.status).toBe(206);
+      expect(response.headers.get('content-range')).toBe('bytes 0-4/11');
+      expect(await response.text()).toBe('hello');
+    });
+
+    it('returns 404 for missing objects', async () => {
+      const response = await SELF.fetch('https://example.com/assets/missing.env');
+      expect(response.status).toBe(404);
+    });
+  });
 });

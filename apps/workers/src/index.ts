@@ -4,7 +4,6 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import Replicate, { ApiError, validateWebhook } from 'replicate';
 import Anthropic from '@anthropic-ai/sdk';
 import { isFullPage } from '@notionhq/client';
@@ -43,7 +42,6 @@ interface Env {
   REPLICATE_API_TOKEN: string;
   IMAGE_GENERATION_SECRET: string;
   IMAGE_GENERATION_BASE_PROMPT: string;
-  BlogAssets: KVNamespace;
   BlogOthers: KVNamespace;
   PORTFOLIO_BUCKET: R2Bucket;
   ANTHROPIC_API_KEY: string;
@@ -54,11 +52,6 @@ interface Env {
   NOTION_QUEUE: Queue<QueueMessageBody | PageProcessingMessage>;
   NOTION_SIGNATURE_SECRET: string;
   IMAGE_UPLOAD_QUEUE: Queue<ImageProcessingMessage>;
-}
-
-interface CachedSignedUrl {
-  url: string;
-  refreshTime: number;
 }
 
 interface DispatchRequest {
@@ -523,53 +516,42 @@ const handleNotionWebhook = async (
   );
 };
 
-const handleAssets = async (request: Request, env: Env, s3Client: S3Client) => {
-  const url = new URL(request.url);
-  const key = url.pathname.slice(1);
-  console.log('Key:', key);
+// Streams straight from the R2 binding, with conditional and range support.
+const handleAssets = async (request: Request, env: Env) => {
+  const key = new URL(request.url).pathname.slice(1);
 
   try {
-    const cache = await env.BlogAssets.get<CachedSignedUrl>(key, 'json');
-    let signedUrl: string;
-
-    if (!cache || Date.now() > cache.refreshTime) {
-      // Check if object exists before generating and caching signed URL
-      // This prevents KV pollution from vulnerability scanners probing for .env, .php, etc.
-      try {
-        const headCommand = new HeadObjectCommand({ Bucket: env.R2_BUCKET_NAME, Key: key });
-        await s3Client.send(headCommand);
-      } catch {
-        // Object doesn't exist in R2, return 404 without caching
-        return new Response('Not found', { status: 404 });
-      }
-
-      const command = new GetObjectCommand({ Bucket: env.R2_BUCKET_NAME, Key: key });
-      signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
-      await env.BlogAssets.put(
-        key,
-        JSON.stringify({
-          url: signedUrl,
-          refreshTime: Date.now() + 55 * 60 * 1000,
-        }),
-      );
-    } else {
-      console.log(`Used cached signed URL for ${key}`);
-      signedUrl = cache.url;
-    }
-
-    const response = await fetch(signedUrl);
-    const headers = new Headers(response.headers);
-    // Add CORS headers for assets
-    for (const [key, value] of Object.entries(assetsCorsHeaders)) {
-      headers.set(key, value);
-    }
-    return new Response(response.body as BodyInit, {
-      status: response.status,
-      headers,
+    const object = await env.PORTFOLIO_BUCKET.get(key, {
+      onlyIf: request.headers,
+      range: request.headers,
     });
+    if (!object) {
+      return new Response('Not found', { status: 404 });
+    }
+
+    const headers = new Headers(assetsCorsHeaders);
+    object.writeHttpMetadata(headers);
+    headers.set('etag', object.httpEtag);
+    headers.set('accept-ranges', 'bytes');
+
+    // No body means an If-None-Match / If-Modified-Since precondition matched.
+    if (!('body' in object)) {
+      return new Response(null, { status: 304, headers });
+    }
+
+    const range = object.range as { offset: number; length: number } | undefined;
+    if (range && request.headers.has('range')) {
+      headers.set(
+        'content-range',
+        `bytes ${range.offset}-${range.offset + range.length - 1}/${object.size}`,
+      );
+      return new Response(object.body, { status: 206, headers });
+    }
+
+    return new Response(object.body, { headers });
   } catch (error) {
-    console.error('Error generating signed URL:', error);
-    return new Response('Failed to generate signed URL', { status: 500 });
+    console.error('Error serving asset:', key, error);
+    return new Response('Failed to serve asset', { status: 500 });
   }
 };
 
@@ -2327,7 +2309,6 @@ const countMatchedKeywords = (keywords1: string[], keywords2: string[]): number 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
-    const s3Client = createS3Client(env);
 
     // Handle CORS preflight requests only for /assets/*
     if (request.method === 'OPTIONS' && url.pathname.startsWith('/assets/')) {
@@ -2355,7 +2336,7 @@ export default {
     }
 
     if (url.pathname.startsWith('/assets/')) {
-      return handleAssets(request, env, s3Client);
+      return handleAssets(request, env);
     }
 
     if (url.pathname === '/api/changes-on-notion') {

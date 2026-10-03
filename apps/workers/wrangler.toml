@@ -87,10 +87,6 @@ routes = [
 # Bind a KV Namespace. Use KV as persistent storage for small key-value pairs.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#kv-namespaces
 [[kv_namespaces]]
-binding = "BlogAssets"
-id = "b1c34589814240cfa24050edb1dd028d"
-
-[[kv_namespaces]]
 binding = "BlogOthers"
 id = "2476a2f9522c4281872631ca59caa872"
 
