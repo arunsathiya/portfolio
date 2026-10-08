@@ -1,6 +1,4 @@
 {
-	"model": "sonnet",
-	"gateModel": "opus",
 	"triggers": [
 		{
 			"tool": "edit",
